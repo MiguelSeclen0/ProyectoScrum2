@@ -37,6 +37,10 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [],
 
+  axios:{
+    baseURL: '',
+  },
+
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
