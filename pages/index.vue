@@ -10,7 +10,7 @@
 export default {
   name: 'IndexPage',
   created: function () {
-    this.$axios.get('https://jsonplaceholder.typicode.com/todos/1').then(response => { console.log(response) })
+    this.$axios.get('http://localhost:90/cliente/all').then(response => { console.log(response) })
   }
 
 
