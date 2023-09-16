@@ -1,20 +1,13 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
+    <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
+      <v-avatar class="spaceAvatar">
+        <img src="https://cdn.vuetifyjs.com/images/john.jpg">
+      </v-avatar>
+      <!-- <span class="text-small">Team in Space</span>
+      <span class="text-large">Software Project</span> -->
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
+        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -90,3 +83,11 @@ export default {
   },
 }
 </script>
+<style>
+.spaceAvatar {
+  margin-left: 7%;
+}
+.spacetext {
+  margin-left: 2%;
+}
+</style>
