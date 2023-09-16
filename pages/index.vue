@@ -47,7 +47,8 @@ export default {
         { nombres: "Xiomar" }
       ],
       Mylist3: [
-        { nombres: "Patrick" }
+        { nombres: "Patrick" },
+        { nombres: "Miguel" }
       ],
       Mylist4: [
         { nombres: "Axel" }
