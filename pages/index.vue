@@ -18,13 +18,13 @@
 
       </v-card>
       <v-card style="background-color: brown;">
-        <draggable v-model="Mylist" group="people2" @start="drag = true" @end="drag = false">
-          <v-card-title v-for="item in Mylist" :key="item.nombres" class="headline">{{ item.nombres }}</v-card-title>
+        <draggable v-model="Mylist3" group="people2" @start="drag = true" @end="drag = false">
+          <v-card-title v-for="item in Mylist3" :key="item.nombres" class="headline">{{ item.nombres }}</v-card-title>
         </draggable>
       </v-card>
       <v-card style="background-color: blue;">
-        <draggable v-model="Mylist2" group="people2" @start="drag = true" @end="drag = false">
-          <v-card-title v-for="item in Mylist2" :key="item.nombres" class="headline">{{ item.nombres }}</v-card-title>
+        <draggable v-model="Mylist4" group="people2" @start="drag = true" @end="drag = false">
+          <v-card-title v-for="item in Mylist4" :key="item.nombres" class="headline">{{ item.nombres }}</v-card-title>
         </draggable>
       </v-card>
     </v-col>
@@ -45,7 +45,14 @@ export default {
       ],
       Mylist2: [
         { nombres: "Xiomar" }
+      ],
+      Mylist3: [
+        { nombres: "Patrick" }
+      ],
+      Mylist4: [
+        { nombres: "Axel" }
       ]
+      
     }
   },
   components: {
