@@ -16,6 +16,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <v-switch v-model="$vuetify.theme.dark" inset label="Vuetify" persistent-hint></v-switch>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -37,6 +38,11 @@
     <v-main>
       <v-container>
         <Nuxt />
+        <v-fab-transition>
+          <v-btn color="pink" dark absolute bottom right fab>
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </v-fab-transition>
       </v-container>
     </v-main>
     <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
@@ -87,6 +93,7 @@ export default {
 .spaceAvatar {
   margin-left: 7%;
 }
+
 .spacetext {
   margin-left: 2%;
 }

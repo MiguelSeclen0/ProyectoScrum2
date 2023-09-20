@@ -1,4 +1,5 @@
 import { ClienteService } from '@/services/cliente.service'
+import { UsuarioService } from '@/services/usuario.service'
 
 export default function (ctx,inject){
     if(!ctx.$axios){
@@ -6,4 +7,5 @@ export default function (ctx,inject){
     }
 
     inject('cliente',new ClienteService(ctx))
+    inject('usuario',new UsuarioService(ctx))
 }
