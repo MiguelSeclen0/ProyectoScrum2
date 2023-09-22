@@ -84,4 +84,19 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  // Auth Configuration
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: 'http://localhost:90/usuario/find',
+            method: 'get',
+          },
+          logout: false,
+        },
+      },
+    },
+  },
 }

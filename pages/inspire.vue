@@ -103,9 +103,6 @@ export default {
   computed: {
     ...mapState('usuario', ['usuario']),
   },
-  prueba() {
-    return console.log('Prueba', this.$vuetify.theme.dark)
-  }
 }
 </script>
 <style>
