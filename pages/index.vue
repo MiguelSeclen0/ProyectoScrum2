@@ -3,7 +3,7 @@
     <v-card class="align-self-center px-5 py-5" outlined :min-width="400">
       <!-- Error alert -->
       <v-alert v-if="error" type="error" dismissible :max-width="400">
-        aun no
+        {{ error }}
       </v-alert>
 
       <!-- Login Form-->
@@ -17,14 +17,11 @@
         </div>
       </v-card-title>
       <v-card-text>
-        <v-form ref="" v-model="valid" class="text-center" lazy-validation @submit.prevent="onLogin">
-
-          <v-text-field v-model="user.username" label='Usuario' outlined rounded color="primary"
-            :rules="usernameRules" />
+        <v-form ref="loginForm" v-model="valid" class="text-center" lazy-validation @submit.prevent="onLogin">
+          <v-text-field v-model="user.username" label='Usuario' outlined rounded color="primary" :rules="usernameRules" />
 
           <PasswordField v-model="user.password" label='Contraseña' min="6" outlined rounded color="primary"
             :rules="passwordRules" />
-
           <div class="text-right">
             <v-btn small color="primary" text rounded to="/forgot-your-password">
               Olvidaste Contraseña
@@ -44,14 +41,14 @@
 <script>
 
 export default {
-  async fetch() {
-    await Promise.all([
-      // // this.$store.dispatch(`etiquetaIdioma/${FETCH_ETIQUETA_IDIOMA}`, {
-      // //   currentIdioma: { idIdioma: this.selectedIdioma },
-      // // }),
-      // this.fetchLabelsByLanguage(this.selectedIdioma),
-    ])
-  },
+  // async fetch() {
+  //   await Promise.all([
+  //     // // this.$store.dispatch(`etiquetaIdioma/${FETCH_ETIQUETA_IDIOMA}`, {
+  //     // //   currentIdioma: { idIdioma: this.selectedIdioma },
+  //     // // }),
+  //     // this.fetchLabelsByLanguage(this.selectedIdioma),
+  //   ])
+  // },
   layout: 'empty',
   auth: false,
   progress: false,
@@ -88,28 +85,30 @@ export default {
     //     currentIdioma: { idIdioma: value },
     //   })
     // },
-    async onLogin() {
-      // if (!this.$refs.loginForm.validate()) {
-      //   return
-      // }
-      debugger
+    // async onLogin() {
+    onLogin() {
+
+      if (!this.$refs.loginForm.validate()) {
+        return
+      }
       this.busy = true
 
-      try {
-        // const payload = {
-        //     nombreUsuario: 1 //this.user.username,
-        //     // secreto: this.user.password,
-        // }
-        const nombreUsuario = 1
-
-         await this.$auth.loginWith('local', nombreUsuario)
-
-        const URL = '/tablero'
-        this.$router.push(URL)
-      } catch (err) {
-        this.error = 'Error de inicio de sesion'
-      } finally {
-        this.busy = false
+      const payload = {
+        data: {
+          email: this.user.username,
+          nombre: '',
+          contrasena: this.user.password,
+        }
+      }
+      console.log(payload)
+      const response = 1 // await this.$auth.loginWith('local', payload)
+      if (response === 1) {
+        // La autenticación fue exitosa
+        const URL = '/tablero';
+        this.$router.push(URL);
+      } else {
+        // La autenticación falló, muestra un mensaje de error
+        this.error = 'Credenciales incorrectas';
       }
     },
   },

@@ -72,8 +72,8 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Home',
-          to: '/',
+          title: 'Proyecyos',
+          to: '/tablero',
         },
         {
           icon: 'mdi-chart-bubble',

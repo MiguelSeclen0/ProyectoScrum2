@@ -35,7 +35,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/axios'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/auth'],
 
   axios: {
     baseURL: 'http://localhost:90',
@@ -66,7 +66,7 @@ export default {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
-          text:'#ffffff'
+          text: '#ffffff'
         },
         light: {
           primary: '#ffffff',
@@ -76,7 +76,7 @@ export default {
           info: '#2196F3',
           success: '#4CAF50',
           warning: '#FFC107',
-          text:'#000000'
+          text: '#000000'
         },
       },
     },
@@ -91,8 +91,9 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: 'http://localhost:90/usuario/find',
-            method: 'get',
+            Headers: { 'Content-Type': 'application/json' },
+            url: '/usuario/login',
+            method: 'post',
           },
           logout: false,
         },
