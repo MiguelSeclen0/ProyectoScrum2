@@ -9,7 +9,7 @@
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                            New Item
+                            Crear Nuevo Proyecto
                         </v-btn>
                     </template>
                     <v-card>
@@ -21,19 +21,16 @@
                             <v-container>
                                 <v-row>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                                        <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                                        <v-text-field v-model="editedItem.calories" label="Clave"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                                        <v-text-field v-model="editedItem.fat" label="Tipo"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                                        <v-text-field v-model="editedItem.carbs" label="Oportunidad"></v-text-field>
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -89,16 +86,15 @@ export default {
         dialogDelete: false,
         headers: [
             {
-                text: 'Dessert (100g serving)',
+                text: 'Nombre',
                 align: 'start',
                 sortable: false,
                 value: 'name',
             },
-            { text: 'Prueba2', value: 'Prueba 4' },
-            { text: 'Prueba3', value: 'fat' },
-            { text: 'Carbs (g)', value: 'carbs' },
-            { text: 'Protein (g)', value: 'protein' },
-            { text: 'Actions', value: 'actions', sortable: false },
+            { text: 'Clave', value: 'Prueba 4' },
+            { text: 'Tipo', value: 'fat' },
+            { text: 'Oportunidad', value: 'carbs' },
+            { text: 'Acciones', value: 'actions', sortable: false },
         ],
         desserts: [],
         editedIndex: -1,
@@ -120,7 +116,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+            return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Edit Item'
         },
     },
 
