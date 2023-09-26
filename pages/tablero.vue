@@ -95,7 +95,7 @@ export default {
                 value: 'name',
             },
             { text: 'Prueba2', value: 'Prueba 4' },
-            { text: 'Fat (g)', value: 'fat' },
+            { text: 'Prueba 4', value: 'fat' },
             { text: 'Carbs (g)', value: 'carbs' },
             { text: 'Protein (g)', value: 'protein' },
             { text: 'Actions', value: 'actions', sortable: false },
