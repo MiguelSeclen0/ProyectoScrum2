@@ -42,6 +42,11 @@
           </v-card-actions>
         </v-card>
       </draggable>
+      <v-btn style="margin-top: 1%;" @click="openAddTaskModal">
+        <v-icon>
+          mdi-plus
+        </v-icon>
+      </v-btn>
     </v-col>
     <v-btn style="margin-top: 1%;" @click="openAddColumnModal">
       <v-icon>
@@ -49,17 +54,29 @@
       </v-icon>
     </v-btn>
     <v-dialog v-model="addColumnModal" max-width="400">
-    <v-card>
-      <v-card-title>Agregar Nueva Columna</v-card-title>
-      <v-card-text>
-        <v-text-field v-model="newColumnName" label="Nombre de la Columna"></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn color="primary" @click="addColumn">Agregar</v-btn>
-        <v-btn @click="closeAddColumnModal">Cancelar</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+      <v-card>
+        <v-card-title>Agregar Nueva Columna</v-card-title>
+        <v-card-text>
+          <v-text-field v-model="newColumnName" label="Nombre de la Columna"></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" @click="addColumn">Agregar</v-btn>
+          <v-btn @click="closeAddColumnModal">Cancelar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="addTaskModal" max-width="400">
+      <v-card>
+        <v-card-title>Agregar Nueva Tarea</v-card-title>
+        <v-card-text>
+          <v-text-field v-model="newColumnName" label="Nombre de la Tarea"></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" @click="addTask">Agregar</v-btn>
+          <v-btn @click="closeAddTaskModal">Cancelar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -100,9 +117,9 @@ export default {
       // Agrega más objetos de datos aquí según sea necesario
     ],
       Mylist3: [
-        { nombres: "TO DO" },
-        { nombres: "TO DO" },
-        { nombres: "TO DO" }
+        { nombres: "TO DO", editing: false }, // Agrega 'editing: false' a cada elemento
+        { nombres: "TO DO", editing: false },
+        { nombres: "TO DO", editing: false }
       ],
       Mylist4: [
         { nombres: "Axel" }
@@ -111,6 +128,9 @@ export default {
       newColumnName: '',    // Almacena el nombre de la nueva columna
       editedColumnIndex: -1,     // Índice de la columna en edición
       editedColumnName: '',      // Nuevo nombre de la columna en edición
+      addTaskModal: false,
+      newTaskName: '',
+
     }
   },
   components: {
@@ -133,11 +153,17 @@ export default {
     openAddColumnModal() {
       this.addColumnModal = true;
     },
-
+    openAddTaskModal(){
+      this.addTaskModal = true;
+    },
     // Cierra el modal
     closeAddColumnModal() {
       this.addColumnModal = false;
       this.newColumnName = ''; // Restablece el nombre de la nueva columna
+    },
+    closeAddTaskModal() {
+      this.addTaskModal = false;
+      this.newTaskName = ''; // Restablece el nombre de la nueva columna
     },
 
     // Agrega una nueva columna a la lista
@@ -148,12 +174,18 @@ export default {
         this.closeAddColumnModal(); // Cierra el modal después de agregar la columna
       }
     },
+    addTask(){
+      if (this.newColumnName.trim() !== '') {
+        this.Mylist2.push({ nombres: this.newColumnName });
+        this.closeAddTaskModal(); // Cierra el modal después de agregar la columna
+      }
+    },
     deleteColumn(index) {
       this.Mylist3.splice(index, 1);
     },
-        // Activa el modo de edición de una columna
-        editColumn(index) {
-      this.editedColumnIndex = index;
+    // Activa el modo de edición de una columna
+    editColumn(index) {
+      this.Mylist3[index].editing = true;
       this.editedColumnName = this.Mylist3[index].nombres;
     },
 
@@ -167,7 +199,7 @@ export default {
 
     // Cancela la edición de la columna
     cancelEdit(index) {
-      this.editedColumnIndex = -1;
+      this.Mylist3[index].editing = false;
       this.editedColumnName = '';
     },
   },
