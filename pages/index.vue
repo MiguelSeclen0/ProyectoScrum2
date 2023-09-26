@@ -41,14 +41,6 @@
 <script>
 
 export default {
-  // async fetch() {
-  //   await Promise.all([
-  //     // // this.$store.dispatch(`etiquetaIdioma/${FETCH_ETIQUETA_IDIOMA}`, {
-  //     // //   currentIdioma: { idIdioma: this.selectedIdioma },
-  //     // // }),
-  //     // this.fetchLabelsByLanguage(this.selectedIdioma),
-  //   ])
-  // },
   layout: 'empty',
   auth: false,
   progress: false,
