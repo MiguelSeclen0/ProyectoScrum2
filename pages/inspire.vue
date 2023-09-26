@@ -1,16 +1,15 @@
 <template>
-  <v-row>
-    <v-col v-for="item in Mylist3" :key="item.id" class="secondary cards" cols="12" md="3">
+  <v-container class="scrollable-container">
+    <div class="cards-wrapper">
+    <v-col v-for="item in Mylist3" :key="item.id" class="secondary cards" md="3">
       {{ item.nombres }}
       <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
-        <v-card v-for="item in usuario" :key="item.id" elevation="24" class="mx-auto cards" color="primary"
-          max-width="400">
+        <v-card v-for="item in Mylist2" :key="item.id" elevation="24" class="mx-auto" color="primary" max-width="250">
           <v-card-title>
             <v-icon large left>
               {{ item.id }}
             </v-icon>
           </v-card-title>
-
           <v-card-text class="text-h5 font-weight-bold">
             {{ item.correoElectronico }}
           </v-card-text>
@@ -42,7 +41,8 @@
         </v-card>
       </draggable>
     </v-col>
-  </v-row>
+    </div>
+  </v-container>
 </template>
 
 <script>
@@ -60,13 +60,18 @@ export default {
 
       ],
       Mylist2: [
+        { nombres: "Xiomar" },
+        { nombres: "Xiomar" },
+        { nombres: "Xiomar" },
+        { nombres: "Xiomar" },
         { nombres: "Xiomar" }
       ],
       Mylist3: [
         { nombres: "TO DO" },
         { nombres: "IN PROGRESS" },
         { nombres: "DONE" },
-        { nombres: "PRUEBA"}
+        { nombres: "PRUEBA" },
+        { nombres: "PRueba2" }
       ],
       Mylist4: [
         { nombres: "Axel" }
@@ -86,10 +91,21 @@ export default {
 }
 </script>
 <style>
+.scrollable-container {
+  overflow-x: auto; /* Habilita la barra de desplazamiento horizontal */
+  overflow-y: auto;
+  white-space: nowrap; /* Evita que las columnas se envuelvan */
+  max-width: 100%; /* Asegura que el contenedor no se desborde horizontalmente */
+}
+
+.cards-wrapper {
+  display: inline-flex; /* Hace que las columnas se coloquen en línea */
+  flex-wrap: nowrap; /* Evita el ajuste de línea */
+}
+
 .cards {
-  margin-bottom: 5%;
-  min-height: 700px;
-  margin-left: 2%;
-  margin-top: 2%;
+  margin: 1%; /* Ajusta el margen entre las columnas */
+  min-width: 250px; /* Ancho mínimo de las columnas */
+  min-height: 750px; /*Alto de las columnas */
 }
 </style>
