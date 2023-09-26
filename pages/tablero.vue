@@ -94,7 +94,7 @@ export default {
                 sortable: false,
                 value: 'name',
             },
-            { text: 'Calories', value: 'calories' },
+            { text: 'Prueba2', value: 'calories' },
             { text: 'Fat (g)', value: 'fat' },
             { text: 'Carbs (g)', value: 'carbs' },
             { text: 'Protein (g)', value: 'protein' },
