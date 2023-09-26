@@ -1,33 +1,37 @@
 <template>
-  <v-container class="scrollable-container">
-    <div class="cards-wrapper">
+  <div class="cards-wrapper">
     <v-col v-for="item in Mylist3" :key="item.id" class="secondary cards" md="3">
       {{ item.nombres }}
       <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
-        <v-card v-for="item in Mylist2" :key="item.id" elevation="24" class="mx-auto" color="primary" max-width="250">
+        <!-- Eliminamos el bucle v-card -->
+        <v-card elevation="24" class="mx-auto cardst" color="primary" max-width="250" v-if="Mylist2.length > 0">
           <v-card-title>
             <v-icon large left>
-              {{ item.id }}
+              {{ Mylist2[0].id }} <!-- Mostramos el código de la tarea -->
             </v-icon>
           </v-card-title>
           <v-card-text class="text-h5 font-weight-bold">
-            {{ item.correoElectronico }}
+            {{ Mylist2[0].correoElectronico }} <!-- Mostramos el nombre de la tarea -->
           </v-card-text>
 
           <v-card-actions>
             <v-list-item class="grow">
               <v-list-item-avatar color="grey darken-3">
-                <v-img class="elevation-6" alt=""
-                  src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"></v-img>
+                <!-- Aquí puedes colocar la imagen circular con las iniciales -->
+                <v-img class="elevation-6" alt="">
+                  <!-- Puedes personalizar esta imagen según tus necesidades -->
+                  <img src="https://placekitten.com/50/50" alt="Avatar">
+                </v-img>
               </v-list-item-avatar>
 
               <v-list-item-content>
-                <v-list-item-title>{{ item.nombreUsuario }}</v-list-item-title>
+                <!-- Mostramos el nombre de la tarea -->
+                <v-list-item-title>{{ Mylist2[0].nombreUsuario }}</v-list-item-title>
               </v-list-item-content>
 
               <v-row justify="end">
                 <v-icon class="mr-1">
-                  mdi-heart
+                  mdi-black-mesa
                 </v-icon>
                 <span class="subheading mr-2">256</span>
                 <span class="mr-1">·</span>
@@ -41,9 +45,9 @@
         </v-card>
       </draggable>
     </v-col>
-    </div>
-  </v-container>
+  </div>
 </template>
+
 
 <script>
 import draggable from 'vuedraggable'
@@ -60,12 +64,26 @@ export default {
 
       ],
       Mylist2: [
-        { nombres: "Xiomar" },
-        { nombres: "Xiomar" },
-        { nombres: "Xiomar" },
-        { nombres: "Xiomar" },
-        { nombres: "Xiomar" }
-      ],
+      {
+        id: "001",
+        correoElectronico: "tarea1@ejemplo.com",
+        nombreUsuario: "Usuario 1",
+        nombres: "U1"
+      },
+      {
+        id: "002",
+        correoElectronico: "tarea2@ejemplo.com",
+        nombreUsuario: "Usuario 2",
+        nombres: "U2"
+      },
+      {
+        id: "003",
+        correoElectronico: "tarea3@ejemplo.com",
+        nombreUsuario: "Usuario 3",
+        nombres: "U3"
+      },
+      // Agrega más objetos de datos aquí según sea necesario
+    ],
       Mylist3: [
         { nombres: "TO DO" },
         { nombres: "IN PROGRESS" },
@@ -91,7 +109,7 @@ export default {
 }
 </script>
 <style>
-.scrollable-container {
+.container {
   overflow-x: auto; /* Habilita la barra de desplazamiento horizontal */
   overflow-y: auto;
   white-space: nowrap; /* Evita que las columnas se envuelvan */
@@ -107,5 +125,9 @@ export default {
   margin: 1%; /* Ajusta el margen entre las columnas */
   min-width: 250px; /* Ancho mínimo de las columnas */
   min-height: 750px; /*Alto de las columnas */
+}
+
+.cardst{
+  margin: 5%;
 }
 </style>
