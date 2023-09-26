@@ -120,7 +120,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+            return this.editedIndex === -1 ? 'Crear Nuevo Proyecto' : 'Edit Item'
         },
     },
 
