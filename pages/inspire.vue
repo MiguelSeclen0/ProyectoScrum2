@@ -13,30 +13,28 @@
             </v-icon>
           </v-btn>
       <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
-        <!-- Eliminamos el bucle v-card -->
-        <v-card elevation="24" class="mx-auto cardst" color="primary" max-width="250" v-if="Mylist2.length > 0">
+        <v-card v-for="item in Mylist2" :key="item.id" elevation="24" class="mx-auto cardst" color="primary" max-width="250" >
           <v-card-title>
             <v-icon large left>
-              {{ Mylist2[0].id }} <!-- Mostramos el código de la tarea -->
+              {{ item.nombreTarea }} <!-- Mostramos el nombre de la tarea -->
             </v-icon>
           </v-card-title>
           <v-card-text class="text-h5 font-weight-bold">
-            {{ Mylist2[0].correoElectronico }} <!-- Mostramos el nombre de la tarea -->
+            {{ item.nombres }} <!-- Mostramos el código de la tarea -->
           </v-card-text>
 
           <v-card-actions>
             <v-list-item class="grow">
               <v-list-item-avatar color="grey darken-3">
-                <!-- Aquí puedes colocar la imagen circular con las iniciales -->
+                <!-- Genera la imagen circular con las iniciales del nombre de usuario -->
                 <v-img class="elevation-6" alt="">
-                  <!-- Puedes personalizar esta imagen según tus necesidades -->
-                  <img src="https://placekitten.com/50/50" alt="Avatar">
+                  <div class="avatar-circle">{{ getInitials(item.nombreUsuario) }}</div>
                 </v-img>
               </v-list-item-avatar>
 
               <v-list-item-content>
                 <!-- Mostramos el nombre de la tarea -->
-                <v-list-item-title>{{ Mylist2[0].nombreUsuario }}</v-list-item-title>
+                <v-list-item-title>{{ item.nombreUsuario }}</v-list-item-title>
               </v-list-item-content>
 
               <v-row justify="end">
@@ -93,20 +91,20 @@ export default {
       Mylist2: [
       {
         id: "001",
-        correoElectronico: "tarea1@ejemplo.com",
-        nombreUsuario: "Usuario 1",
+        nombreTarea: "tarea1",
+        nombreUsuario: "Usuario Palomo",
         nombres: "U1"
       },
       {
         id: "002",
-        correoElectronico: "tarea2@ejemplo.com",
-        nombreUsuario: "Usuario 2",
+        nombreTarea: "tarea2",
+        nombreUsuario: "Usuario Seclen",
         nombres: "U2"
       },
       {
         id: "003",
-        correoElectronico: "tarea3@ejemplo.com",
-        nombreUsuario: "Usuario 3",
+        nombreTarea: "tarea3m",
+        nombreUsuario: "Usuario Snache",
         nombres: "U3"
       },
       // Agrega más objetos de datos aquí según sea necesario
@@ -136,6 +134,11 @@ export default {
     ...mapState('usuario', ['usuario']),
   },
   methods: {
+    getInitials(username) {
+      const words = username.split(" ");
+      const initials = words.map((word) => word[0].toUpperCase());
+      return initials.join("");
+    },
     // Abre el modal para agregar una nueva columna
     openAddColumnModal() {
       this.addColumnModal = true;
@@ -204,5 +207,17 @@ export default {
 
 .cardst{
   margin: 5%;
+}
+
+.avatar-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #007bff; /* Cambia el color de fondo según tus preferencias */
+  color: white;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
