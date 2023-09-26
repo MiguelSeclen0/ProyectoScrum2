@@ -2,6 +2,16 @@
   <div class="cards-wrapper">
     <v-col v-for="item in Mylist3" :key="item.id" class="secondary cards" md="3">
       {{ item.nombres }}
+      <v-btn @click="deleteColumn(index)">
+          <v-icon>
+            mdi-delete
+          </v-icon>
+        </v-btn>
+        <v-btn @click="editColumn(index)">
+            <v-icon>
+              mdi-pencil
+            </v-icon>
+          </v-btn>
       <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
         <!-- Eliminamos el bucle v-card -->
         <v-card elevation="24" class="mx-auto cardst" color="primary" max-width="250" v-if="Mylist2.length > 0">
@@ -45,6 +55,23 @@
         </v-card>
       </draggable>
     </v-col>
+    <v-btn style="margin-top: 1%;" @click="openAddColumnModal">
+      <v-icon>
+        mdi-plus
+      </v-icon>
+    </v-btn>
+    <v-dialog v-model="addColumnModal" max-width="400">
+    <v-card>
+      <v-card-title>Agregar Nueva Columna</v-card-title>
+      <v-card-text>
+        <v-text-field v-model="newColumnName" label="Nombre de la Columna"></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" @click="addColumn">Agregar</v-btn>
+        <v-btn @click="closeAddColumnModal">Cancelar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
   </div>
 </template>
 
@@ -86,14 +113,16 @@ export default {
     ],
       Mylist3: [
         { nombres: "TO DO" },
-        { nombres: "IN PROGRESS" },
-        { nombres: "DONE" },
-        { nombres: "PRUEBA" },
-        { nombres: "PRueba2" }
+        { nombres: "TO DO" },
+        { nombres: "TO DO" }
       ],
       Mylist4: [
         { nombres: "Axel" }
-      ]
+      ],
+      addColumnModal: false, // Controla la visibilidad del modal
+      newColumnName: '',    // Almacena el nombre de la nueva columna
+      editedColumnIndex: -1,     // Índice de la columna en edición
+      editedColumnName: '',      // Nuevo nombre de la columna en edición
     }
   },
   components: {
@@ -106,19 +135,65 @@ export default {
   computed: {
     ...mapState('usuario', ['usuario']),
   },
+  methods: {
+    // Abre el modal para agregar una nueva columna
+    openAddColumnModal() {
+      this.addColumnModal = true;
+    },
+
+    // Cierra el modal
+    closeAddColumnModal() {
+      this.addColumnModal = false;
+      this.newColumnName = ''; // Restablece el nombre de la nueva columna
+    },
+
+    // Agrega una nueva columna a la lista
+    addColumn() {
+      if (this.newColumnName.trim() !== '') {
+        this.Mylist3.push({ nombres: this.newColumnName });
+        this.closeAddColumnModal(); // Cierra el modal después de agregar la columna
+      }
+    },
+    deleteColumn(index) {
+      this.Mylist3.splice(index, 1);
+    },
+        // Activa el modo de edición de una columna
+        editColumn(index) {
+      this.editedColumnIndex = index;
+      this.editedColumnName = this.Mylist3[index].nombres;
+    },
+
+    // Guarda el nombre editado de la columna
+    saveEditedColumn(index) {
+      if (this.editedColumnName.trim() !== '') {
+        this.Mylist3[index].nombres = this.editedColumnName;
+      }
+      this.cancelEdit(index);
+    },
+
+    // Cancela la edición de la columna
+    cancelEdit(index) {
+      this.editedColumnIndex = -1;
+      this.editedColumnName = '';
+    },
+  },
 }
 </script>
 <style>
 .container {
   overflow-x: auto; /* Habilita la barra de desplazamiento horizontal */
   overflow-y: auto;
-  white-space: nowrap; /* Evita que las columnas se envuelvan */
-  max-width: 100%; /* Asegura que el contenedor no se desborde horizontalmente */
+  white-space: nowrap;
+  /* Evita que las columnas se envuelvan */
+  max-width: 100%;
+  /* Asegura que el contenedor no se desborde horizontalmente */
 }
 
 .cards-wrapper {
-  display: inline-flex; /* Hace que las columnas se coloquen en línea */
-  flex-wrap: nowrap; /* Evita el ajuste de línea */
+  display: inline-flex;
+  /* Hace que las columnas se coloquen en línea */
+  flex-wrap: nowrap;
+  /* Evita el ajuste de línea */
 }
 
 .cards {
