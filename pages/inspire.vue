@@ -20,30 +20,33 @@
         <v-btn @click="cancelEdit(columnIndex)">Cancelar</v-btn>
       </div>
       <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
-        <v-card v-for="item in Mylist2" :key="item.id" elevation="24" class="mx-auto" color="primary" max-width="250">
+        <v-card v-for="item in Mylist2" :key="item.id" elevation="24" class="mx-auto cardst" color="primary" max-width="250" >
           <v-card-title>
             <v-icon large left>
-              {{ item.id }}
+              {{ item.nombreTarea }} <!-- Mostramos el nombre de la tarea -->
             </v-icon>
           </v-card-title>
           <v-card-text class="text-h5 font-weight-bold">
-            {{ item.correoElectronico }}
+            {{ item.nombres }} <!-- Mostramos el código de la tarea -->
           </v-card-text>
 
           <v-card-actions>
             <v-list-item class="grow">
               <v-list-item-avatar color="grey darken-3">
-                <v-img class="elevation-6" alt=""
-                  src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"></v-img>
+                <!-- Genera la imagen circular con las iniciales del nombre de usuario -->
+                <v-img class="elevation-6" alt="">
+                  <div class="avatar-circle">{{ getInitials(item.nombreUsuario) }}</div>
+                </v-img>
               </v-list-item-avatar>
 
               <v-list-item-content>
+                <!-- Mostramos el nombre de la tarea -->
                 <v-list-item-title>{{ item.nombreUsuario }}</v-list-item-title>
               </v-list-item-content>
 
               <v-row justify="end">
                 <v-icon class="mr-1">
-                  mdi-heart
+                  mdi-black-mesa
                 </v-icon>
                 <span class="subheading mr-2">256</span>
                 <span class="mr-1">·</span>
@@ -94,6 +97,7 @@
   </div>
 </template>
 
+
 <script>
 import draggable from 'vuedraggable'
 import { mapState } from 'vuex'
@@ -109,12 +113,26 @@ export default {
 
       ],
       Mylist2: [
-        { nombres: "Xiomar" },
-        { nombres: "Xiomar" },
-        { nombres: "Xiomar" },
-        { nombres: "Xiomar" },
-        { nombres: "Xiomar" }
-      ],
+      {
+        id: "001",
+        nombreTarea: "tarea1",
+        nombreUsuario: "Usuario Palomo",
+        nombres: "U1"
+      },
+      {
+        id: "002",
+        nombreTarea: "tarea2",
+        nombreUsuario: "Usuario Seclen",
+        nombres: "U2"
+      },
+      {
+        id: "003",
+        nombreTarea: "tarea3m",
+        nombreUsuario: "Usuario Snache",
+        nombres: "U3"
+      },
+      // Agrega más objetos de datos aquí según sea necesario
+    ],
       Mylist3: [
         { nombres: "TO DO", editing: false }, // Agrega 'editing: false' a cada elemento
         { nombres: "TO DO", editing: false },
@@ -143,6 +161,11 @@ export default {
     ...mapState('usuario', ['usuario']),
   },
   methods: {
+    getInitials(username) {
+      const words = username.split(" ");
+      const initials = words.map((word) => word[0].toUpperCase());
+      return initials.join("");
+    },
     // Abre el modal para agregar una nueva columna
     openAddColumnModal() {
       this.addColumnModal = true;
@@ -200,8 +223,7 @@ export default {
 </script>
 <style>
 .container {
-  overflow-x: auto;
-  /* Habilita la barra de desplazamiento horizontal */
+  overflow-x: auto; /* Habilita la barra de desplazamiento horizontal */
   overflow-y: auto;
   white-space: nowrap;
   /* Evita que las columnas se envuelvan */
@@ -217,11 +239,24 @@ export default {
 }
 
 .cards {
-  margin: 1%;
-  /* Ajusta el margen entre las columnas */
-  min-width: 250px;
-  /* Ancho mínimo de las columnas */
-  min-height: 750px;
-  /*Alto de las columnas */
+  margin: 1%; /* Ajusta el margen entre las columnas */
+  min-width: 250px; /* Ancho mínimo de las columnas */
+  min-height: 750px; /*Alto de las columnas */
+}
+
+.cardst{
+  margin: 5%;
+}
+
+.avatar-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #007bff; /* Cambia el color de fondo según tus preferencias */
+  color: white;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
