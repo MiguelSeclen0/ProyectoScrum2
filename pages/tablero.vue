@@ -24,13 +24,13 @@
                                         <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.calories" label="Clave"></v-text-field>
+                                        <v-text-field v-model="editedItem.clave1" label="Clave"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.fat" label="Tipo"></v-text-field>
+                                        <v-text-field v-model="editedItem.tipo1" label="Tipo"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.carbs" label="Oportunidad"></v-text-field>
+                                        <v-text-field v-model="editedItem.oportunidad1" label="Oportunidad"></v-text-field>
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -39,21 +39,21 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn color="blue darken-1" text @click="close">
-                                Cancel
+                                Cancelar
                             </v-btn>
                             <v-btn color="blue darken-1" text @click="save">
-                                Save
+                                Guardar
                             </v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
                 <v-dialog v-model="dialogDelete" max-width="500px">
                     <v-card>
-                        <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+                        <v-card-title class="text-h5">¿Estás seguro de eliminar este proyecto?</v-card-title>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                            <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                            <v-btn color="blue darken-1" text @click="closeDelete">Cancelar</v-btn>
+                            <v-btn color="blue darken-1" text @click="deleteItemConfirm">Eliminar</v-btn>
                             <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-card>
@@ -91,32 +91,30 @@ export default {
                 sortable: false,
                 value: 'name',
             },
-            { text: 'Clave', value: 'Prueba 4' },
-            { text: 'Tipo', value: 'fat' },
-            { text: 'Oportunidad', value: 'carbs' },
+            { text: 'Clave', value: 'clave1' },
+            { text: 'Tipo', value: 'tipo1' },
+            { text: 'Oportunidad', value: 'oportunidad1' },
             { text: 'Acciones', value: 'actions', sortable: false },
         ],
         desserts: [],
         editedIndex: -1,
         editedItem: {
             name: '',
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0,
+            clave1: '',
+            tipo1: '',
+            oportunidad1: '',
         },
         defaultItem: {
             name: '',
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0,
+            clave1: '',
+            tipo1: '',
+            oportunidad1: '',            
         },
     }),
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Edit Item'
+            return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Editar Proyecto'
         },
     },
 
@@ -138,73 +136,63 @@ export default {
             this.desserts = [
                 {
                     name: 'Implementación de un sistema de gestión de pedidos',
-                    calories: 159,
-                    fat: 6.0,
-                    carbs: 24,
-                    protein: 4.0,
+                    clave1: 'ISG',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Erick Irwin Pajuelo Ojeda',
                 },
                 {
                     name: 'Optimización de un blog corporativo',
-                    calories: 237,
-                    fat: 9.0,
-                    carbs: 37,
-                    protein: 4.3,
+                    clave1: 'OBC',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Culqui Sanchez Axel Adrian',
                 },
                 {
                     name: 'Desarrollo de una aplicación móvil de delivery',
-                    calories: 262,
-                    fat: 16.0,
-                    carbs: 23,
-                    protein: 6.0,
+                    clave1: 'DAM',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Mucching Sanchez Grace Victoria',
                 },
                 {
                     name: 'Implementación de un sistema de reservas de hoteles',
-                    calories: 305,
-                    fat: 3.7,
-                    carbs: 67,
-                    protein: 4.3,
+                    clave1: 'ISR',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Orihuela Vera Fernando Alan Jesus',
                 },
                 {
                     name: 'Implementación de un sistema de gestión de proyectos',
-                    calories: 356,
-                    fat: 16.0,
-                    carbs: 49,
-                    protein: 3.9,
+                    clave1: 'ISP',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Erick Irwin Pajuelo Ojeda',
                 },
                 {
                     name: 'Implementación de un sistema de reservas online',
-                    calories: 375,
-                    fat: 0.0,
-                    carbs: 94,
-                    protein: 0.0,
+                    clave1: 'ISO',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Mucching Sanchez Grace Victoria',
                 },
                 {
                     name: 'Desarrollo de una aplicación de realidad aumentada',
-                    calories: 392,
-                    fat: 0.2,
-                    carbs: 98,
-                    protein: 0,
+                    clave1: 'DAR',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Limas Meza Patrick Sebastian',
                 },
                 {
                     name: 'Diseño de una aplicación de medición de servicios',
-                    calories: 408,
-                    fat: 3.2,
-                    carbs: 87,
-                    protein: 6.5,
+                    clave1: 'DAS',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Seclen Chavez Miguel Andres',
                 },
                 {
                     name: 'Elaboración de una plataforma de mentorías online',
-                    calories: 452,
-                    fat: 25.0,
-                    carbs: 51,
-                    protein: 4.9,
+                    clave1: 'EPM',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Orihuela Vera Fernando Alan Jesus',
                 },
                 {
                     name: 'Construcción de una aplicación colaborativa de empresa familiar',
-                    calories: 518,
-                    fat: 26.0,
-                    carbs: 65,
-                    protein: 7,
+                    clave1: 'CAC',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Erick Irwin Pajuelo Ojeda',
                 },
             ]
         },
