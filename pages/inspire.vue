@@ -1,61 +1,44 @@
 <template>
   <div class="cards-wrapper">
-    <v-col v-for="(item, columnIndex) in Mylist3" :key="item.id" class="secondary cards" md="3">
-      <div v-if="!item.editing">
-        {{ item.nombres }}
-        <v-btn @click="editColumn(columnIndex)">
-          <v-icon>
-            mdi-pencil
-          </v-icon>
-        </v-btn>
-        <v-btn @click="deleteColumn(columnIndex)">
+    <v-col v-for="(item, index) in Mylist3" :key="index" class="secondary cards" md="3">
+      <div v-if="index !== editedColumnIndex">
+        <span @click="editColumn(index)">{{ item.nombres }}</span>
+      </div>
+      <div v-else>
+        <v-text-field v-model="editedColumnName" label="Nuevo nombre" solo-inverted></v-text-field>
+        <v-btn @click="saveEditedColumn(index)">Guardar</v-btn>
+        <v-btn @click="cancelEdit(index)">Cancelar</v-btn>
+      </div>
+      <v-btn @click="deleteColumn(index)">
           <v-icon>
             mdi-delete
           </v-icon>
         </v-btn>
-      </div>
-      <div v-else>
-        <v-text-field v-model="editedColumnName" label="Nuevo Nombre"></v-text-field>
-        <v-btn @click="saveEditedColumn(columnIndex)">Guardar</v-btn>
-        <v-btn @click="cancelEdit(columnIndex)">Cancelar</v-btn>
-      </div>
-      <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
-        <v-card v-for="item in Mylist2" :key="item.id" elevation="24" class="mx-auto cardst" color="primary" max-width="250" >
+          <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
+      <v-card v-for="item in Mylist2" :key="item.id" elevation="24" class="mx-auto cardst" :class="['column-card', { 'new-column': index >= Mylist3.length - 1 }]" color="primary" max-width="250">
           <v-card-title>
-            <v-icon large left>
+            <v-icon large left class="text-caption">
               {{ item.nombreTarea }} <!-- Mostramos el nombre de la tarea -->
             </v-icon>
           </v-card-title>
-          <v-card-text class="text-h5 font-weight-bold">
-            {{ item.nombres }} <!-- Mostramos el código de la tarea -->
-          </v-card-text>
-
           <v-card-actions>
-            <v-list-item class="grow">
-              <v-list-item-avatar color="grey darken-3">
-                <!-- Genera la imagen circular con las iniciales del nombre de usuario -->
-                <v-img class="elevation-6" alt="">
-                  <div class="avatar-circle">{{ getInitials(item.nombreUsuario) }}</div>
-                </v-img>
-              </v-list-item-avatar>
-
-              <v-list-item-content>
-                <!-- Mostramos el nombre de la tarea -->
-                <v-list-item-title>{{ item.nombreUsuario }}</v-list-item-title>
-              </v-list-item-content>
-
-              <v-row justify="end">
-                <v-icon class="mr-1">
-                  mdi-black-mesa
-                </v-icon>
-                <span class="subheading mr-2">256</span>
-                <span class="mr-1">·</span>
-                <v-icon class="mr-1">
-                  mdi-share-variant
-                </v-icon>
-                <span class="subheading">45</span>
-              </v-row>
-            </v-list-item>
+            <v-row align-items="center" class="text-overline">
+              <v-col md="6" style="min-width: 80%;">
+                <!-- Muestra item.nombres a la izquierda -->
+                {{ item.nombres }}
+              </v-col>
+              <v-col md="6" class="text-right" style="max-width: 10%;">
+                <!-- Genera la imagen circular con las iniciales del nombre de usuario a la derecha -->
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-avatar class="avatar-circle" size="24px" v-bind="attrs" v-on="on">
+                      <div class="avatar-inner">{{ getInitials(item.nombreUsuario) }}</div>
+                    </v-avatar>
+                  </template>
+                  <span>{{ item.nombreUsuario }}</span>
+                </v-tooltip>
+              </v-col>
+            </v-row>
           </v-card-actions>
         </v-card>
       </draggable>
@@ -129,7 +112,7 @@ export default {
         id: "003",
         nombreTarea: "tarea3m",
         nombreUsuario: "Usuario Snache",
-        nombres: "U3"
+        nombres: "USSSSSSSSS"
       },
       // Agrega más objetos de datos aquí según sea necesario
     ],
@@ -187,6 +170,7 @@ export default {
     addColumn() {
       if (this.newColumnName.trim() !== '') {
         this.Mylist3.push({ nombres: this.newColumnName });
+        this.Mylist2 = [...this.Mylist2]; // Restablece Mylist2 a su estado original
         this.closeAddColumnModal(); // Cierra el modal después de agregar la columna
       }
     },
@@ -252,14 +236,26 @@ export default {
 }
 
 .avatar-circle {
-  width: 50px;
-  height: 50px;
   border-radius: 50%;
   background-color: #007bff; /* Cambia el color de fondo según tus preferencias */
   color: white;
-  font-size: 24px;
+  font-size: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* Estilo para todas las columnas */
+.column-card {
+  margin: 5%; /* Ajusta el margen entre las columnas */
+  min-width: 250px; /* Ancho mínimo de las columnas */
+  max-width: 250px; /* Ancho máximo de las columnas */
+}
+
+/* Estilo solo para las nuevas columnas */
+.new-column {
+  /* Puedes ajustar el ancho mínimo y máximo según tus preferencias */
+  min-width: 250px; /* Ancho mínimo de las nuevas columnas */
+  max-width: 250px; /* Ancho máximo de las nuevas columnas */
 }
 </style>

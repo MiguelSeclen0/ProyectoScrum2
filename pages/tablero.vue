@@ -9,7 +9,7 @@
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                            New Item
+                            Crear Nuevo Proyecto
                         </v-btn>
                     </template>
                     <v-card>
@@ -21,19 +21,16 @@
                             <v-container>
                                 <v-row>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                                        <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                                        <v-text-field v-model="editedItem.clave1" label="Clave"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                                        <v-text-field v-model="editedItem.tipo1" label="Tipo"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                                        <v-text-field v-model="editedItem.oportunidad1" label="Oportunidad"></v-text-field>
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -42,21 +39,21 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn color="blue darken-1" text @click="close">
-                                Cancel
+                                Cancelar
                             </v-btn>
                             <v-btn color="blue darken-1" text @click="save">
-                                Save
+                                Guardar
                             </v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
                 <v-dialog v-model="dialogDelete" max-width="500px">
                     <v-card>
-                        <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+                        <v-card-title class="text-h5">¿Estás seguro de eliminar este proyecto?</v-card-title>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                            <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                            <v-btn color="blue darken-1" text @click="closeDelete">Cancelar</v-btn>
+                            <v-btn color="blue darken-1" text @click="deleteItemConfirm">Eliminar</v-btn>
                             <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-card>
@@ -89,38 +86,35 @@ export default {
         dialogDelete: false,
         headers: [
             {
-                text: 'Dessert (100g serving)',
+                text: 'Nombre',
                 align: 'start',
                 sortable: false,
                 value: 'name',
             },
-            { text: 'Calories', value: 'calories' },
-            { text: 'Fat (g)', value: 'fat' },
-            { text: 'Carbs (g)', value: 'carbs' },
-            { text: 'Protein (g)', value: 'protein' },
-            { text: 'Actions', value: 'actions', sortable: false },
+            { text: 'Clave', value: 'clave1' },
+            { text: 'Tipo', value: 'tipo1' },
+            { text: 'Oportunidad', value: 'oportunidad1' },
+            { text: 'Acciones', value: 'actions', sortable: false },
         ],
         desserts: [],
         editedIndex: -1,
         editedItem: {
             name: '',
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0,
+            clave1: '',
+            tipo1: '',
+            oportunidad1: '',
         },
         defaultItem: {
             name: '',
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0,
+            clave1: '',
+            tipo1: '',
+            oportunidad1: '',            
         },
     }),
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+            return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Editar Proyecto'
         },
     },
 
@@ -141,74 +135,64 @@ export default {
         initialize() {
             this.desserts = [
                 {
-                    name: 'Frozen Yogurt',
-                    calories: 159,
-                    fat: 6.0,
-                    carbs: 24,
-                    protein: 4.0,
+                    name: 'Implementación de un sistema de gestión de pedidos',
+                    clave1: 'ISG',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Erick Irwin Pajuelo Ojeda',
                 },
                 {
-                    name: 'Ice cream sandwich',
-                    calories: 237,
-                    fat: 9.0,
-                    carbs: 37,
-                    protein: 4.3,
+                    name: 'Optimización de un blog corporativo',
+                    clave1: 'OBC',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Culqui Sanchez Axel Adrian',
                 },
                 {
-                    name: 'Eclair',
-                    calories: 262,
-                    fat: 16.0,
-                    carbs: 23,
-                    protein: 6.0,
+                    name: 'Desarrollo de una aplicación móvil de delivery',
+                    clave1: 'DAM',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Mucching Sanchez Grace Victoria',
                 },
                 {
-                    name: 'Cupcake',
-                    calories: 305,
-                    fat: 3.7,
-                    carbs: 67,
-                    protein: 4.3,
+                    name: 'Implementación de un sistema de reservas de hoteles',
+                    clave1: 'ISR',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Orihuela Vera Fernando Alan Jesus',
                 },
                 {
-                    name: 'Gingerbread',
-                    calories: 356,
-                    fat: 16.0,
-                    carbs: 49,
-                    protein: 3.9,
+                    name: 'Implementación de un sistema de gestión de proyectos',
+                    clave1: 'ISP',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Erick Irwin Pajuelo Ojeda',
                 },
                 {
-                    name: 'Jelly bean',
-                    calories: 375,
-                    fat: 0.0,
-                    carbs: 94,
-                    protein: 0.0,
+                    name: 'Implementación de un sistema de reservas online',
+                    clave1: 'ISO',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Mucching Sanchez Grace Victoria',
                 },
                 {
-                    name: 'Lollipop',
-                    calories: 392,
-                    fat: 0.2,
-                    carbs: 98,
-                    protein: 0,
+                    name: 'Desarrollo de una aplicación de realidad aumentada',
+                    clave1: 'DAR',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Limas Meza Patrick Sebastian',
                 },
                 {
-                    name: 'Honeycomb',
-                    calories: 408,
-                    fat: 3.2,
-                    carbs: 87,
-                    protein: 6.5,
+                    name: 'Diseño de una aplicación de medición de servicios',
+                    clave1: 'DAS',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Seclen Chavez Miguel Andres',
                 },
                 {
-                    name: 'Donut',
-                    calories: 452,
-                    fat: 25.0,
-                    carbs: 51,
-                    protein: 4.9,
+                    name: 'Elaboración de una plataforma de mentorías online',
+                    clave1: 'EPM',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Orihuela Vera Fernando Alan Jesus',
                 },
                 {
-                    name: 'KitKat',
-                    calories: 518,
-                    fat: 26.0,
-                    carbs: 65,
-                    protein: 7,
+                    name: 'Construcción de una aplicación colaborativa de empresa familiar',
+                    clave1: 'CAC',
+                    tipo1: 'Software gestionado por el equipo',
+                    oportunidad1: 'Erick Irwin Pajuelo Ojeda',
                 },
             ]
         },
