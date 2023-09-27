@@ -10,12 +10,13 @@
         <v-btn @click="cancelEdit(index)">Cancelar</v-btn>
       </div>
       <v-btn @click="deleteColumn(index)">
-          <v-icon>
-            mdi-delete
-          </v-icon>
-        </v-btn>
-          <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
-      <v-card v-for="item in Mylist2" :key="item.id" elevation="24" class="mx-auto cardst" :class="['column-card', { 'new-column': index >= Mylist3.length - 1 }]" color="primary" max-width="250">
+        <v-icon>
+          mdi-delete
+        </v-icon>
+      </v-btn>
+      <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
+        <v-card v-for="item in Mylist2" :key="item.id" elevation="24" class="mx-auto cardst"
+          :class="['column-card', { 'new-column': index >= Mylist3.length - 1 }]" color="primary" max-width="250">
           <v-card-title>
             <v-icon large left class="text-caption">
               {{ item.nombreTarea }} <!-- Mostramos el nombre de la tarea -->
@@ -96,26 +97,26 @@ export default {
 
       ],
       Mylist2: [
-      {
-        id: "001",
-        nombreTarea: "tarea1",
-        nombreUsuario: "Usuario Palomo",
-        nombres: "U1"
-      },
-      {
-        id: "002",
-        nombreTarea: "tarea2",
-        nombreUsuario: "Usuario Seclen",
-        nombres: "U2"
-      },
-      {
-        id: "003",
-        nombreTarea: "tarea3m",
-        nombreUsuario: "Usuario Snache",
-        nombres: "USSSSSSSSS"
-      },
-      // Agrega más objetos de datos aquí según sea necesario
-    ],
+        {
+          id: "001",
+          nombreTarea: "tarea1",
+          nombreUsuario: "Usuario Palomo",
+          nombres: "U1"
+        },
+        {
+          id: "002",
+          nombreTarea: "tarea2",
+          nombreUsuario: "Usuario Seclen",
+          nombres: "U2"
+        },
+        {
+          id: "003",
+          nombreTarea: "tarea3m",
+          nombreUsuario: "Usuario Snache",
+          nombres: "USSSSSSSSS"
+        },
+        // Agrega más objetos de datos aquí según sea necesario
+      ],
       Mylist3: [
         { nombres: "TO DO", editing: false }, // Agrega 'editing: false' a cada elemento
         { nombres: "TO DO", editing: false },
@@ -153,7 +154,7 @@ export default {
     openAddColumnModal() {
       this.addColumnModal = true;
     },
-    openAddTaskModal(){
+    openAddTaskModal() {
       this.addTaskModal = true;
     },
     // Cierra el modal
@@ -174,7 +175,7 @@ export default {
         this.closeAddColumnModal(); // Cierra el modal después de agregar la columna
       }
     },
-    addTask(){
+    addTask() {
       if (this.newColumnName.trim() !== '') {
         this.Mylist2.push({ nombres: this.newColumnName });
         this.closeAddTaskModal(); // Cierra el modal después de agregar la columna
@@ -185,7 +186,7 @@ export default {
     },
     // Activa el modo de edición de una columna
     editColumn(index) {
-      this.Mylist3[index].editing = true;
+      this.editedColumnIndex = index;
       this.editedColumnName = this.Mylist3[index].nombres;
     },
 
@@ -199,7 +200,7 @@ export default {
 
     // Cancela la edición de la columna
     cancelEdit(index) {
-      this.Mylist3[index].editing = false;
+      this.editedColumnIndex = -1;
       this.editedColumnName = '';
     },
   },
@@ -207,7 +208,8 @@ export default {
 </script>
 <style>
 .container {
-  overflow-x: auto; /* Habilita la barra de desplazamiento horizontal */
+  overflow-x: auto;
+  /* Habilita la barra de desplazamiento horizontal */
   overflow-y: auto;
   white-space: nowrap;
   /* Evita que las columnas se envuelvan */
@@ -216,6 +218,7 @@ export default {
 }
 
 .cards-wrapper {
+  max-width: 100%; /* Puedes ajustar el valor según tus necesidades */
   display: inline-flex;
   /* Hace que las columnas se coloquen en línea */
   flex-wrap: nowrap;
@@ -223,18 +226,22 @@ export default {
 }
 
 .cards {
-  margin: 1%; /* Ajusta el margen entre las columnas */
-  min-width: 250px; /* Ancho mínimo de las columnas */
-  min-height: 750px; /*Alto de las columnas */
+  margin: 1%;
+  /* Ajusta el margen entre las columnas */
+  min-width: 250px;
+  /* Ancho mínimo de las columnas */
+  min-height: 750px;
+  /*Alto de las columnas */
 }
 
-.cardst{
+.cardst {
   margin: 5%;
 }
 
 .avatar-circle {
   border-radius: 50%;
-  background-color: #007bff; /* Cambia el color de fondo según tus preferencias */
+  background-color: #007bff;
+  /* Cambia el color de fondo según tus preferencias */
   color: white;
   font-size: 10px;
   display: flex;
@@ -244,15 +251,34 @@ export default {
 
 /* Estilo para todas las columnas */
 .column-card {
-  margin: 5%; /* Ajusta el margen entre las columnas */
-  min-width: 250px; /* Ancho mínimo de las columnas */
-  max-width: 250px; /* Ancho máximo de las columnas */
+  margin: 5%;
+  /* Ajusta el margen entre las columnas */
+  min-width: 250px;
+  /* Ancho mínimo de las columnas */
+  max-width: 250px;
+  /* Ancho máximo de las columnas */
 }
 
 /* Estilo solo para las nuevas columnas */
 .new-column {
   /* Puedes ajustar el ancho mínimo y máximo según tus preferencias */
-  min-width: 250px; /* Ancho mínimo de las nuevas columnas */
-  max-width: 250px; /* Ancho máximo de las nuevas columnas */
+  min-width: 250px;
+  /* Ancho mínimo de las nuevas columnas */
+  max-width: 250px;
+  /* Ancho máximo de las nuevas columnas */
+}
+/* Agrega un estilo específico para el contenido dentro de las columnas */
+.secondary.cards {
+  margin-right: 10px; /* Ajusta el margen derecho según tus preferencias */
+  /* Ajusta el margen entre las columnas según tus preferencias */
+  margin: 1%;
+  /* Establece el mismo ancho mínimo y máximo que las columnas */
+  min-width: 280px;
+  max-width: 250px;
+}
+
+.mx-auto.cardst {
+  /* Ajusta el margen entre las tarjetas dentro de las columnas */
+  margin: 5%;
 }
 </style>
