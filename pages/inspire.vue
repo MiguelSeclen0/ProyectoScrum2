@@ -192,7 +192,10 @@ export default {
     },
     addTask(){
       if (this.newColumnName.trim() !== '') {
-        this.Mylist2.push({ nombres: this.newColumnName });
+        this.Mylist2.push({ id: 5,
+                            nombreTarea: this.newColumnName,
+                            nombreUsuario: this.newColumnName,
+                            nombres: this.newColumnName});
         this.closeAddTaskModal(); // Cierra el modal después de agregar la columna
       }
     },
