@@ -1,6 +1,6 @@
 <template>
   <div class="cards-wrapper">
-    <v-col v-for="(item, index) in Mylist3" :key="index" class="secondary cards" md="3">
+    <v-col v-for="(item, index) in  Mylist3 " :key="index" class="secondary cards" md="3">
       <div v-if="index !== editedColumnIndex">
         <span @click="editColumn(index)">{{ item.nombres }}</span>
       </div>
@@ -15,7 +15,7 @@
         </v-icon>
       </v-btn>
       <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
-        <v-card v-for="item in Mylist2" :key="item.id" elevation="24" class="mx-auto cardst"
+        <v-card v-for="item in  Mylist2 " :key="item.id" elevation="24" class="mx-auto cardst"
           :class="['column-card', { 'new-column': index >= Mylist3.length - 1 }]" color="primary" max-width="250">
           <v-card-title>
             <v-icon large left class="text-caption">
@@ -23,12 +23,17 @@
             </v-icon>
           </v-card-title>
           <v-card-actions>
-            <v-row align-items="center" class="text-overline">
-              <v-col md="6" style="min-width: 80%;">
+            <v-row align-center="center" justify="space-between">
+              <v-col cols="1">
                 <!-- Muestra item.nombres a la izquierda -->
-                {{ item.nombres }}
+                <v-checkbox color="success" v-model="checkbox"></v-checkbox>
               </v-col>
-              <v-col md="6" class="text-right" style="max-width: 10%;">
+              <v-col cols="6" class="align-center mr-1" style="margin-top: 7.5%; margin-bottom: 10px;">
+                <span class="text-overline" :class="{ 'text-decoration-line-through text-overline': checkbox }">
+                  {{ item.nombres }}
+                </span>
+              </v-col>
+              <v-col cols="2" class="text-right" style="margin-top: 7.5%; margin-right: 2%;">
                 <!-- Genera la imagen circular con las iniciales del nombre de usuario a la derecha -->
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
@@ -91,6 +96,7 @@ export default {
   name: 'InspirePage',
   data() {
     return {
+      checkbox: false,
       Mylist: [
         { nombres: "Cesar" },
         { nombres: "Predro" }
@@ -177,10 +183,12 @@ export default {
     },
     addTask() {
       if (this.newColumnName.trim() !== '') {
-        this.Mylist2.push({ id: 5,
-                            nombreTarea: this.newColumnName,
-                            nombreUsuario: this.newColumnName,
-                            nombres: this.newColumnName});
+        this.Mylist2.push({
+          id: 5,
+          nombreTarea: this.newColumnName,
+          nombreUsuario: this.newColumnName,
+          nombres: this.newColumnName
+        });
         this.closeAddTaskModal(); // Cierra el modal después de agregar la columna
       }
     },
@@ -221,7 +229,8 @@ export default {
 }
 
 .cards-wrapper {
-  max-width: 100%; /* Puedes ajustar el valor según tus necesidades */
+  max-width: 100%;
+  /* Puedes ajustar el valor según tus necesidades */
   display: inline-flex;
   /* Hace que las columnas se coloquen en línea */
   flex-wrap: nowrap;
@@ -270,9 +279,11 @@ export default {
   max-width: 250px;
   /* Ancho máximo de las nuevas columnas */
 }
+
 /* Agrega un estilo específico para el contenido dentro de las columnas */
 .secondary.cards {
-  margin-right: 10px; /* Ajusta el margen derecho según tus preferencias */
+  margin-right: 10px;
+  /* Ajusta el margen derecho según tus preferencias */
   /* Ajusta el margen entre las columnas según tus preferencias */
   margin: 1%;
   /* Establece el mismo ancho mínimo y máximo que las columnas */
