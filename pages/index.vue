@@ -1,4 +1,4 @@
-<template>TextField
+<template>
   <FormWithImageLayout background-image="/fondo2.png">
     <v-card class="align-self-center px-5 py-5" outlined :min-width="400">
       <!-- Error alert -->
@@ -78,7 +78,7 @@ export default {
     //   })
     // },
     // async onLogin() {
-   async onLogin() {
+    onLogin() {
       if (!this.$refs.loginForm.validate()) {
         return
       }
@@ -92,17 +92,17 @@ export default {
         }
       }
       console.log(payload)
-      // const response = 1 // await this.$auth.loginWith('local', payload)     
-      // if (this.user.username === 'Usuario' && this.user.password === 'password1') {
-      // La autenticación fue exitosa
-      const URL = '/tablero';
-      this.$router.push(URL);
-      // }
-      // else {
-      // this.error = 'Credenciales incorrectas';
-      // await new Promise(resolve => setTimeout(resolve, 1200));
-      // location.reload()
-      // }
+      const response = 1 // await this.$auth.loginWith('local', payload)     
+      if (response === 1) {
+        // La autenticación fue exitosa
+        const URL = '/tablero';
+        this.$router.push(URL);
+      }
+      else {
+        this.error = 'Credenciales incorrectas';
+        // await new Promise(resolve => setTimeout(resolve, 1200));
+        // location.reload()
+      }
     },
   },
 }
