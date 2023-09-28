@@ -93,7 +93,7 @@ export default {
       }
       console.log(payload)
       // const response = 1 // await this.$auth.loginWith('local', payload)
-      if (this.user.username === 'Usuario' && this.user.password === 'password') {
+      if (this.user.username === 'Usuario' && this.user.password === 'password1') {
         // La autenticación fue exitosa
         const URL = '/tablero';
         this.$router.push(URL);
