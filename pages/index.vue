@@ -78,7 +78,7 @@ export default {
     //   })
     // },
     // async onLogin() {
-    onLogin() {
+   async onLogin() {
       if (!this.$refs.loginForm.validate()) {
         return
       }

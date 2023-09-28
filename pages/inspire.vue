@@ -212,7 +212,7 @@ export default {
     // Cancela la edición de la columna
     cancelEdit(index) {
       this.editedColumnIndex = -1;
-      this.editedColumnName = ''; 
+      this.editedColumnName = '';
     },
   },
 }
