@@ -78,8 +78,7 @@ export default {
     //   })
     // },
     // async onLogin() {
-    onLogin() {
-
+   async onLogin() {
       if (!this.$refs.loginForm.validate()) {
         return
       }
@@ -93,14 +92,16 @@ export default {
         }
       }
       console.log(payload)
-      const response = 1 // await this.$auth.loginWith('local', payload)
-      if (response === 1) {
+      // const response = 1 // await this.$auth.loginWith('local', payload)
+      if (this.user.username === 'Usuario' && this.user.password === 'password') {
         // La autenticación fue exitosa
         const URL = '/tablero';
         this.$router.push(URL);
-      } else {
-        // La autenticación falló, muestra un mensaje de error
+      }
+      else {
         this.error = 'Credenciales incorrectas';
+        await new Promise(resolve => setTimeout(resolve, 1200));
+        location.reload()
       }
     },
   },
