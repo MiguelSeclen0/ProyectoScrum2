@@ -80,7 +80,7 @@
 <script>
 export default {
     name: 'tablero',
-    layout: 'sidebar    ',
+    layout: 'sidebar',
     data: () => ({
         dialog: false,
         dialogDelete: false,
