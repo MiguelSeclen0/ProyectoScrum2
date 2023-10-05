@@ -3,7 +3,7 @@
     <div style="position: absolute; top: 0; left: 0;"><v-img src="/LogoScrum.png" contain :max-width="400" /></div>
     <v-div class="align-self-center px-5 py-5" outlined style="width: 600px">
       <!-- Error alert -->
-      <v-alert v-if="error" type="error" dismissible :max-width="400">
+      <v-alert v-if="error" type="error" dismissible :max-width="600">
         {{ error }}
       </v-alert>
 
@@ -64,43 +64,28 @@ export default {
     },
   },
   methods: {
-    // etiqueta(nombre) {
-    //   for (let i = 0; i < this.etiquetaIdioma.length; ++i) {
-    //     if (this.etiquetaIdioma[i].labelKey === nombre) {
-    //       return this.etiquetaIdioma.descripcion
-    //     }
-    //   }
-    // },
-    // async fetchLabelsByLanguage(value) {
-    //   await this.$store.dispatch(`etiquetaIdioma/${FETCH_ETIQUETA_IDIOMA}`, {
-    //     currentIdioma: { idIdioma: value },
-    //   })
-    // },
-    // async onLogin() {
-    onLogin() {
-      if (!this.$refs.loginForm.validate()) {
-        return
-      }
+    async onLogin() {
+      // if (!this.$refs.loginForm.validate()) {
+      //   return
+      // }
+      debugger
       this.busy = true
 
-      const payload = {
-        data: {
-          email: this.user.username,
-          nombre: '',
-          contrasena: this.user.password,
-        }
-      }
-      console.log(payload)
-      const response = 1 // await this.$auth.loginWith('local', payload)     
-      if (response === 1) {
-        // La autenticación fue exitosa
-        const URL = '/tablero';
-        this.$router.push(URL);
-      }
-      else {
-        this.error = 'Credenciales incorrectas';
-        // await new Promise(resolve => setTimeout(resolve, 1200));
-        // location.reload()
+      try {
+        // const payload = {
+        //     nombreUsuario: 1 //this.user.username,
+        //     // secreto: this.user.password,
+        // }
+        const nombreUsuario = 1
+
+         await this.$auth.loginWith('local', nombreUsuario)
+
+        const URL = '/tablero'
+        this.$router.push(URL)
+      } catch (err) {
+        this.error = 'Error de inicio de sesion'
+      } finally {
+        this.busy = false
       }
     },
   },
