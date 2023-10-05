@@ -1,7 +1,7 @@
 $text-sizes: (
-    "small" :  10px,
+    "small" :  20px,
     "medium" : 15px,
-    "large" : 18px
+    "large" : 64px
 );
 @each $size, $font-size in $text-sizes{
     .text-#{$size} {

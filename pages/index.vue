@@ -1,6 +1,7 @@
 <template>
-  <FormWithImageLayout background-image="/fondo2.png">
-    <v-card class="align-self-center px-5 py-5" outlined :min-width="400">
+  <FormWithImageLayout background-image="/fondo.png">
+    <div style="position: absolute; top: 0; left: 0;"><v-img src="/LogoScrum.png" contain :max-width="400" /></div>
+    <v-div class="align-self-center px-5 py-5" outlined :min-width="200">
       <!-- Error alert -->
       <v-alert v-if="error" type="error" dismissible :max-width="400">
         {{ error }}
@@ -8,13 +9,16 @@
 
       <!-- Login Form-->
       <v-card-title class="mb-3">
-        <div class="flex-grow-1 flex-shrink-0">
+        <!-- <div class="flex-grow-1 flex-shrink-0">
           <v-img src="/LogoScrum.png" contain :max-width="110" />
-        </div>
-        <span class="mx-2"></span>
-        <div class="flex-grow-0 flex-shrink-0">
+        </div> -->
+        <v-col>
+          <span class="mx-2 text-large displayBlock" style="margin-bottom: 6%">Bienvenido</span>
+          <span class="mx-2 text-small displayBlock">Ingrese sus credenciales</span>
+        </v-col>
+        <!-- <div class="flex-grow-0 flex-shrink-0">
           <v-img src="/UPN_withe.png" :max-width="150" />
-        </div>
+        </div> -->
       </v-card-title>
       <v-card-text>
         <v-form ref="loginForm" v-model="valid" class="text-center" lazy-validation @submit.prevent="onLogin">
@@ -34,7 +38,7 @@
           </v-btn>
         </v-form>
       </v-card-text>
-    </v-card>
+    </v-div>
   </FormWithImageLayout>
 </template>
 
@@ -107,3 +111,8 @@ export default {
   },
 }
 </script>
+<style>
+.displayBlock {
+  display: block;
+}
+</style>
