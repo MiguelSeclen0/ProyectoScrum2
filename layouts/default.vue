@@ -23,9 +23,10 @@
               </template>
             </v-list-group>
           </v-list>
-          <v-switch v-model="$vuetify.theme.dark" inset label="Vuetify" persistent-hint></v-switch>
+          <v-switch v-model="$vuetify.theme.dark" inset persistent-hint
+            :class="{ 'expanded-margin': !miniVariant, 'minimized-margin': miniVariant }" class="theme-switch"></v-switch>
           <v-btn icon @click.stop="toggleDrawer"
-            :class="{ 'expanded-margin': !miniVariant, 'minimized-margin': miniVariant }">
+            :class="{ 'expanded-margin': !miniVariant, 'minimized-margin': miniVariant }" class="menu-button">
             <v-icon>mdi-menu</v-icon>
           </v-btn>
         </div>
@@ -49,7 +50,7 @@
         <v-icon>mdi-menu</v-icon>
       </v-btn>
     </v-app-bar> -->
-    <v-main style="margin-left: 2%">
+    <v-main style="margin-left: 2%; padding: 0px 0px 36px 15% !important;">
       <v-container>
         <Nuxt />
         <v-fab-transition>
@@ -60,18 +61,18 @@
       </v-container>
     </v-main>
 
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
+    <!-- <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
       <div style="background-color: red; padding: 40px;">
         <v-list>
           <v-list-item @click.native="right = !right">
             <v-list-item-action>
               <v-icon light> mdi-repeat </v-icon>
             </v-list-item-action>
-            <v-list-item-title>Switch drawer (click me)</v-list-item-title>
+            <v-list-item-title></v-list-item-title>
           </v-list-item>
         </v-list>
       </div>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
     <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
@@ -153,14 +154,14 @@ export default {
 }
 
 .sidebarCustom {
-  background-color: "primary";
+  background-color: transparent;
   height: 100%;
   padding: 7% 7% 7% 7%;
   height: 100%;
 }
 
 .sidebarCustomContainer {
-  background-color: blue;
+  background-color: #484c7f;
   width: 99%;
   height: 97%;
   border-radius: 20px;
