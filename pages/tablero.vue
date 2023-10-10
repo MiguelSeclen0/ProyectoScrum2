@@ -1,11 +1,25 @@
 <template>
     <v-row>
         <v-col>
-            <v-toolbar-title style="margin-top: 2%; align-items: center;">Proyectos</v-toolbar-title>
+            <v-row style="margin-top: 2%; padding-left: 2%;">
+                <v-toolbar-title style="margin-top: 2%; align-items: center;">Proyectos</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <UserMenu name="Patrick Limas">
+                    <v-list subheader>
+                        <v-subheader>Opciones</v-subheader>
+                        <v-list-item @click.stop="onLogout">
+                            <v-list-item-icon>
+                                <v-icon>mdi-logout-variant</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>Cerrar Sesion</v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </UserMenu>
+            </v-row>
             <v-row style="margin: 2%;">
-                <v-text-field v-model="search" append-icon="mdi-magnify" label="Buscar Proyecto" single-line
+                <v-text-field append-icon="mdi-magnify" label="Buscar Proyecto" single-line
                     hide-details></v-text-field>
-                <v-btn  @click="showDialog" style="margin-left: 2%;" color="accent mx-2" fab >
+                <v-btn @click="showDialog" style="margin-left: 2%;" color="accent mx-2" fab>
                     <v-icon dark>
                         mdi-plus
                     </v-icon>
@@ -122,8 +136,26 @@ export default {
     },
 
     methods: {
-        showDialog(){
-            this.dialog=true
+        showDialog() {
+            this.dialog = true
+        },
+        async onLogout() {
+            debugger
+            const res = await this.$dialog.confirm({
+                text: '¿Realmente desea cerrar sesión?',
+                title: 'Advertencia',
+                actions: {
+                    false: 'No',
+                    true: { color: 'accent', text:'Si' },
+                },
+                persistent: true,
+            })
+
+            if (res) {
+                await this.$auth.logout()
+
+                this.$router.push('/login')
+            }
         },
         initialize() {
             this.desserts = [

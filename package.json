@@ -13,8 +13,8 @@
     "lintfix": "prettier --write --list-different . && npm run lint:js -- --fix"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/auth": "^4.9.1",
+    "@nuxtjs/axios": "^5.13.6",
     "core-js": "^3.25.3",
     "http-status-codes": "^2.1.4",
     "nuxt": "^2.15.8",
@@ -23,7 +23,8 @@
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10",
     "vuedraggable": "^2.23.1",
-    "vuetify": "^2.6.10"
+    "vuetify": "^2.6.10",
+    "vuetify-dialog": "^2.0.10"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",

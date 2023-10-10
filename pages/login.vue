@@ -76,7 +76,7 @@ export default {
         }
 
         // Realiza la solicitud de inicio de sesión y obtén el token
-         await this.$auth.loginWith('local', payload)
+        await this.$auth.loginWith('local', payload)
 
         // Obtiene el token de la respuesta
         // debugger
@@ -85,17 +85,16 @@ export default {
         // // Ahora puedes usar el token para realizar la solicitud de datos del usuario
         // // Agrega el token al encabezado de autorización en la solicitud del usuario
         // const userResponse = await this.$auth.fetchUser({ customTokenRequest: token })
-       
+
         // console.log('userResponse',userResponse)
         // `userResponse` contiene los datos del usuario
         const URL = '/tablero'
         this.$router.push(URL)
       } catch (err) {
         this.error = 'Error de inicio de sesión'
+      } finally {
+        this.busy = false
       }
-      // } finally {
-      //   this.busy = false
-      // }
     },
   },
 }

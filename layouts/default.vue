@@ -6,12 +6,12 @@
         <div class="sidebarCustomContainer">
           <img style="width: 55%;" src="LogoScrum.png">
           <v-list>
-            <v-list-group class="spaceSide" :value="true" prepend-icon="mdi-account-circle">
+            <v-list-group class="spaceSide" :value="true" prepend-icon=" mdi-view-dashboard">
               <template v-slot:activator>
                 <v-list-item-title>Dashboard</v-list-item-title>
               </template>
             </v-list-group>
-            <v-list-group class="spaceSide" :value="true" prepend-icon="mdi-account-circle">
+            <v-list-group class="spaceSide" :value="true" prepend-icon="mdi-bag-checked">
               <template v-slot:activator>
                 <v-list-item-title>Proyectos</v-list-item-title>
               </template>
@@ -21,12 +21,12 @@
                 <v-list-item-title>Clientes</v-list-item-title>
               </template>
             </v-list-group>
-            <v-list-group class="spaceSide" :value="true" prepend-icon="mdi-account-circle">
+            <v-list-group class="spaceSide" :value="true" prepend-icon="mdi mdi-account-group">
               <template v-slot:activator>
                 <v-list-item-title>Colaboradores</v-list-item-title>
               </template>
             </v-list-group>
-            <v-list-group class="spaceSide" :value="true" prepend-icon="mdi-account-circle">
+            <v-list-group class="spaceSide" :value="true" prepend-icon="mdi mdi-ticket-account">
               <template v-slot:activator>
                 <v-list-item-title>Tickets</v-list-item-title>
               </template>
@@ -42,7 +42,7 @@
           <div style="margin-top: 25%; margin-left: 18%;" class="theme-switch">
             <v-btn color="accent">
               <span>Cerrar Sesión</span>
-              <v-icon>mdi-history</v-icon>
+              <v-icon style="transform: rotate(-90deg);">mdi-tray-arrow-down</v-icon>
             </v-btn>
           </div>
         </div>
