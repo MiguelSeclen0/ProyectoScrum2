@@ -89,8 +89,8 @@
 
 <script>
 import draggable from 'vuedraggable'
-import { mapState } from 'vuex'
-import { FETCH_USUARIO } from '@/utils/types/users/actions.types'
+// import { mapState } from 'vuex'
+// import { FETCH_USUARIO } from '@/utils/types/users/actions.types'
 
 export default {
   name: 'InspirePage',
@@ -143,13 +143,13 @@ export default {
   components: {
     draggable,
   },
-  async fetch() {
-    debugger
-    await Promise.all([this.$store.dispatch(`usuario/${FETCH_USUARIO}`)])
-  },
-  computed: {
-    ...mapState('usuario', ['usuario']),
-  },
+  // async fetch() {
+  //   debugger
+  //   await Promise.all([this.$store.dispatch(`usuario/${FETCH_USUARIO}`)])
+  // },
+  // computed: {
+  //   ...mapState('usuario', ['usuario']),
+  // },
   methods: {
     getInitials(username) {
       const words = username.split(" ");

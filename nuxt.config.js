@@ -45,6 +45,9 @@ export default {
       browserBaseURL: process.env.BROWSER_BASE_URL,
     },
   },
+  router: {
+    middleware: ['auth'],
+  },
 
   privateRuntimeConfig: {
     axios: {
@@ -92,10 +95,23 @@ export default {
         endpoints: {
           login: {
             Headers: { 'Content-Type': 'application/json' },
-            url: '/usuario/login',
+            url: '/auth/login',
             method: 'post',
           },
-          logout: false,
+          logout: true,
+          user: {
+            url: '/usuario/all',
+            method: 'get',
+            propertyName: false,
+            // Agregar la opción customTokenRequest aquí
+            customTokenRequest: (token) => {
+              return {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Agregar el token al encabezado de autorización
+                },
+              };
+            },
+          },
         },
       },
     },

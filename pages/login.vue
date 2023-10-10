@@ -65,28 +65,37 @@ export default {
   },
   methods: {
     async onLogin() {
-      // if (!this.$refs.loginForm.validate()) {
-      //   return
-      // }
-      debugger
       this.busy = true
 
       try {
-        // const payload = {
-        //     nombreUsuario: 1 //this.user.username,
-        //     // secreto: this.user.password,
-        // }
-        const nombreUsuario = 1
+        const payload = {
+          data: {
+            username: this.user.username,
+            password: this.user.password,
+          }
+        }
 
-         await this.$auth.loginWith('local', nombreUsuario)
+        // Realiza la solicitud de inicio de sesión y obtén el token
+        const authResponse = await this.$auth.loginWith('local', payload)
 
+        // Obtiene el token de la respuesta
+        debugger
+        const token = authResponse.token
+
+        // Ahora puedes usar el token para realizar la solicitud de datos del usuario
+        // Agrega el token al encabezado de autorización en la solicitud del usuario
+        const userResponse = await this.$auth.fetchUser({ customTokenRequest: token })
+       
+        console.log('userResponse',userResponse)
+        // `userResponse` contiene los datos del usuario
         const URL = '/tablero'
         this.$router.push(URL)
       } catch (err) {
-        this.error = 'Error de inicio de sesion'
-      } finally {
-        this.busy = false
+        this.error = 'Error de inicio de sesión'
       }
+      // } finally {
+      //   this.busy = false
+      // }
     },
   },
 }
@@ -95,7 +104,8 @@ export default {
 .displayBlock {
   display: block;
 }
-.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
-    background: #d8d5d4;
+
+.theme--light.v-text-field--solo>.v-input__control>.v-input__slot {
+  background: #d8d5d4;
 }
 </style>
