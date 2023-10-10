@@ -1,7 +1,7 @@
 <template>
   <FormWithImageLayout background-image="/fondo.png">
     <div style="position: absolute; top: 0; left: 0;"><v-img src="/LogoScrum.png" contain :max-width="400" /></div>
-    <v-div class="align-self-center px-5 py-5" outlined style="width: 600px">
+    <div class="align-self-center px-5 py-5" outlined style="width: 600px">
       <!-- Error alert -->
       <v-alert v-if="error" type="error" dismissible :max-width="600">
         {{ error }}
@@ -32,7 +32,7 @@
           </v-btn>
         </v-form>
       </v-card-text>
-    </v-div>
+    </div>
     <div style="position: absolute; bottom: 0; right: 0;"><v-img src="/UPN_withe.png" :max-width="200" /></div>
   </FormWithImageLayout>
 </template>
@@ -76,17 +76,17 @@ export default {
         }
 
         // Realiza la solicitud de inicio de sesión y obtén el token
-        const authResponse = await this.$auth.loginWith('local', payload)
+         await this.$auth.loginWith('local', payload)
 
         // Obtiene el token de la respuesta
-        debugger
-        const token = authResponse.token
+        // debugger
+        // const token = authResponse.token
 
-        // Ahora puedes usar el token para realizar la solicitud de datos del usuario
-        // Agrega el token al encabezado de autorización en la solicitud del usuario
-        const userResponse = await this.$auth.fetchUser({ customTokenRequest: token })
+        // // Ahora puedes usar el token para realizar la solicitud de datos del usuario
+        // // Agrega el token al encabezado de autorización en la solicitud del usuario
+        // const userResponse = await this.$auth.fetchUser({ customTokenRequest: token })
        
-        console.log('userResponse',userResponse)
+        // console.log('userResponse',userResponse)
         // `userResponse` contiene los datos del usuario
         const URL = '/tablero'
         this.$router.push(URL)

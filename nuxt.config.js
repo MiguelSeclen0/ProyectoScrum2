@@ -74,12 +74,12 @@ export default {
         light: {
           primary: '#ffffff',
           secondary: '#f2f1f6',
-          accent: '#82B1FF',
+          accent: '#6d76bc',
           error: '#FFC0CB',
           info: '#2196F3',
           success: '#4CAF50',
           warning: '#FFC0CB',
-          text: '#000000'
+          text: '#ffffff'
         },
       },
     },
@@ -104,13 +104,13 @@ export default {
             method: 'get',
             propertyName: false,
             // Agregar la opción customTokenRequest aquí
-            customTokenRequest: (token) => {
-              return {
-                headers: {
-                  Authorization: `Bearer ${token}`, // Agregar el token al encabezado de autorización
-                },
-              };
-            },
+            // customTokenRequest: (token) => {
+            //   return {
+            //     headers: {
+            //       Authorization: `Bearer ${token}`, // Agregar el token al encabezado de autorización
+            //     },
+            //   };
+            // },
           },
         },
       },

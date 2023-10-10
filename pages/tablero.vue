@@ -1,22 +1,23 @@
 <template>
     <v-row>
-        <v-toolbar-title style="margin-top: 2%; align-items: center;">Proyectos</v-toolbar-title>
-        <v-divider class="mx-4" inset vertical></v-divider>
-        <v-spacer></v-spacer>
+        <v-col>
+            <v-toolbar-title style="margin-top: 2%; align-items: center;">Proyectos</v-toolbar-title>
+            <v-row style="margin: 2%;">
+                <v-text-field v-model="search" append-icon="mdi-magnify" label="Buscar Proyecto" single-line
+                    hide-details></v-text-field>
+                <v-btn  @click="showDialog" style="margin-left: 2%;" color="accent mx-2" fab >
+                    <v-icon dark>
+                        mdi-plus
+                    </v-icon>
+                </v-btn>
+            </v-row>
+            <V-row>
+                <v-card>
+
+                </v-card>
+            </V-row>
+        </v-col>
         <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on, attrs }">
-                <v-div align="center" class="tabs-button-container">
-                    <v-tabs class="tabs-container text-small">
-                        <v-tab class="tab">One</v-tab>
-                        <v-tab class="tab">Two</v-tab>
-                        <v-tab class="tab">Three</v-tab>
-                        <v-tab class="tab">Four</v-tab>
-                    </v-tabs>
-                    <v-btn color="primary" v-bind="attrs" v-on="on">
-                        Nuevo Proyecto
-                    </v-btn>
-                </v-div>
-            </template>
             <v-card>
                 <v-card-title>
                     <span class="text-h5">{{ formTitle }}</span>
@@ -121,6 +122,9 @@ export default {
     },
 
     methods: {
+        showDialog(){
+            this.dialog=true
+        },
         initialize() {
             this.desserts = [
                 {
@@ -241,26 +245,33 @@ export default {
     flex-grow: 1;
     /* Hace que el v-data-table ocupe todo el espacio disponible en el contenedor flex */
 }
+
 /* Clase para el contenedor de los tabs y el botón */
 .tabs-button-container {
-  display: grid;
-  grid-template-columns: 1fr auto; /*Divide en dos columnas, la primera se ajusta automáticamente y la segunda tiene el ancho del contenido */
-  align-items: center; /*Centra verticalmente los elementos */
+    display: grid;
+    grid-template-columns: 1fr auto;
+    /*Divide en dos columnas, la primera se ajusta automáticamente y la segunda tiene el ancho del contenido */
+    align-items: center;
+    /*Centra verticalmente los elementos */
 }
 
 /* Clase para el contenedor de los tabs */
 .tabs-container {
-  width: auto; /* Ajusta automáticamente el ancho según el contenido */
-  max-width: 366px; /* Ancho máximo para los tabs */
+    width: auto;
+    /* Ajusta automáticamente el ancho según el contenido */
+    max-width: 366px;
+    /* Ancho máximo para los tabs */
 }
 
 /* Clase para los tabs */
 .tab {
-  padding: 6px 12px; /* Ajusta el espaciado interno de los tabs */
+    padding: 6px 12px;
+    /* Ajusta el espaciado interno de los tabs */
 }
 
 /* Clase para el botón */
 .button {
-  width: 140px; /* Ancho personalizado para el botón */
+    width: 140px;
+    /* Ancho personalizado para el botón */
 }
 </style>
