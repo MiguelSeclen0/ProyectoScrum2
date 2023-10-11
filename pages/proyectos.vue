@@ -27,13 +27,8 @@
                 </v-btn>
             </v-row>
             <v-row style="margin: 2%; padding-left: 2%;">
-                <CardProyect :cardsCustom="headers" />
+                <CardProyect :cardsCustom="proyecto" />
             </v-row>
-            <V-row>
-                <v-card>
-
-                </v-card>
-            </V-row>
         </v-col>
         <v-dialog v-model="dialog" max-width="500px">
             <v-card>

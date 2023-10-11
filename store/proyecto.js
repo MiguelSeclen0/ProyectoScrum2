@@ -22,8 +22,8 @@ import {
   
   export const actions = {
      async [FETCH_PROYECTOS]({ commit }) {
-      const proyectos =  await this.$proyecto.FindAll()
-      console.log('proyectos', proyectos)
-      commit(SET_PROYECTOS, { proyectos })
+      const proyecto =  await this.$proyecto.FindAll()
+      console.log('proyectos', proyecto)
+      commit(SET_PROYECTOS, { proyecto })
     },
   }
