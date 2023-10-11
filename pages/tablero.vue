@@ -18,7 +18,8 @@
                 </UserMenu>
             </v-row>
             <v-row style="margin: 2%;">
-                <v-text-field color="accent" append-icon="mdi-magnify" label="Buscar Proyecto" outlined rounded></v-text-field>
+                <v-text-field color="accent" append-icon="mdi-magnify" label="Buscar Proyecto" outlined
+                    rounded></v-text-field>
                 <v-btn style="margin-left: 2%;" color="accent mx-2" fab @click="showDialog">
                     <v-icon dark>
                         mdi-plus
@@ -27,21 +28,6 @@
             </v-row>
             <v-row style="margin: 2%; padding-left: 2%;">
                 <CardProyect :cardsCustom="headers" />
-                <!-- <div>
-                    <v-hover>
-                        <template v-slot:default="{ hover }">
-                            <div :class="`elevation-${hover ? 24 : 6}`" class="mx-auto pa-6 transition-swing smaller-card"
-                                style="position: relative; z-index: 1;">
-                                MYPER SSOMA
-                            </div>
-                        </template>
-                    </v-hover>
-                    <v-card class="mt-n10 mx-auto big-card" elevation="0" height="250" width="500" color="secondary">
-                        <br>
-                        <br>
-                        <v-card-text class="d-flex align-center justify-center">Pagina Web</v-card-text>
-                    </v-card>
-                </div> -->
             </v-row>
             <V-row>
                 <v-card>
@@ -100,24 +86,58 @@
 </template>
   
 <script>
+
+import { mapState } from 'vuex'
+import { FETCH_PROYECTOS } from '@/utils/types/proyectos/actions.types'
+
 export default {
     name: 'tablero',
     layout: 'default',
+    async fetch() {
+      debugger
+      await Promise.all([this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`)])
+    },
     data: () => ({
         dialog: false,
         dialogDelete: false,
         Prueba: true,
         headers: [
             {
-                text: 'Nombre',
-                align: 'start',
-                sortable: false,
-                value: 'name',
+                "proyectoId": "6525f05a74a3e40d011d2837",
+                "nombre": "Proyecto 01",
+                "cliente": "MYPER SSOMA",
+                "descripcion": "Descripción del Proyecto",
+                "estado": "En Progreso",
+                "tipo": "Página Web",
+                "color": "#FF5723",
+                "fechaInicio": "2023-10-10",
+                "fechaFinalizacion": "2023-11-10",
+                "presupuesto": 10000.0,
+                "equipo": {
+                    "equipoId": "6525ea0674a3e40d011d2834",
+                    "nombre": "Equipo 01"
+                },
+                "duracion": "2 semanas",
+                "participantes": 5,
             },
-            { text: 'Clave', value: 'clave1' },
-            { text: 'Tipo', value: 'tipo1' },
-            { text: 'Oportunidad', value: 'oportunidad1' },
-            { text: 'Acciones', value: 'actions', sortable: false },
+            {
+                "proyectoId": "6525f05a74a3e40d011d2838",
+                "nombre": "Proyecto 02",
+                "cliente": "MYPER SSOMA",
+                "descripcion": "Descripción del Proyecto",
+                "estado": "En Progreso",
+                "tipo": "App",
+                "color": "#FF5753",
+                "fechaInicio": "2023-10-10",
+                "fechaFinalizacion": "2023-11-10",
+                "presupuesto": 10000.0,
+                "equipo": {
+                    "equipoId": "6525ea0674a3e40d011d2834",
+                    "nombre": "Equipo 01"
+                },
+                "duracion": "2 semanas",
+                "participantes": 5,
+            }
         ],
         desserts: [],
         editedIndex: -1,
@@ -136,6 +156,7 @@ export default {
     }),
 
     computed: {
+        ...mapState('proyecto', ['proyecto']),
         formTitle() {
             return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Editar Proyecto'
         },
@@ -234,10 +255,12 @@ export default {
     height: 60px;
     border-radius: 15px;
 }
-.big-card{
+
+.big-card {
     border-radius: 15px !important;
     border-bottom: solid 1px black !important;
 }
+
 .v-data-table {
     flex-grow: 1;
     /* Hace que el v-data-table ocupe todo el espacio disponible en el contenedor flex */
