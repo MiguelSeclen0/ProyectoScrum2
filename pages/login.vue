@@ -88,7 +88,7 @@ export default {
 
         // console.log('userResponse',userResponse)
         // `userResponse` contiene los datos del usuario
-        const URL = '/tablero'
+        const URL = '/proyectos'
         this.$router.push(URL)
       } catch (err) {
         this.error = 'Error de inicio de sesión'
