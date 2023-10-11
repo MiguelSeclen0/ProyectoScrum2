@@ -39,12 +39,12 @@
             :class="{ 'expanded-margin': !miniVariant, 'minimized-margin': miniVariant }" class="menu-button">
             <v-icon>mdi-menu</v-icon>
           </v-btn> -->
-          <div style="margin-top: 25%; margin-left: 18%;" class="theme-switch">
+          <!-- <div style="margin-top: 25%; margin-left: 18%;" class="theme-switch">
             <v-btn color="accent">
               <span>Cerrar Sesión</span>
               <v-icon style="transform: rotate(-90deg);">mdi-tray-arrow-down</v-icon>
             </v-btn>
-          </div>
+          </div> -->
         </div>
       </div>
     </v-navigation-drawer>

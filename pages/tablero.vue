@@ -2,9 +2,10 @@
     <v-row>
         <v-col>
             <v-row style="margin-top: 2%; padding-left: 2%;">
-                <v-toolbar-title style="margin-top: 2%; align-items: center;">Proyectos</v-toolbar-title>
+                <v-toolbar-title class="text-medium"
+                    style="margin-top: 2%; align-items: center;">Proyectos</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <UserMenu name="Patrick Limas">
+                <UserMenu style="margin-right: 2%;" name="Patrick Limas">
                     <v-list subheader>
                         <v-subheader>Opciones</v-subheader>
                         <v-list-item @click.stop="onLogout">
@@ -17,13 +18,30 @@
                 </UserMenu>
             </v-row>
             <v-row style="margin: 2%;">
-                <v-text-field append-icon="mdi-magnify" label="Buscar Proyecto" single-line
-                    hide-details></v-text-field>
-                <v-btn @click="showDialog" style="margin-left: 2%;" color="accent mx-2" fab>
+                <v-text-field color="accent" append-icon="mdi-magnify" label="Buscar Proyecto" outlined rounded></v-text-field>
+                <v-btn style="margin-left: 2%;" color="accent mx-2" fab @click="showDialog">
                     <v-icon dark>
                         mdi-plus
                     </v-icon>
                 </v-btn>
+            </v-row>
+            <v-row style="margin: 2%; padding-left: 2%;">
+                <CardProyect :cardsCustom="headers" />
+                <!-- <div>
+                    <v-hover>
+                        <template v-slot:default="{ hover }">
+                            <div :class="`elevation-${hover ? 24 : 6}`" class="mx-auto pa-6 transition-swing smaller-card"
+                                style="position: relative; z-index: 1;">
+                                MYPER SSOMA
+                            </div>
+                        </template>
+                    </v-hover>
+                    <v-card class="mt-n10 mx-auto big-card" elevation="0" height="250" width="500" color="secondary">
+                        <br>
+                        <br>
+                        <v-card-text class="d-flex align-center justify-center">Pagina Web</v-card-text>
+                    </v-card>
+                </div> -->
             </v-row>
             <V-row>
                 <v-card>
@@ -88,6 +106,7 @@ export default {
     data: () => ({
         dialog: false,
         dialogDelete: false,
+        Prueba: true,
         headers: [
             {
                 text: 'Nombre',
@@ -140,13 +159,12 @@ export default {
             this.dialog = true
         },
         async onLogout() {
-            debugger
             const res = await this.$dialog.confirm({
                 text: '¿Realmente desea cerrar sesión?',
                 title: 'Advertencia',
                 actions: {
                     false: 'No',
-                    true: { color: 'accent', text:'Si' },
+                    true: { color: 'accent', text: 'Si' },
                 },
                 persistent: true,
             })
@@ -158,68 +176,6 @@ export default {
             }
         },
         initialize() {
-            this.desserts = [
-                {
-                    name: 'Implementación de un sistema de gestión de pedidos',
-                    clave1: 'ISG',
-                    tipo1: 'Software gestionado por el equipo',
-                    oportunidad1: 'Erick Irwin Pajuelo Ojeda',
-                },
-                {
-                    name: 'Optimización de un blog corporativo',
-                    clave1: 'OBC',
-                    tipo1: 'Software gestionado por el equipo',
-                    oportunidad1: 'Culqui Sanchez Axel Adrian',
-                },
-                {
-                    name: 'Desarrollo de una aplicación móvil de delivery',
-                    clave1: 'DAM',
-                    tipo1: 'Software gestionado por el equipo',
-                    oportunidad1: 'Mucching Sanchez Grace Victoria',
-                },
-                {
-                    name: 'Implementación de un sistema de reservas de hoteles',
-                    clave1: 'ISR',
-                    tipo1: 'Software gestionado por el equipo',
-                    oportunidad1: 'Orihuela Vera Fernando Alan Jesus',
-                },
-                {
-                    name: 'Implementación de un sistema de gestión de proyectos',
-                    clave1: 'ISP',
-                    tipo1: 'Software gestionado por el equipo',
-                    oportunidad1: 'Erick Irwin Pajuelo Ojeda',
-                },
-                {
-                    name: 'Implementación de un sistema de reservas online',
-                    clave1: 'ISO',
-                    tipo1: 'Software gestionado por el equipo',
-                    oportunidad1: 'Mucching Sanchez Grace Victoria',
-                },
-                {
-                    name: 'Desarrollo de una aplicación de realidad aumentada',
-                    clave1: 'DAR',
-                    tipo1: 'Software gestionado por el equipo',
-                    oportunidad1: 'Limas Meza Patrick Sebastian',
-                },
-                {
-                    name: 'Diseño de una aplicación de medición de servicios',
-                    clave1: 'DAS',
-                    tipo1: 'Software gestionado por el equipo',
-                    oportunidad1: 'Seclen Chavez Miguel Andres',
-                },
-                {
-                    name: 'Elaboración de una plataforma de mentorías online',
-                    clave1: 'EPM',
-                    tipo1: 'Software gestionado por el equipo',
-                    oportunidad1: 'Orihuela Vera Fernando Alan Jesus',
-                },
-                {
-                    name: 'Construcción de una aplicación colaborativa de empresa familiar',
-                    clave1: 'CAC',
-                    tipo1: 'Software gestionado por el equipo',
-                    oportunidad1: 'Erick Irwin Pajuelo Ojeda',
-                },
-            ]
         },
 
         editItem(item) {
@@ -273,6 +229,15 @@ export default {
     /* Cambiar la dirección a columna para apilar elementos verticalmente */
 }
 
+.smaller-card {
+    width: 440px;
+    height: 60px;
+    border-radius: 15px;
+}
+.big-card{
+    border-radius: 15px !important;
+    border-bottom: solid 1px black !important;
+}
 .v-data-table {
     flex-grow: 1;
     /* Hace que el v-data-table ocupe todo el espacio disponible en el contenedor flex */

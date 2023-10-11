@@ -1,6 +1,6 @@
 $text-sizes: (
-    "small" :  10px,
-    "medium" : 15px,
+    "small" :  15px,
+    "medium" : 30px,
     "large" : 64px
 );
 @each $size, $font-size in $text-sizes{
