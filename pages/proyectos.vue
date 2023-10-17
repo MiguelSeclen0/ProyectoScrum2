@@ -5,7 +5,7 @@
                 <v-toolbar-title class="text-medium"
                     style="margin-top: 2%; align-items: center;">Proyectos</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <UserMenu style="margin-right: 2%;" name="Patrick Limas">
+                <UserMenu style="margin-right: 2%;" :name="usersName()">
                     <v-list subheader>
                         <v-subheader>Opciones</v-subheader>
                         <v-list-item @click.stop="onLogout">
@@ -96,45 +96,8 @@ export default {
         dialog: false,
         dialogDelete: false,
         Prueba: true,
-        headers: [
-            {
-                "proyectoId": "6525f05a74a3e40d011d2837",
-                "nombre": "Proyecto 01",
-                "cliente": "MYPER SSOMA",
-                "descripcion": "Descripción del Proyecto",
-                "estado": "En Progreso",
-                "tipo": "Página Web",
-                "color": "#FF5723",
-                "fechaInicio": "2023-10-10",
-                "fechaFinalizacion": "2023-11-10",
-                "presupuesto": 10000.0,
-                "equipo": {
-                    "equipoId": "6525ea0674a3e40d011d2834",
-                    "nombre": "Equipo 01"
-                },
-                "duracion": "2 semanas",
-                "participantes": 5,
-            },
-            {
-                "proyectoId": "6525f05a74a3e40d011d2838",
-                "nombre": "Proyecto 02",
-                "cliente": "MYPER SSOMA",
-                "descripcion": "Descripción del Proyecto",
-                "estado": "En Progreso",
-                "tipo": "App",
-                "color": "#FF5753",
-                "fechaInicio": "2023-10-10",
-                "fechaFinalizacion": "2023-11-10",
-                "presupuesto": 10000.0,
-                "equipo": {
-                    "equipoId": "6525ea0674a3e40d011d2834",
-                    "nombre": "Equipo 01"
-                },
-                "duracion": "2 semanas",
-                "participantes": 5,
-            }
-        ],
         desserts: [],
+        proyectoId: [],
         editedIndex: -1,
         editedItem: {
             name: '',
@@ -151,13 +114,18 @@ export default {
     }),
 
     computed: {
-        ...mapState('proyecto', ['proyecto']),
+        ...mapState('proyecto', ['proyecto'],['proyectoId']),
         formTitle() {
             return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Editar Proyecto'
         },
     },
 
     watch: {
+        async handler() {
+            this.dimensions = await this.$dimensions.findBy({
+            IdUser: this.$auth.user.nombre,
+        })
+        },
         dialog(val) {
             val || this.close()
         },
@@ -235,6 +203,12 @@ export default {
             }
             this.close()
         },
+        usersName(){
+            return this.$auth.user.nombre
+        },
+        proyectos(){
+            
+        }
     },
 }
 </script>

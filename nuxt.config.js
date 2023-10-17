@@ -100,7 +100,7 @@ export default {
           },
           logout: true,
           user: {
-            url: '/usuario/all',
+            url: '/auth/user',
             method: 'get',
             propertyName: false,
             // Agregar la opción customTokenRequest aquí

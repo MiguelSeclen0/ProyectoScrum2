@@ -9,7 +9,7 @@
         v-on="on"
       >
         <div class="d-flex align-center fill-height px-3">
-          <span class="mr-2"> Patrick Limas</span>
+          <span class="mr-2">{{ name }}</span>
           <v-avatar :color="!image ? 'accent' : ''" size="36">
             <img v-if="image" :src="image" />
             <span v-else class="white--text">
