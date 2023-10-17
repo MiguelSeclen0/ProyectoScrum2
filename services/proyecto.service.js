@@ -7,9 +7,9 @@ export class ProyectoService {
         return this.$axios.$get('/proyecto/all')
     }
 
-    findAllById(filters) {
+    findById({params}) {
         return this.$axios.$get('/proyecto/findById', {
-          params: filters,
+          params,
         })
       }
 }

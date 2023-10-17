@@ -23,7 +23,6 @@ import {
   export const actions = {
      async [FETCH_CLIENTS]({ commit }) {
       const clients =  await this.$cliente.FindAll()
-      console.log('ClientesStore', clients)
       commit(SET_CLIENTS, { clients })
     },
   }

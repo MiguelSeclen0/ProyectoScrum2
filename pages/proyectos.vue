@@ -27,7 +27,7 @@
                 </v-btn>
             </v-row>
             <v-row style="margin: 2%; padding-left: 2%;">
-                <CardProyect :cardsCustom="proyecto" />
+                <CardProyect :cardsCustom="proyectoId" />
             </v-row>
         </v-col>
         <v-dialog v-model="dialog" max-width="500px">
@@ -89,15 +89,18 @@ export default {
     name: 'tablero',
     layout: 'default',
     async fetch() {
-      debugger
-      await Promise.all([this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`)])
+        debugger
+        await Promise.all([this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
+            id: this.$auth.user.email,
+        })
+        ])
     },
     data: () => ({
         dialog: false,
         dialogDelete: false,
         Prueba: true,
+        Proyectos: [],
         desserts: [],
-        proyectoId: [],
         editedIndex: -1,
         editedItem: {
             name: '',
@@ -114,18 +117,13 @@ export default {
     }),
 
     computed: {
-        ...mapState('proyecto', ['proyecto'],['proyectoId']),
+        ...mapState('proyecto', ['proyectoId']),
         formTitle() {
             return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Editar Proyecto'
         },
     },
 
     watch: {
-        async handler() {
-            this.dimensions = await this.$dimensions.findBy({
-            IdUser: this.$auth.user.nombre,
-        })
-        },
         dialog(val) {
             val || this.close()
         },
@@ -203,11 +201,11 @@ export default {
             }
             this.close()
         },
-        usersName(){
+        usersName() {
             return this.$auth.user.nombre
         },
-        proyectos(){
-            
+        proyectos() {
+
         }
     },
 }

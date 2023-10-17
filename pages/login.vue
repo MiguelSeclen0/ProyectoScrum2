@@ -86,7 +86,6 @@ export default {
         // // Agrega el token al encabezado de autorización en la solicitud del usuario
         // const userResponse = await this.$auth.fetchUser({ customTokenRequest: token })
 
-        // console.log('userResponse',userResponse)
         // `userResponse` contiene los datos del usuario
         const URL = '/proyectos'
         this.$router.push(URL)

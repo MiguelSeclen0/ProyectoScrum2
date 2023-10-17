@@ -13,7 +13,7 @@
           <v-avatar :color="!image ? 'accent' : ''" size="36">
             <img v-if="image" :src="image" />
             <span v-else class="white--text">
-              PL 
+              {{ nameInitials }} 
             </span>
           </v-avatar>
         </div>
@@ -38,11 +38,11 @@ export default {
     },
   },
   computed: {
-    // nameInitials() {
-    //   const [firstName, lastName] = this.name.split(' ')
+    nameInitials() {
+      const [firstName] = this.name
 
-    //   return `${firstName[0]}${lastName[0]}`
-    // },
+      return `${firstName[0]}`
+    },
   },
 }
 </script>
