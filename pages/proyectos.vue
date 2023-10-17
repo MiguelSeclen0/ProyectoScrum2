@@ -27,7 +27,9 @@
                 </v-btn>
             </v-row>
             <v-row style="margin: 2%; padding-left: 2%;">
-                <CardProyect :cardsCustom="proyectoId" />
+                <CardProyect :cardsCustom="proyectoId" 
+                    @click:update="editItem(proyectoId)"
+                    @click:delete="deleteItem(proyectoId)" />
             </v-row>
         </v-col>
         <v-dialog v-model="dialog" max-width="500px">
@@ -43,13 +45,13 @@
                                 <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.clave1" label="Clave"></v-text-field>
+                                <v-text-field v-model="editedItem.cliente" label="Cliente"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.tipo1" label="Tipo"></v-text-field>
+                                <v-text-field v-model="editedItem.descripcion" label="Descripcion"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.oportunidad1" label="Oportunidad"></v-text-field>
+                                <v-text-field v-model="editedItem.estado" label="Estado"></v-text-field>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -103,10 +105,20 @@ export default {
         desserts: [],
         editedIndex: -1,
         editedItem: {
-            name: '',
-            clave1: '',
-            tipo1: '',
-            oportunidad1: '',
+            nombre: '',
+            cliente: '',
+            descripcion: '',
+            estado: '',
+            tipo: '',
+            fechaInicio: '',
+            fechaFinalizacion: '',
+            presupuesto: '',
+            duracion: '',
+            participantes: '',
+            equipo: {
+                equipoId: '',
+            },
+
         },
         defaultItem: {
             name: '',
@@ -161,19 +173,19 @@ export default {
         },
 
         editItem(item) {
-            this.editedIndex = this.desserts.indexOf(item)
+            this.editedIndex = this.proyectoId.proyectoId
             this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
 
         deleteItem(item) {
-            this.editedIndex = this.desserts.indexOf(item)
+            this.editedIndex = this.proyectoId.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
         },
 
         deleteItemConfirm() {
-            this.desserts.splice(this.editedIndex, 1)
+            this.proyectoId.splice(this.editedIndex, 1)
             this.closeDelete()
         },
 
@@ -195,9 +207,9 @@ export default {
 
         save() {
             if (this.editedIndex > -1) {
-                Object.assign(this.desserts[this.editedIndex], this.editedItem)
+                Object.assign(this.proyectoId[this.editedIndex], this.editedItem)
             } else {
-                this.desserts.push(this.editedItem)
+                this.proyectoId.push(this.editedItem)
             }
             this.close()
         },
