@@ -3,9 +3,9 @@ export class ProyectoService {
         this.$axios = $axios
     }
 
-    FindAll() {
-        return this.$axios.$get('/proyecto/all')
-    }
+    // FindAll() {
+    //     return this.$axios.$get('/proyecto/all')
+    // }
 
     findById({params}) {
         return this.$axios.$get('/proyecto/findById', {

@@ -15,7 +15,7 @@
                 <br>
                 <br>
                 <v-card-text class="d-flex align-center justify-center">{{ item.tipo }}</v-card-text>
-                <span style="margin-left:8%"> <v-badge :value="hover" color="deep-purple accent-4" content="5" left
+                <span style="margin-left:8%"> <v-badge :value="hover" color="deep-purple accent-4" :content="item.participantes" left
                         transition="slide-x-transition">
                         <v-hover v-model="hover">
                             <v-icon color="accent" large>
@@ -23,8 +23,8 @@
                             </v-icon>
                         </v-hover>
                     </v-badge>Participantes</span>
-                <span style="margin-left: 40%;"><v-icon color="accent" large>mdi-calendar-month-outline</v-icon>Meses</span>
-                <v-divider></v-divider>
+                <span style="margin-left: 40%;"><v-icon color="accent" large>mdi-calendar-month-outline</v-icon>{{item.duracion}}</span>
+                <v-divider style="margin: 5%;"></v-divider>
             </v-card>
         </div>
     </v-row>
@@ -38,7 +38,7 @@ export default {
         cardsCustom: {
             type: Array,
             default: () => [],
-        },
+        },  
     },
     methods: {
         funcRedirect() {

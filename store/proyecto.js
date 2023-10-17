@@ -8,7 +8,7 @@ import {
   
   
   export const state = () => ({
-    proyecto: [],
+    // proyecto: [],
     proyectoId:[],
   })
   
@@ -22,10 +22,10 @@ import {
   }
   
   export const actions = {
-     async [FETCH_PROYECTOS]({ commit }) {
-      const proyecto =  await this.$proyecto.FindAll()
-      commit(SET_PROYECTOS, { proyecto })
-    },
+    //  async [FETCH_PROYECTOS]({ commit }) {
+    //   const proyecto =  await this.$proyecto.FindAll()
+    //   commit(SET_PROYECTOS, { proyecto })
+    // },
       async [FETCH_PROYECTOS]({ commit }, params) {
         const proyectoId = await this.$proyecto.findById({params})
         commit(SET_PROYECTOS, { proyectoId })
