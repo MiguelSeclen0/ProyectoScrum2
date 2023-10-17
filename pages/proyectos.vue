@@ -38,23 +38,59 @@
                     <span class="text-h5">{{ formTitle }}</span>
                 </v-card-title>
 
+
                 <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.cliente" label="Cliente"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.descripcion" label="Descripcion"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.estado" label="Estado"></v-text-field>
-                            </v-col>
-                        </v-row>
-                    </v-container>
+                    <v-row>
+                        <v-col>
+                            <v-text-field v-model="editedItem.name" backgroundColor="secondary" rounded label="Nombre"></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Categoría</label>
+                            <v-text-field backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Fecha inicio</label>
+                            <v-text-field type="date" backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                        <v-col>
+                            <label>Fecha fin</label>
+                            <v-text-field type="date" backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Anexo</label>
+                            <v-text-field backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Personas asignadas</label>
+                            <v-text-field backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Prioridad</label>
+                            <v-text-field backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Detalle</label>
+                            <v-textarea backgroundColor="grey" rounded></v-textarea>
+                        </v-col>
+                    </v-row>
                 </v-card-text>
 
                 <v-card-actions>
