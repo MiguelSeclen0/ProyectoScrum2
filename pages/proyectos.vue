@@ -36,23 +36,59 @@
                     <span class="text-h5">{{ formTitle }}</span>
                 </v-card-title>
 
+
                 <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.clave1" label="Clave"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.tipo1" label="Tipo"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.oportunidad1" label="Oportunidad"></v-text-field>
-                            </v-col>
-                        </v-row>
-                    </v-container>
+                    <v-row>
+                        <v-col>
+                            <v-text-field v-model="editedItem.name" backgroundColor="secondary" rounded label="Nombre"></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Categoría</label>
+                            <v-text-field backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Fecha inicio</label>
+                            <v-text-field type="date" backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                        <v-col>
+                            <label>Fecha fin</label>
+                            <v-text-field type="date" backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Anexo</label>
+                            <v-text-field backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Personas asignadas</label>
+                            <v-text-field backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Prioridad</label>
+                            <v-text-field backgroundColor="grey" rounded></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <label>Detalle</label>
+                            <v-textarea backgroundColor="grey" rounded></v-textarea>
+                        </v-col>
+                    </v-row>
                 </v-card-text>
 
                 <v-card-actions>
@@ -89,8 +125,8 @@ export default {
     name: 'tablero',
     layout: 'default',
     async fetch() {
-      debugger
-      await Promise.all([this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`)])
+        debugger
+        await Promise.all([this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`)])
     },
     data: () => ({
         dialog: false,
@@ -114,7 +150,7 @@ export default {
     }),
 
     computed: {
-        ...mapState('proyecto', ['proyecto'],['proyectoId']),
+        ...mapState('proyecto', ['proyecto'], ['proyectoId']),
         formTitle() {
             return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Editar Proyecto'
         },
@@ -123,8 +159,8 @@ export default {
     watch: {
         async handler() {
             this.dimensions = await this.$dimensions.findBy({
-            IdUser: this.$auth.user.nombre,
-        })
+                IdUser: this.$auth.user.nombre,
+            })
         },
         dialog(val) {
             val || this.close()
@@ -203,11 +239,11 @@ export default {
             }
             this.close()
         },
-        usersName(){
+        usersName() {
             return this.$auth.user.nombre
         },
-        proyectos(){
-            
+        proyectos() {
+
         }
     },
 }
