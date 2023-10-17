@@ -8,7 +8,7 @@ import {
   
   
   export const state = () => ({
-    proyecto: [],
+    // proyecto: [],
     proyectoId:[],
   })
   
@@ -16,19 +16,18 @@ import {
   }
   
   export const mutations = {
-    [SET_PROYECTOS](state, { proyecto }) {
-      state.proyecto = proyecto
+    [SET_PROYECTOS](state, { proyectoId }) {
+      state.proyectoId = proyectoId
     }
   }
   
   export const actions = {
-     async [FETCH_PROYECTOS]({ commit }) {
-      const proyecto =  await this.$proyecto.FindAll()
-      console.log('proyectos', proyecto)
-      commit(SET_PROYECTOS, { proyecto })
-    },
-      async [FETCH_PROYECTOS]({ commit }, payload) {
-        const proyectoId = await this.$proyecto.findAllById(payload)
+    //  async [FETCH_PROYECTOS]({ commit }) {
+    //   const proyecto =  await this.$proyecto.FindAll()
+    //   commit(SET_PROYECTOS, { proyecto })
+    // },
+      async [FETCH_PROYECTOS]({ commit }, params) {
+        const proyectoId = await this.$proyecto.findById({params})
         commit(SET_PROYECTOS, { proyectoId })
       },
   }
