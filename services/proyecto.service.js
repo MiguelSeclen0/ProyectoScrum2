@@ -12,4 +12,8 @@ export class ProyectoService {
           params,
         })
       }
+    
+      proyectoInsert(proyecto){
+      return this.$axios.$post('/proyecto/save', proyecto)
+    }
 }

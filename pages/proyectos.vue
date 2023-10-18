@@ -27,8 +27,7 @@
                 </v-btn>
             </v-row>
             <v-row style="margin: 2%; padding-left: 2%;">
-                <CardProyect :cardsCustom="proyectoId" 
-                    @click:update="editItem(proyectoId)"
+                <CardProyect :cardsCustom="proyectoId" @click:update="editItem(proyectoId)"
                     @click:delete="deleteItem(proyectoId)" />
             </v-row>
         </v-col>
@@ -142,7 +141,7 @@
 <script>
 
 import { mapState } from 'vuex'
-import { FETCH_PROYECTOS } from '@/utils/types/proyectos/actions.types'
+import { FETCH_PROYECTOS, INSERT_PROYECTOS } from '@/utils/types/proyectos/actions.types'
 
 export default {
     name: 'proyectos',
@@ -165,7 +164,6 @@ export default {
             nombre: '',
             cliente: '',
             descripcion: '',
-            estado: '',
             tipo: '',
             fechaInicio: '',
             fechaFinalizacion: '',
@@ -262,11 +260,53 @@ export default {
             })
         },
 
-        save() {
-            if (this.editedIndex > -1) {
-                Object.assign(this.proyectoId[this.editedIndex], this.editedItem)
-            } else {
-                this.proyectoId.push(this.editedItem)
+        async save() {
+            // if (this.editedIndex > -1) {
+            //     Object.assign(this.proyectoId[this.editedIndex], this.editedItem)
+            // } else {
+            //     this.proyectoId.push(this.editedItem)
+            // }
+            const newProyecto = {
+                nombre: 'Proyecto 06',
+                cliente: 'CONSULTORIA | EMPRESA NUEVA2',
+                descripcion: 'Descripción del Proyecto',
+                tipo: 'Página Web',
+                color: '#AB4743',
+                fechaInicio: '2023-10-11',
+                fechaFinalizacion: '2023-12-25',
+                presupuesto: 20000.0,
+                equipo: {
+                    equipoId: '6526c50ba76fc22a6794c34d',
+                },
+            }
+            const res = await this.$dialog.confirm({
+                text: `¿Realmente desea agregar el proyecto?`,
+                title: 'ADVERTENCIA',
+                actions: {
+                    false: 'No',
+                    true: { color: 'primary', text: 'Sí' },
+                },
+                persistent: true,
+            })
+            if (res) {
+                try {
+                    // Dispatch action for update the survey and fetch all surveys again
+                    await this.$store.dispatch(
+                        `proyecto/${INSERT_PROYECTOS}`,
+                        newProyecto
+                    )
+                    // Ya se puede ejecutar la modificación
+
+                    this.$dialog.message.success(
+                        'El proyecto se agrego correctamente',
+                        {
+                            position: 'top-right',
+                        }
+                    )
+                    await this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
+                        id: this.$auth.user.email,
+                    })
+                } catch (err) { }
             }
             this.close()
         },

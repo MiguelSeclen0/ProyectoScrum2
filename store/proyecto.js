@@ -1,5 +1,6 @@
 import {
     FETCH_PROYECTOS,
+    INSERT_PROYECTOS,
   } from '@/utils/types/proyectos/actions.types'
   
   import {
@@ -29,5 +30,8 @@ import {
       async [FETCH_PROYECTOS]({ commit }, params) {
         const proyectoId = await this.$proyecto.findById({params})
         commit(SET_PROYECTOS, { proyectoId })
+      },
+      async [INSERT_PROYECTOS]({ dispatch }, proyecto) {
+        await this.$proyecto.proyectoInsert(proyecto)
       },
   }
