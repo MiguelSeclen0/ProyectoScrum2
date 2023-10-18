@@ -42,53 +42,74 @@
                 <v-card-text>
                     <v-row>
                         <v-col>
-                            <v-text-field v-model="editedItem.name" backgroundColor="secondary" rounded label="Nombre"></v-text-field>
+                            <v-text-field v-model="editedItem.name" backgroundColor="secondary" outlined label="Nombre" color="textito"></v-text-field>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col>
-                            <label>Categoría</label>
-                            <v-text-field backgroundColor="grey" rounded></v-text-field>
+                            <v-text-field v-model="editedItem.name" backgroundColor="secondary" outlined label="Cliente" color="textito"></v-text-field>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col>
-                            <label>Fecha inicio</label>
-                            <v-text-field type="date" backgroundColor="grey" rounded></v-text-field>
+                        <DatePicker
+                          label="Fecha Inicio"
+                          outlined
+                          type='date'
+                        />
+                      </v-col>
+                      <v-col>
+                        <DatePicker
+                          label="Fecha Fin"
+                          outlined
+                          type='date'
+                        />
+                      </v-col>
+                        <!-- <v-col>
+                            <v-text-field type="date" v-model="editedItem.name" backgroundColor="secondary" outlined label="Categoría" color="textito"></v-text-field>
                         </v-col>
                         <v-col>
                             <label>Fecha fin</label>
                             <v-text-field type="date" backgroundColor="grey" rounded></v-text-field>
+                        </v-col> -->
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <ColorPicker
+                            label="Color"
+                            outlined
+                            type="String"
+                            />
                         </v-col>
+                        <v-col>
+                            <v-combobox 
+                            label = "Tipo"
+                            backgroundColor="secondary"
+                            color="textito"
+                            outlined>                            
+                            </v-combobox>
+                        </v-col>
+                        
                     </v-row>
 
                     <v-row>
                         <v-col>
-                            <label>Anexo</label>
-                            <v-text-field backgroundColor="grey" rounded></v-text-field>
+                            <v-text-field v-model="editedItem.name" backgroundColor="secondary" outlined label="Presupuesto" color="textito"></v-text-field>
+                        </v-col>
+                        <v-col>
+                            <v-combobox 
+                            label = "Equipo"
+                            backgroundColor="secondary"
+                            color="textito"
+                            outlined>                            
+                            </v-combobox>
                         </v-col>
                     </v-row>
-
                     <v-row>
                         <v-col>
-                            <label>Personas asignadas</label>
-                            <v-text-field backgroundColor="grey" rounded></v-text-field>
-                        </v-col>
-                    </v-row>
-
-                    <v-row>
-                        <v-col>
-                            <label>Prioridad</label>
-                            <v-text-field backgroundColor="grey" rounded></v-text-field>
-                        </v-col>
-                    </v-row>
-
-                    <v-row>
-                        <v-col>
-                            <label>Detalle</label>
-                            <v-textarea backgroundColor="grey" rounded></v-textarea>
+                            <v-textarea backgroundColor="secondary" outlined label="Detalle"></v-textarea>
                         </v-col>
                     </v-row>
                 </v-card-text>

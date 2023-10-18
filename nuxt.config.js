@@ -69,7 +69,8 @@ export default {
           warning: '#FFC0CB',
           error: '#FFC0CB',
           success: colors.green.accent3,
-          text: '#ffffff'
+          text: '#ffffff',
+          textito: "#929194"
         },
         light: {
           primary: '#ffffff',
@@ -79,7 +80,8 @@ export default {
           info: '#2196F3',
           success: '#4CAF50',
           warning: '#FFC0CB',
-          text: '#ffffff'
+          text: '#ffffff',
+          textito: "#929194"
         },
       },
     },
