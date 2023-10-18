@@ -6,10 +6,14 @@
         <div class="sidebarCustomContainer">
           <img style="width: 55%;" src="LogoScrum.png">
           <v-list>
-            <v-list-group class="spaceSide" :value="true" prepend-icon=" mdi-view-dashboard">
+            <v-list-group class="spaceSide" :value="false" prepend-icon=" mdi-view-dashboard">
               <template v-slot:activator>
-                <v-list-item-title>Dashboard</v-list-item-title>
+                <v-list-item-title >Dashboard
+                </v-list-item-title>            
               </template>
+              <v-list-item to="/dashboard" class="justify-center">
+                  Dashito
+                </v-list-item>
             </v-list-group>
             <v-list-group class="spaceSide" :value="true" prepend-icon="mdi-bag-checked">
               <template v-slot:activator>

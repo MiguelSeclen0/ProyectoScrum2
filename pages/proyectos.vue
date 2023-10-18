@@ -145,7 +145,7 @@ import { mapState } from 'vuex'
 import { FETCH_PROYECTOS } from '@/utils/types/proyectos/actions.types'
 
 export default {
-    name: 'tablero',
+    name: 'proyectos',
     layout: 'default',
     async fetch() {
         debugger
