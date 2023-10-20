@@ -63,10 +63,10 @@
       <v-card>
         <v-card-title>Agregar Nueva Columna</v-card-title>
         <v-card-text>
-          <v-text-field v-model="newColumnName" label="Nombre de la Columna"></v-text-field>
+          <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre" color="textito"></v-text-field>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="addColumn">Agregar</v-btn>
+          <v-btn color="accent" @click="addColumn">Agregar</v-btn>
           <v-btn @click="closeAddColumnModal">Cancelar</v-btn>
         </v-card-actions>
       </v-card>
@@ -75,10 +75,23 @@
       <v-card>
         <v-card-title>Agregar Nueva Tarea</v-card-title>
         <v-card-text>
-          <v-text-field v-model="newColumnName" label="Nombre de la Tarea"></v-text-field>
+          <v-col>
+            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre" color="textito"></v-text-field>
+          </v-col>  
+          <v-col>
+            <v-combobox 
+              label = "Responsable"
+              backgroundColor="secondary"
+              color="textito"
+              outlined>                            
+              </v-combobox>
+          </v-col>
+          <v-col>
+            <v-textarea backgroundColor="secondary" outlined label="Descripcion"></v-textarea>
+          </v-col>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="addTask">Agregar</v-btn>
+          <v-btn color="accent" @click="addTask">Agregar</v-btn>
           <v-btn @click="closeAddTaskModal">Cancelar</v-btn>
         </v-card-actions>
       </v-card>
