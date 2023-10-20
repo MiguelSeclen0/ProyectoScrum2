@@ -83,12 +83,14 @@
                             />
                         </v-col>
                         <v-col>
-                            <v-combobox 
-                            label = "Tipo"
+                            <v-select
+                            label="Tipo"
+                            :items="tipo"
+                            item-text="nombre"
                             backgroundColor="secondary"
                             color="textito"
                             outlined>                            
-                            </v-combobox>
+                            </v-select>
                         </v-col>
                         
                     </v-row>
@@ -142,15 +144,16 @@
 
 import { mapState } from 'vuex'
 import { FETCH_PROYECTOS, INSERT_PROYECTOS } from '@/utils/types/proyectos/actions.types'
+import { FETCH_TIPOS } from '@/utils/types/tipos/actions.types'
 
 export default {
     name: 'proyectos',
     layout: 'default',
     async fetch() {
-        debugger
-        await Promise.all([this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
-            id: this.$auth.user.email,
-        })
+        await Promise.all([
+            this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
+                id: this.$auth.user.email,}),
+            this.$store.dispatch(`tipo/${FETCH_TIPOS}`)
         ])
     },
     data: () => ({
@@ -185,6 +188,7 @@ export default {
 
     computed: {
         ...mapState('proyecto', ['proyectoId']),
+        ...mapState('tipo', ['tipo']),
         formTitle() {
             return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Editar Proyecto'
         },
