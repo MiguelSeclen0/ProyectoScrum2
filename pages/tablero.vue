@@ -16,7 +16,7 @@
       </v-btn>
       <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
         <v-card v-for="item in  Mylist2 " :key="item.id" elevation="24" class="mx-auto cardst"
-          :class="['column-card', { 'new-column': index >= Mylist3.length - 1 }]" color="primary" max-width="250">
+          :class="['column-card', { 'new-column': index >= Mylist3.length - 1 }]" color="secondary" max-width="250">
           <v-card-title>
             <v-icon large left class="text-caption">
               {{ item.nombreTarea }} <!-- Mostramos el nombre de la tarea -->
