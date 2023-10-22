@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app
-      class="custom-drawer primary">
+      class="custom-drawer accent">
       <div class="sidebarCustom">
         <div class="sidebarCustomContainer">
           <img style="width: 55%;" src="LogoScrum.png">
@@ -12,28 +12,26 @@
                 </v-list-item-title>            
               </template>
               <v-list-item to="/dashboard" class="justify-center">
-                  Dashito
+                  Graficos
                 </v-list-item>
             </v-list-group>
             <v-list-group class="spaceSide" :value="true" prepend-icon="mdi-bag-checked">
               <template v-slot:activator>
-                <v-list-item-title>Proyectos</v-list-item-title>
+                <v-list-item-title>Proyectos
+                </v-list-item-title>
               </template>
+              <v-list-item to="/proyectos" class="justify-center">
+                  Ver todos los proyectos
+              </v-list-item>
             </v-list-group>
             <v-list-group class="spaceSide" :value="true" prepend-icon="mdi-account-circle">
               <template v-slot:activator>
-                <v-list-item-title>Clientes</v-list-item-title>
+                <v-list-item-title>Tableros
+                </v-list-item-title>
               </template>
-            </v-list-group>
-            <v-list-group class="spaceSide" :value="true" prepend-icon="mdi mdi-account-group">
-              <template v-slot:activator>
-                <v-list-item-title>Colaboradores</v-list-item-title>
-              </template>
-            </v-list-group>
-            <v-list-group class="spaceSide" :value="true" prepend-icon="mdi mdi-ticket-account">
-              <template v-slot:activator>
-                <v-list-item-title>Tickets</v-list-item-title>
-              </template>
+              <v-list-item to="/tablero" class="justify-center">
+                  Actividades
+              </v-list-item>
             </v-list-group>
           </v-list>
           <v-switch v-model="$vuetify.theme.dark" inset persistent-hint
