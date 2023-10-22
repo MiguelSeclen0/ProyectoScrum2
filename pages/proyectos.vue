@@ -91,8 +91,7 @@
                             color="textito"
                             outlined>                            
                             </v-select>
-                        </v-col>
-                        
+                        </v-col>                        
                     </v-row>
 
                     <v-row>
@@ -100,14 +99,17 @@
                             <v-text-field v-model="editedItem.name" backgroundColor="secondary" outlined label="Presupuesto" color="textito"></v-text-field>
                         </v-col>
                         <v-col>
-                            <v-combobox 
+                            <v-select
                             label = "Equipo"
+                            :items="equipo"
+                            item-text="nombre"
                             backgroundColor="secondary"
                             color="textito"
                             outlined>                            
-                            </v-combobox>
+                            </v-select>
                         </v-col>
                     </v-row>
+
                     <v-row>
                         <v-col>
                             <v-textarea backgroundColor="secondary" outlined label="Detalle"></v-textarea>
@@ -145,6 +147,7 @@
 import { mapState } from 'vuex'
 import { FETCH_PROYECTOS, INSERT_PROYECTOS } from '@/utils/types/proyectos/actions.types'
 import { FETCH_TIPOS } from '@/utils/types/tipos/actions.types'
+import { FETCH_EQUIPOS } from '@/utils/types/equipos/actions.types'
 
 export default {
     name: 'proyectos',
@@ -153,7 +156,8 @@ export default {
         await Promise.all([
             this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
                 id: this.$auth.user.email,}),
-            this.$store.dispatch(`tipo/${FETCH_TIPOS}`)
+            this.$store.dispatch(`tipo/${FETCH_TIPOS}`),
+            this.$store.dispatch(`equipo/${FETCH_EQUIPOS}`)
         ])
     },
     data: () => ({
@@ -189,6 +193,7 @@ export default {
     computed: {
         ...mapState('proyecto', ['proyectoId']),
         ...mapState('tipo', ['tipo']),
+        ...mapState('equipo', ['equipo']),
         formTitle() {
             return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Editar Proyecto'
         },
