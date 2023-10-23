@@ -105,6 +105,10 @@ import draggable from 'vuedraggable'
 // import { mapState } from 'vuex'
 // import { FETCH_USUARIO } from '@/utils/types/users/actions.types'
 
+//agg1
+import { mapState } from 'vuex'
+import { FETCH_TAREAS } from '@/utils/types/tareas/actions.types'
+
 export default {
   name: 'InspirePage',
   data() {
@@ -163,6 +167,18 @@ export default {
   // computed: {
   //   ...mapState('usuario', ['usuario']),
   // },
+  
+  //agg2
+  async fetch() {
+    await Promise.all([
+      this.$store.dispatch(`tarea/${FETCH_TAREAS}`)
+    ])
+  },
+  //agg3
+  computed: {
+    ...mapState('tarea', ['tarea']),
+  },
+
   methods: {
     getInitials(username) {
       const words = username.split(" ");
