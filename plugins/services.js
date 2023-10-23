@@ -4,6 +4,7 @@ import { ProyectoService } from '@/services/proyecto.service'
 import { TipoService } from '@/services/tipo.service'
 import { EquipoService } from '@/services/equipo.service'
 import { TareaService } from '@/services/tarea.service'
+import { EstadoService } from '@/services/estado.service'
 
 export default function (ctx,inject){
     if(!ctx.$axios){
@@ -16,4 +17,5 @@ export default function (ctx,inject){
     inject('tipo',new TipoService(ctx))
     inject('equipo',new EquipoService(ctx))
     inject('tarea',new TareaService(ctx))
+    inject('estado',new EstadoService(ctx))
 }
