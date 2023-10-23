@@ -88,7 +88,24 @@ export default {
     methods: {
         usersName() {
             return this.$auth.user.nombre
-        }
+        },
+        async onLogout() {
+            const res = await this.$dialog.confirm({
+                text: '¿Realmente desea cerrar sesión?',
+                title: 'Advertencia',
+                actions: {
+                    false: 'No',
+                    true: { color: 'accent', text: 'Si' },
+                },
+                persistent: true,
+            })
+
+            if (res) {
+                await this.$auth.logout()
+
+                this.$router.push('/login')
+            }
+        },
     },
 }
 
