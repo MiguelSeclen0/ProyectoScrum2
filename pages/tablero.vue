@@ -1,8 +1,8 @@
 <template>
   <div class="cards-wrapper">
-    <v-col v-for="(item, index) in  Mylist3 " :key="index" class="secondary cards" md="3">
+    <v-col v-for="(item, index) in  estado " :key="item.estadoId" class="secondary cards" md="3">
       <div v-if="index !== editedColumnIndex">
-        <span @click="editColumn(index)">{{ item.nombres }}</span>
+        <span @click="editColumn(index)">{{ item.nombre }}</span>
       </div>
       <div v-else>
         <v-text-field v-model="editedColumnName" label="Nuevo nombre" solo-inverted></v-text-field>
@@ -16,7 +16,7 @@
       </v-btn>
       <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
         <v-card v-for="item in  Mylist2 " :key="item.id" elevation="24" class="mx-auto cardst"
-          :class="['column-card', { 'new-column': index >= Mylist3.length - 1 }]" color="primary" max-width="250">
+          :class="['column-card', { 'new-column': index >= Mylist3.length - 1 }]" color="secondary" max-width="250">
           <v-card-title>
             <v-icon large left class="text-caption">
               {{ item.nombreTarea }} <!-- Mostramos el nombre de la tarea -->
@@ -63,10 +63,10 @@
       <v-card>
         <v-card-title>Agregar Nueva Columna</v-card-title>
         <v-card-text>
-          <v-text-field v-model="newColumnName" label="Nombre de la Columna"></v-text-field>
+          <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre" color="textito"></v-text-field>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="addColumn">Agregar</v-btn>
+          <v-btn color="accent" @click="addColumn">Agregar</v-btn>
           <v-btn @click="closeAddColumnModal">Cancelar</v-btn>
         </v-card-actions>
       </v-card>
@@ -75,10 +75,23 @@
       <v-card>
         <v-card-title>Agregar Nueva Tarea</v-card-title>
         <v-card-text>
-          <v-text-field v-model="newColumnName" label="Nombre de la Tarea"></v-text-field>
+          <v-col>
+            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre" color="textito"></v-text-field>
+          </v-col>  
+          <v-col>
+            <v-combobox 
+              label = "Responsable"
+              backgroundColor="secondary"
+              color="textito"
+              outlined>                            
+              </v-combobox>
+          </v-col>
+          <v-col>
+            <v-textarea backgroundColor="secondary" outlined label="Descripcion"></v-textarea>
+          </v-col>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="addTask">Agregar</v-btn>
+          <v-btn color="accent" @click="addTask">Agregar</v-btn>
           <v-btn @click="closeAddTaskModal">Cancelar</v-btn>
         </v-card-actions>
       </v-card>
@@ -91,6 +104,11 @@
 import draggable from 'vuedraggable'
 // import { mapState } from 'vuex'
 // import { FETCH_USUARIO } from '@/utils/types/users/actions.types'
+
+// agg1
+import { mapState } from 'vuex'
+import { FETCH_TAREAS } from '@/utils/types/tareas/actions.types'
+import { FETCH_ESTADOS } from '@/utils/types/estados/actions.types'
 
 export default {
   name: 'InspirePage',
@@ -150,6 +168,20 @@ export default {
   // computed: {
   //   ...mapState('usuario', ['usuario']),
   // },
+  
+  // agg2
+  async fetch() {
+    await Promise.all([
+      this.$store.dispatch(`tarea/${FETCH_TAREAS}`),
+      this.$store.dispatch(`estado/${FETCH_ESTADOS}`)
+    ])
+  },
+  // agg3
+  computed: {
+    ...mapState('tarea', ['tarea']),
+    ...mapState('estado', ['estado'])
+  },
+
   methods: {
     getInitials(username) {
       const words = username.split(" ");

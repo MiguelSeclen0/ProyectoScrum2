@@ -19,6 +19,8 @@
       <v-card>
       <v-color-picker
         :type="type"
+        hide-mode-switch
+        mode="hexa"
         color="textito"
         @input="menu = true"
       ></v-color-picker>
