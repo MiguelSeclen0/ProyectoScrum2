@@ -1,8 +1,8 @@
 <template>
   <div class="cards-wrapper">
-    <v-col v-for="(item, index) in  Mylist3 " :key="index" class="secondary cards" md="3">
+    <v-col v-for="(item, index) in  estado " :key="item.estadoId" class="secondary cards" md="3">
       <div v-if="index !== editedColumnIndex">
-        <span @click="editColumn(index)">{{ item.nombres }}</span>
+        <span @click="editColumn(index)">{{ item.nombre }}</span>
       </div>
       <div v-else>
         <v-text-field v-model="editedColumnName" label="Nuevo nombre" solo-inverted></v-text-field>
@@ -105,6 +105,11 @@ import draggable from 'vuedraggable'
 // import { mapState } from 'vuex'
 // import { FETCH_USUARIO } from '@/utils/types/users/actions.types'
 
+// agg1
+import { mapState } from 'vuex'
+import { FETCH_TAREAS } from '@/utils/types/tareas/actions.types'
+import { FETCH_ESTADOS } from '@/utils/types/estados/actions.types'
+
 export default {
   name: 'InspirePage',
   data() {
@@ -163,6 +168,20 @@ export default {
   // computed: {
   //   ...mapState('usuario', ['usuario']),
   // },
+  
+  // agg2
+  async fetch() {
+    await Promise.all([
+      this.$store.dispatch(`tarea/${FETCH_TAREAS}`),
+      this.$store.dispatch(`estado/${FETCH_ESTADOS}`)
+    ])
+  },
+  // agg3
+  computed: {
+    ...mapState('tarea', ['tarea']),
+    ...mapState('estado', ['estado'])
+  },
+
   methods: {
     getInitials(username) {
       const words = username.split(" ");
