@@ -80,11 +80,13 @@
                 </UserMenu>
                 </v-col>
             </v-row>
+            <ChartPrueba></ChartPrueba>
         </v-col>
     </v-row>
 </template>
   
 <script>
+
 export default {    
     name: 'dashboard',
     layout: 'default',
@@ -93,8 +95,6 @@ export default {
     }),
     computed: {
         
-    },
-    components: {
     },
     watch: {
     },
