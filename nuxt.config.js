@@ -35,8 +35,11 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/axios', '@nuxtjs/auth','vuetify-dialog/nuxt',],
+  modules: ['@nuxtjs/axios', '@nuxtjs/auth','vuetify-dialog/nuxt','primevue/nuxt'],
 
+  primevue: {
+    components: ["DataTable", "Column", "Row", "ColumnGroup"]
+  },
   axios: {
     baseURL: 'http://localhost:90',
   },
@@ -88,7 +91,9 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    transpile: ["primevue"]
+  },
 
   // Auth Configuration
   auth: {

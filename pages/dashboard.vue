@@ -91,11 +91,11 @@
                 </v-card>
             </v-row>
         </v-col>
+        <CalendarPrueba></CalendarPrueba>
     </v-row>
 </template>
   
 <script>
-
 export default {
     name: 'dashboard',
     layout: 'default',
