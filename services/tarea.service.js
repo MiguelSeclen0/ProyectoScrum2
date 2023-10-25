@@ -3,7 +3,18 @@ export class TareaService {
         this.$axios = $axios
     }
 
-    FindAll() {
-        return this.$axios.$get('/tarea/all')
-    }  
+    // FindAll() {
+    //    return this.$axios.$get('/tarea/all')
+    // }  
+    findById({params}) {
+        return this.$axios.$get('/tarea/findByproyectoId', {
+          params,
+        })
+      }
+      
+    listEstado({params}) {
+        return this.$axios.$get('/tarea/listEstado', {
+          params,
+        })
+      }  
 }

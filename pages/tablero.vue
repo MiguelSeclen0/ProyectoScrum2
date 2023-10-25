@@ -1,8 +1,8 @@
 <template>
   <div class="cards-wrapper">
-    <v-col v-for="(item, index) in  estado " :key="item.estadoId" class="secondary cards" md="3">
+    <v-col v-for="(item, index) in  tareaEstado " :key="item.index" class="secondary cards" md="3">
       <div v-if="index !== editedColumnIndex">
-        <span @click="editColumn(index)">{{ item.nombre }}</span>
+        <span @click="editColumn(index)">{{ item }}</span>
       </div>
       <div v-else>
         <v-text-field v-model="editedColumnName" label="Nuevo nombre" solo-inverted></v-text-field>
@@ -15,11 +15,12 @@
         </v-icon>
       </v-btn>
       <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
-        <v-card v-for="item in  Mylist2 " :key="item.id" elevation="24" class="mx-auto cardst"
-          :class="['column-card', { 'new-column': index >= Mylist3.length - 1 }]" color="secondary" max-width="250">
+        <v-card v-for="item in  tarea " :key="item.tareaId" elevation="24" class="mx-auto cardst"
+        :style="{ 'background': item.color }"  
+        :class="['column-card', { 'new-column': index >= tareaEstado.length - 1 }]"  max-width="250">
           <v-card-title>
             <v-icon large left class="text-caption">
-              {{ item.nombreTarea }} <!-- Mostramos el nombre de la tarea -->
+               {{item.nombre}}  <!-- Mostramos el nombre de la tarea -->
             </v-icon>
           </v-card-title>
           <v-card-actions>
@@ -30,7 +31,7 @@
               </v-col>
               <v-col cols="6" class="align-center mr-1" style="margin-top: 7.5%; margin-bottom: 10px;">
                 <span class="text-overline" :class="{ 'text-decoration-line-through text-overline': checkbox }">
-                  {{ item.nombres }}
+                 {{item.descripcion}}
                 </span>
               </v-col>
               <v-col cols="2" class="text-right" style="margin-top: 7.5%; margin-right: 2%;">
@@ -38,10 +39,10 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-avatar class="avatar-circle" size="24px" v-bind="attrs" v-on="on">
-                      <div class="avatar-inner">{{ getInitials(item.nombreUsuario) }}</div>
+                      <div class="avatar-inner"> {{getInitials(item.nombre)}} </div>
                     </v-avatar>
                   </template>
-                  <span>{{ item.nombreUsuario }}</span>
+                  <span> {{item.fechaLimite}} </span>
                 </v-tooltip>
               </v-col>
             </v-row>
@@ -108,6 +109,7 @@ import draggable from 'vuedraggable'
 // agg1
 import { mapState } from 'vuex'
 import { FETCH_TAREAS } from '@/utils/types/tareas/actions.types'
+import { FETCH_TAREASESTADO } from '@/utils/types/tareas/actions.types'
 import { FETCH_ESTADOS } from '@/utils/types/estados/actions.types'
 
 export default {
@@ -172,13 +174,16 @@ export default {
   // agg2
   async fetch() {
     await Promise.all([
-      this.$store.dispatch(`tarea/${FETCH_TAREAS}`),
+      this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
+                id: '653482173d1327199055609e',}),
+      this.$store.dispatch(`tarea/${FETCH_TAREASESTADO}`, {
+                id: '653482173d1327199055609e',}),          
       this.$store.dispatch(`estado/${FETCH_ESTADOS}`)
-    ])
+    ]) 
   },
   // agg3
   computed: {
-    ...mapState('tarea', ['tarea']),
+    ...mapState('tarea', ['tarea','tareaEstado']),
     ...mapState('estado', ['estado'])
   },
 
