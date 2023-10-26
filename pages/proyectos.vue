@@ -41,13 +41,26 @@
                 <v-card-text>
                     <v-row>
                         <v-col>
-                            <v-text-field v-model="editedItem.name" backgroundColor="secondary" outlined label="Nombre" color="textito"></v-text-field>
+                            <v-text-field v-model="editedItem.nombre" backgroundColor="secondary" outlined label="Nombre" color="textito"></v-text-field>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col>
-                            <v-text-field v-model="editedItem.name" backgroundColor="secondary" outlined label="Cliente" color="textito"></v-text-field>
+                            <v-text-field v-model="editedItem.cliente" backgroundColor="secondary" outlined label="Cliente" color="textito"></v-text-field>
+                        </v-col>
+
+                        <v-col>
+                            <v-select
+                            label="Estado"
+                            v-model="estadoSelect"
+                            item-value="estadoId"
+                            :items="proyectoEstado"                           
+                            item-text="nombre"
+                            backgroundColor="secondary"
+                            color="textito"
+                            outlined>                            
+                            </v-select>
                         </v-col>
                     </v-row>
 
@@ -55,6 +68,7 @@
                         <v-col>
                         <DatePicker
                           label="Fecha Inicio"
+                          v-model="editedItem.fechaInicio"
                           outlined
                           type='date'
                         />
@@ -62,6 +76,7 @@
                       <v-col>
                         <DatePicker
                           label="Fecha Fin"
+                          v-model="editedItem.fechaFinalizacion"
                           outlined
                           type='date'
                         />
@@ -78,6 +93,7 @@
                         <v-col>
                             <ColorPicker
                             label="Color"
+                            v-model="editedItem.ColorPicker"
                             outlined
                             type="String"
                             />
@@ -85,7 +101,9 @@
                         <v-col>
                             <v-select
                             label="Tipo"
-                            :items="tipo"
+                            v-model="tipoSelect"
+                            item-value="tipoId"
+                            :items="tipo"                           
                             item-text="nombre"
                             backgroundColor="secondary"
                             color="textito"
@@ -96,12 +114,14 @@
 
                     <v-row>
                         <v-col>
-                            <v-text-field v-model="editedItem.name" backgroundColor="secondary" outlined label="Presupuesto" color="textito"></v-text-field>
+                            <v-text-field v-model="editedItem.presupuesto" backgroundColor="secondary" outlined label="Presupuesto" color="textito"></v-text-field>
                         </v-col>
                         <v-col>
                             <v-select
                             label = "Equipo"
-                            :items="equipo"
+                            v-model="equipoSelect"
+                            item-value="equipoId"
+                            :items="equipo"                            
                             item-text="nombre"
                             backgroundColor="secondary"
                             color="textito"
@@ -112,7 +132,7 @@
 
                     <v-row>
                         <v-col>
-                            <v-textarea backgroundColor="secondary" outlined label="Detalle"></v-textarea>
+                            <v-textarea v-model="editedItem.descripcion" backgroundColor="secondary" outlined label="Detalle"></v-textarea>
                         </v-col>
                     </v-row>
                 </v-card-text>
@@ -148,6 +168,7 @@ import { mapState } from 'vuex'
 import { FETCH_PROYECTOS, INSERT_PROYECTOS } from '@/utils/types/proyectos/actions.types'
 import { FETCH_TIPOS } from '@/utils/types/tipos/actions.types'
 import { FETCH_EQUIPOS } from '@/utils/types/equipos/actions.types'
+import { FETCH_ESTADOSPROYECTOS } from '@/utils/types/estados/actions.types'
 
 export default {
     name: 'proyectos',
@@ -157,7 +178,8 @@ export default {
             this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
                 id: this.$auth.user.email,}),
             this.$store.dispatch(`tipo/${FETCH_TIPOS}`),
-            this.$store.dispatch(`equipo/${FETCH_EQUIPOS}`)
+            this.$store.dispatch(`equipo/${FETCH_EQUIPOS}`),
+            this.$store.dispatch(`estado/${FETCH_ESTADOSPROYECTOS}`)            
         ])
     },
     data: () => ({
@@ -171,17 +193,20 @@ export default {
             nombre: '',
             cliente: '',
             descripcion: '',
-            tipo: '',
+            tipo: {},
             fechaInicio: '',
             fechaFinalizacion: '',
             presupuesto: '',
+            estado: '',
             duracion: '',
             participantes: '',
             equipo: {
                 equipoId: '',
             },
-
         },
+        estadoSelect: {},
+        tipoSelect: {},
+        equipoSelect: {},
         defaultItem: {
             name: '',
             clave1: '',
@@ -194,6 +219,7 @@ export default {
         ...mapState('proyecto', ['proyectoId']),
         ...mapState('tipo', ['tipo']),
         ...mapState('equipo', ['equipo']),
+        ...mapState('estado', ['proyectoEstado']),
         formTitle() {
             return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Editar Proyecto'
         },
@@ -275,19 +301,28 @@ export default {
             // } else {
             //     this.proyectoId.push(this.editedItem)
             // }
+            console.log('editItem',this.editedItem)
+            console.log('Select',this.select)            
+            
             const newProyecto = {
-                nombre: 'Proyecto 06',
-                cliente: 'CONSULTORIA | EMPRESA NUEVA2',
-                descripcion: 'Descripción del Proyecto',
-                tipo: 'Página Web',
-                color: '#AB4743',
-                fechaInicio: '2023-10-11',
-                fechaFinalizacion: '2023-12-25',
-                presupuesto: 20000.0,
+                nombre: this.editedItem.nombre,
+                cliente: this.editedItem.cliente,
+                descripcion: this.editedItem.descripcion,
+                color: this.editedItem.ColorPicker,
+                fechaInicio: this.editedItem.fechaInicio,
+                fechaFinalizacion: this.editedItem.fechaFinalizacion,
+                presupuesto: this.editedItem.presupuesto,
+                estado: {
+                    estadoId: this.estadoSelect,                    
+                },   
+                tipo: {
+                    tipoId: this.tipoSelect,                    
+                },  
                 equipo: {
-                    equipoId: '6526c50ba76fc22a6794c34d',
-                },
+                    equipoId: this.equipoSelect,                    
+                },                
             }
+            console.log('NewProyect',newProyecto)
             const res = await this.$dialog.confirm({
                 text: `¿Realmente desea agregar el proyecto?`,
                 title: 'ADVERTENCIA',

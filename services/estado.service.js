@@ -7,5 +7,9 @@ export class EstadoService {
         return this.$axios.$get('/tablero/findByproyectoId',{
             params,
         })
-    }  
+    }
+    
+    FindAllEstadoProyecto() {
+        return this.$axios.$get('/estado/all')
+    }    
 }
