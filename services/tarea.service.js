@@ -12,9 +12,9 @@ export class TareaService {
         })
       }
       
-    listEstado({params}) {
-        return this.$axios.$get('/tarea/listEstado', {
-          params,
-        })
-      }  
+    // listEstado({params}) {
+    //     return this.$axios.$get('/tarea/listEstado', {
+    //       params,
+    //     })
+    //   }  
 }

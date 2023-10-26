@@ -1,17 +1,15 @@
 import {
     FETCH_TAREAS,
-    FETCH_TAREASESTADO,
 } from '@/utils/types/tareas/actions.types'
 
 import {
     SET_TAREAS,
-    SET_TAREASESTADO,
 } from '@/utils/types/tareas/mutations.types'
 
 
 export const state = () => ({
     tarea: [],
-    tareaEstado: [],
+    // tareaEstado: [],
 })
 
 export const getters = {
@@ -21,9 +19,9 @@ export const mutations = {
     [SET_TAREAS](state, { tarea }) {
         state.tarea = tarea
     },
-    [SET_TAREASESTADO](state, { tareaEstado }) {
-        state.tareaEstado = tareaEstado
-    }
+    // [SET_TAREASESTADO](state, { tareaEstado }) {
+    //     state.tareaEstado = tareaEstado
+    // }
 }
 
 export const actions = {
@@ -36,8 +34,8 @@ export const actions = {
         commit(SET_TAREAS, { tarea })
       },
 
-    async [FETCH_TAREASESTADO]({ commit }, params) {
-        const tareaEstado = await this.$tarea.listEstado({params})
-        commit(SET_TAREASESTADO, { tareaEstado })
-      },  
+    // async [FETCH_TAREASESTADO]({ commit }, params) {
+    //     const tareaEstado = await this.$tarea.listEstado({params})
+    //     commit(SET_TAREASESTADO, { tareaEstado })
+    //   },  
 }

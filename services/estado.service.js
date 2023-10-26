@@ -3,7 +3,9 @@ export class EstadoService {
         this.$axios = $axios
     }
 
-    FindAll() {
-        return this.$axios.$get('/estado/all')
+    FindAll({params}) {
+        return this.$axios.$get('/tablero/findByproyectoId',{
+            params,
+        })
     }  
 }

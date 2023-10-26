@@ -8,21 +8,21 @@ import {
 
 
 export const state = () => ({
-    estado: [],
+    tareaEstado: [],
 })
 
 export const getters = {
 }
 
 export const mutations = {
-    [SET_ESTADOS](state, { estado }) {
-        state.estado = estado
+    [SET_ESTADOS](state, { tareaEstado }) {
+        state.tareaEstado = tareaEstado
     }
 }
 
 export const actions = {
-    async [FETCH_ESTADOS]({ commit }) {
-        const estado = await this.$estado.FindAll()
-        commit(SET_ESTADOS, { estado })
+    async [FETCH_ESTADOS]({ commit },params) {
+        const tareaEstado = await this.$estado.FindAll({params})
+        commit(SET_ESTADOS, { tareaEstado })
     },
 }

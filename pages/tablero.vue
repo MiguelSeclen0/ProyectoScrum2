@@ -1,8 +1,8 @@
 <template>
   <div class="cards-wrapper">
-    <v-col v-for="(item, index) in  tareaEstado " :key="item.index" class="secondary cards" md="3">
+    <v-col v-for="(item, index) in  tareaEstado " :key="item.tableroId" class="secondary cards" md="3">
       <div v-if="index !== editedColumnIndex">
-        <span @click="editColumn(index)">{{ item }}</span>
+        <span @click="editColumn(index)">{{ item.nombre }}</span>
       </div>
       <div v-else>
         <v-text-field v-model="editedColumnName" label="Nuevo nombre" solo-inverted></v-text-field>
@@ -109,7 +109,6 @@ import draggable from 'vuedraggable'
 // agg1
 import { mapState } from 'vuex'
 import { FETCH_TAREAS } from '@/utils/types/tareas/actions.types'
-import { FETCH_TAREASESTADO } from '@/utils/types/tareas/actions.types'
 import { FETCH_ESTADOS } from '@/utils/types/estados/actions.types'
 
 export default {
@@ -176,15 +175,17 @@ export default {
     await Promise.all([
       this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
                 id: '653482173d1327199055609e',}),
-      this.$store.dispatch(`tarea/${FETCH_TAREASESTADO}`, {
-                id: '653482173d1327199055609e',}),          
-      this.$store.dispatch(`estado/${FETCH_ESTADOS}`)
+      // this.$store.dispatch(`tarea/${FETCH_TAREASESTADO}`, {
+      //           id: '653482173d1327199055609e',}),          
+      this.$store.dispatch(`estado/${FETCH_ESTADOS}`,{
+                id: '653482173d1327199055609e'
+      })
     ]) 
   },
   // agg3
   computed: {
-    ...mapState('tarea', ['tarea','tareaEstado']),
-    ...mapState('estado', ['estado'])
+    ...mapState('tarea', ['tarea']),
+    ...mapState('estado', ['tareaEstado'])
   },
 
   methods: {
