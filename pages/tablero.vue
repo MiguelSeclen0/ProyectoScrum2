@@ -1,6 +1,6 @@
 <template>
   <div class="cards-wrapper">
-    <v-col v-for="(item, index) in  tareaEstado " :key="item.tableroId" class="secondary cards" md="3">
+    <v-col v-for="(item, index) in  tareaEstado" :key="item.tableroId" class="secondary cards" md="3">
       <div v-if="index !== editedColumnIndex">
         <span @click="editColumn(index)">{{ item.nombre }}</span>
       </div>
@@ -15,7 +15,7 @@
         </v-icon>
       </v-btn>
       <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
-        <v-card v-for="item in  tarea " :key="item.tareaId" elevation="24" class="mx-auto cardst"
+        <v-card v-for="item in filtrarTareasPorColumna(item.nombre)" :key="item.tareaId" elevation="24" class="mx-auto cardst"
         :style="{ 'background': item.color }"  
         :class="['column-card', { 'new-column': index >= tareaEstado.length - 1 }]"  max-width="250">
           <v-card-title>
@@ -27,7 +27,7 @@
             <v-row align-center="center" justify="space-between">
               <v-col cols="1">
                 <!-- Muestra item.nombres a la izquierda -->
-                <v-checkbox color="success" v-model="checkbox"></v-checkbox>
+                <v-checkbox color="success" v-model="checked"></v-checkbox>
               </v-col>
               <v-col cols="6" class="align-center mr-1" style="margin-top: 7.5%; margin-bottom: 10px;">
                 <span class="text-overline" :class="{ 'text-decoration-line-through text-overline': checkbox }">
@@ -60,6 +60,26 @@
         mdi-plus
       </v-icon>
     </v-btn>
+    <v-row>
+        <v-col>
+            <v-row style="margin-top: 2%; padding-left: 10%;">
+                <v-toolbar-title class="text-medium"
+                    style="margin-top: 2%; align-items: center;">Actividades</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <UserMenu style="margin-right: 2%;" :name="usersName()">
+                    <v-list subheader>
+                        <v-subheader>Opciones</v-subheader>
+                        <v-list-item @click.stop="onLogout">
+                            <v-list-item-icon>
+                                <v-icon>mdi-logout-variant</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>Cerrar Sesion</v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </UserMenu>
+            </v-row>
+        </v-col>
+  </v-row>
     <v-dialog v-model="addColumnModal" max-width="400">
       <v-card>
         <v-card-title>Agregar Nueva Columna</v-card-title>
@@ -116,6 +136,13 @@ export default {
   data() {
     return {
       checkbox: false,
+      tareaEstado: [
+      // ...
+      { tableroId: '...', nombre: 'A', /* ... */ },
+      { tableroId: '...', nombre: 'B', /* ... */ },
+      { tableroId: '...', nombre: 'C', /* ... */ },
+      // ...
+    ],
       Mylist: [
         { nombres: "Cesar" },
         { nombres: "Predro" }
@@ -189,6 +216,29 @@ export default {
   },
 
   methods: {
+    filtrarTareasPorColumna(nombreColumna) {
+    return this.tarea.filter((item) => item.tablero.nombre === nombreColumna);
+  },
+    usersName() {
+            return this.$auth.user.nombre
+        },
+        async onLogout() {
+            const res = await this.$dialog.confirm({
+                text: '¿Realmente desea cerrar sesión?',
+                title: 'Advertencia',
+                actions: {
+                    false: 'No',
+                    true: { color: 'accent', text: 'Si' },
+                },
+                persistent: true,
+            })
+
+            if (res) {
+                await this.$auth.logout()
+
+                this.$router.push('/login')
+            }
+        },
     getInitials(username) {
       const words = username.split(" ");
       const initials = words.map((word) => word[0].toUpperCase());

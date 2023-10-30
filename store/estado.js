@@ -28,7 +28,7 @@ export const mutations = {
 
 export const actions = {
     async [FETCH_ESTADOS]({ commit },params) {
-        const tareaEstado = await this.$estado.FindAll({})
+        const tareaEstado = await this.$estado.FindAll({params})
         commit(SET_ESTADOS, { tareaEstado })
     },
     async [FETCH_ESTADOSPROYECTOS]({ commit }) {
