@@ -38,7 +38,7 @@ export default {
   modules: ['@nuxtjs/axios', '@nuxtjs/auth','vuetify-dialog/nuxt','primevue/nuxt'],
 
   primevue: {
-    components: ["DataTable", "Column", "Row", "ColumnGroup"]
+    components: ["DataTable", "Column", "Row", "ColumnGroup","ProgressBar"]
   },
   axios: {
     baseURL: 'http://localhost:90',

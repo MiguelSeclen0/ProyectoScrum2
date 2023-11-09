@@ -1,7 +1,7 @@
 <template>
     <v-row>
         <v-col>
-            <v-row style="margin-top: 2%; padding-left: 2%;">
+            <v-row style="margin-top: 0%; padding-left: 2%;">
                 <v-toolbar-title class="text-medium"
                     style="margin-top: 2%; align-items: center;">Proyectos</v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -28,7 +28,7 @@
             </v-row>
             <v-row style="margin: 2%; padding-left: 2%;">
                 <v-row>
-                    <div v-for="item in  proyectoId" :key="item.proyectoId" class="hand-cursor"
+                    <div @click="getIdProj(item)" v-for="item in  proyectoId" :key="item.proyectoId" class="hand-cursor"
                         style="margin-left: 2%; margin-top: 1%">
                         <v-hover>
                             <template v-slot:default="{ hover }">
@@ -43,11 +43,11 @@
                                 </div>
                             </template>
                         </v-hover>
-                        <v-card class="mt-n10 mx-auto big-card" elevation="0" height="250" width="500" color="secondary">
+                        <v-card class="mt-n10 mx-auto big-card" elevation="0" height="220" width="500" color="secondary">
                             <br>
                             <br>
                             <v-card-text class="d-flex align-center
-                justify-center">{{ item.tipo.nombre }}</v-card-text>
+                                justify-center">{{ item.tipo.nombre }}</v-card-text>
                             <span style="margin-left:8%"> <v-badge :value="hover" color="deep-purple accent-4"
                                     :content="item.participantes" left transition="slide-x-transition">
                                     <v-hover v-model="hover">
@@ -59,12 +59,15 @@
                             <span style="margin-left: 40%;"><v-icon color="accent"
                                     large>mdi-calendar-month-outline</v-icon>{{
                                         item.duracion }}</span>
-                            <span><v-btn @click="getIdProj(item)"> Ver</v-btn></span>
                             <v-divider style="margin: 5%;"></v-divider>
+                            <span>
+                                <ProgressBar style="margin: 1% 5% 1% 5%;" :value="bar">
+                                    {{ bar }}%
+                                </ProgressBar>
+                            </span>
                         </v-card>
                     </div>
                 </v-row>
-
             </v-row>
         </v-col>
         <v-dialog v-model="dialog" max-width="500px">
@@ -192,6 +195,7 @@ export default {
         hover: false,
         dialogDelete: false,
         Prueba: true,
+        bar: 30,
         Proyectos: [],
         desserts: [],
         editedIndex: -1,
@@ -433,5 +437,10 @@ export default {
 
 .hand-cursor {
     cursor: pointer;
+}
+
+.p-progressbar-determinate .p-progressbar-value-animate {
+    background: green !important;
+    border-radius: 0 20px 20px 0px;
 }
 </style>
