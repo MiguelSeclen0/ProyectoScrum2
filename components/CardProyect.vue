@@ -1,25 +1,24 @@
 <template>
     <v-row>
-        <div v-for="item in  cardsCustom" :key="item.proyectoId" class="hand-cursor" style="margin-left: 2%;">
+        <div v-for="item in  cardsCustom" :key="item.proyectoId" class="hand-cursor"
+            style="margin-left: 2%; margin-top: 1%">
             <v-hover>
                 <template v-slot:default="{ hover }">
-                    <div 
-                    :class="`elevation-${hover ? 24 : 6}`" :style="{ 'background-color': item.color }"
+                    <div :class="`elevation-${hover ? 24 : 6}`" :style="{ 'background-color': item.color }"
                         class="mx-auto pa-6 transition-swing smaller-card" style="position: relative; z-index: 1">
                         {{ item.cliente }}
-                        <v-icon
-                        style="margin-left: 3%;" color="accent" medium
+                        <v-icon style="margin-left: 3%;" color="accent" medium
                             @click="$emit('click:update')">mdi-pencil</v-icon>
                         <v-icon color="accent" medium @click="$emit('click:delete')"> mdi-trash-can-outline </v-icon>
                     </div>
                 </template>
             </v-hover>
-            <v-card class="mt-n10 mx-auto big-card" elevation="0" height="250" width="500" color="secondary">
+            <v-card class="mt-n10 mx-auto big-card" elevation="0" height="250"
+                width="500" color="secondary">
                 <br>
                 <br>
-                <v-card-text 
-                class="d-flex align-center
-                justify-center">{{ item.tipo }}</v-card-text>
+                <v-card-text class="d-flex align-center
+                justify-center">{{ item.tipo.nombre }}</v-card-text>
                 <span style="margin-left:8%"> <v-badge :value="hover" color="deep-purple accent-4"
                         :content="item.participantes" left transition="slide-x-transition">
                         <v-hover v-model="hover">
@@ -30,6 +29,7 @@
                     </v-badge>Participantes</span>
                 <span style="margin-left: 40%;"><v-icon color="accent" large>mdi-calendar-month-outline</v-icon>{{
                     item.duracion }}</span>
+                <span><v-btn :to="`/tablero/${getIdProj(item)}`"> Ver</v-btn></span>
                 <v-divider style="margin: 5%;"></v-divider>
             </v-card>
         </div>
@@ -50,7 +50,16 @@ export default {
         funcRedirect() {
             const URL = '/tablero'
             this.$router.push(URL)
-        }
+        },
+        getIdProj(item) {
+            const relation = this.cardsCustom.filter(
+                (x) => x.proyectoId === item.proyectoId
+            )
+            console.log('ItemPRoj',item)
+            console.log('ItemPRoj',relation)
+
+            return relation.proyectoId
+        },
 
     },
 }

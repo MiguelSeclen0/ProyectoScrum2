@@ -27,8 +27,44 @@
                 </v-btn>
             </v-row>
             <v-row style="margin: 2%; padding-left: 2%;">
-                <CardProyect :cardsCustom="proyectoId" @click:update="editItem(proyectoId)"
-                    @click:delete="deleteItem(proyectoId)" />
+                <v-row>
+                    <div v-for="item in  proyectoId" :key="item.proyectoId" class="hand-cursor"
+                        style="margin-left: 2%; margin-top: 1%">
+                        <v-hover>
+                            <template v-slot:default="{ hover }">
+                                <div :class="`elevation-${hover ? 24 : 6}`" :style="{ 'background-color': item.color }"
+                                    class="mx-auto pa-6 transition-swing smaller-card"
+                                    style="position: relative; z-index: 1">
+                                    {{ item.cliente }}
+                                    <v-icon style="margin-left: 3%;" color="accent" medium
+                                        @click="$emit('click:update')">mdi-pencil</v-icon>
+                                    <v-icon color="accent" medium @click="$emit('click:delete')"> mdi-trash-can-outline
+                                    </v-icon>
+                                </div>
+                            </template>
+                        </v-hover>
+                        <v-card class="mt-n10 mx-auto big-card" elevation="0" height="250" width="500" color="secondary">
+                            <br>
+                            <br>
+                            <v-card-text class="d-flex align-center
+                justify-center">{{ item.tipo.nombre }}</v-card-text>
+                            <span style="margin-left:8%"> <v-badge :value="hover" color="deep-purple accent-4"
+                                    :content="item.participantes" left transition="slide-x-transition">
+                                    <v-hover v-model="hover">
+                                        <v-icon color="accent" large>
+                                            mdi-account
+                                        </v-icon>
+                                    </v-hover>
+                                </v-badge>Participantes</span>
+                            <span style="margin-left: 40%;"><v-icon color="accent"
+                                    large>mdi-calendar-month-outline</v-icon>{{
+                                        item.duracion }}</span>
+                            <span><v-btn @click="getIdProj(item)"> Ver</v-btn></span>
+                            <v-divider style="margin: 5%;"></v-divider>
+                        </v-card>
+                    </div>
+                </v-row>
+
             </v-row>
         </v-col>
         <v-dialog v-model="dialog" max-width="500px">
@@ -41,46 +77,31 @@
                 <v-card-text>
                     <v-row>
                         <v-col>
-                            <v-text-field v-model="editedItem.nombre" backgroundColor="secondary" outlined label="Nombre" color="textito"></v-text-field>
+                            <v-text-field v-model="editedItem.nombre" backgroundColor="secondary" outlined label="Nombre"
+                                color="textito"></v-text-field>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col>
-                            <v-text-field v-model="editedItem.cliente" backgroundColor="secondary" outlined label="Cliente" color="textito"></v-text-field>
+                            <v-text-field v-model="editedItem.cliente" backgroundColor="secondary" outlined label="Cliente"
+                                color="textito"></v-text-field>
                         </v-col>
 
                         <v-col>
-                            <v-select
-                            label="Estado"
-                            v-model="estadoSelect"
-                            item-value="estadoId"
-                            :items="proyectoEstado"                           
-                            item-text="nombre"
-                            backgroundColor="secondary"
-                            color="textito"
-                            outlined>                            
+                            <v-select label="Estado" v-model="estadoSelect" item-value="estadoId" :items="proyectoEstado"
+                                item-text="nombre" backgroundColor="secondary" color="textito" outlined>
                             </v-select>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col>
-                        <DatePicker
-                          label="Fecha Inicio"
-                          v-model="editedItem.fechaInicio"
-                          outlined
-                          type='date'
-                        />
-                      </v-col>
-                      <v-col>
-                        <DatePicker
-                          label="Fecha Fin"
-                          v-model="editedItem.fechaFinalizacion"
-                          outlined
-                          type='date'
-                        />
-                      </v-col>
+                            <DatePicker label="Fecha Inicio" v-model="editedItem.fechaInicio" outlined type='date' />
+                        </v-col>
+                        <v-col>
+                            <DatePicker label="Fecha Fin" v-model="editedItem.fechaFinalizacion" outlined type='date' />
+                        </v-col>
                         <!-- <v-col>
                             <v-text-field type="date" v-model="editedItem.name" backgroundColor="secondary" outlined label="Categoría" color="textito"></v-text-field>
                         </v-col>
@@ -91,48 +112,31 @@
                     </v-row>
                     <v-row>
                         <v-col>
-                            <ColorPicker
-                            label="Color"
-                            v-model="editedItem.ColorPicker"
-                            outlined
-                            type="String"
-                            />
+                            <ColorPicker label="Color" v-model="editedItem.ColorPicker" outlined type="String" />
                         </v-col>
                         <v-col>
-                            <v-select
-                            label="Tipo"
-                            v-model="tipoSelect"
-                            item-value="tipoId"
-                            :items="tipo"                           
-                            item-text="nombre"
-                            backgroundColor="secondary"
-                            color="textito"
-                            outlined>                            
-                            </v-select>
-                        </v-col>                        
-                    </v-row>
-
-                    <v-row>
-                        <v-col>
-                            <v-text-field v-model="editedItem.presupuesto" backgroundColor="secondary" outlined label="Presupuesto" color="textito"></v-text-field>
-                        </v-col>
-                        <v-col>
-                            <v-select
-                            label = "Equipo"
-                            v-model="equipoSelect"
-                            item-value="equipoId"
-                            :items="equipo"                            
-                            item-text="nombre"
-                            backgroundColor="secondary"
-                            color="textito"
-                            outlined>                            
+                            <v-select label="Tipo" v-model="tipoSelect" item-value="tipoId" :items="tipo" item-text="nombre"
+                                backgroundColor="secondary" color="textito" outlined>
                             </v-select>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col>
-                            <v-textarea v-model="editedItem.descripcion" backgroundColor="secondary" outlined label="Detalle"></v-textarea>
+                            <v-text-field v-model="editedItem.presupuesto" backgroundColor="secondary" outlined
+                                label="Presupuesto" color="textito"></v-text-field>
+                        </v-col>
+                        <v-col>
+                            <v-select label="Equipo" v-model="equipoSelect" item-value="equipoId" :items="equipo"
+                                item-text="nombre" backgroundColor="secondary" color="textito" outlined>
+                            </v-select>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <v-textarea v-model="editedItem.descripcion" backgroundColor="secondary" outlined
+                                label="Detalle"></v-textarea>
                         </v-col>
                     </v-row>
                 </v-card-text>
@@ -172,18 +176,20 @@ import { FETCH_ESTADOSPROYECTOS } from '@/utils/types/estados/actions.types'
 
 export default {
     name: 'proyectos',
-    layout: 'default',
+    layout: 'empty',
     async fetch() {
         await Promise.all([
             this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
-                id: this.$auth.user.email,}),
+                id: this.$auth.user.email,
+            }),
             this.$store.dispatch(`tipo/${FETCH_TIPOS}`),
             this.$store.dispatch(`equipo/${FETCH_EQUIPOS}`),
-            this.$store.dispatch(`estado/${FETCH_ESTADOSPROYECTOS}`)            
+            this.$store.dispatch(`estado/${FETCH_ESTADOSPROYECTOS}`)
         ])
     },
     data: () => ({
         dialog: false,
+        hover: false,
         dialogDelete: false,
         Prueba: true,
         Proyectos: [],
@@ -301,9 +307,9 @@ export default {
             // } else {
             //     this.proyectoId.push(this.editedItem)
             // }
-            console.log('editItem',this.editedItem)
-            console.log('Select',this.select)            
-            
+            console.log('editItem', this.editedItem)
+            console.log('Select', this.select)
+
             const newProyecto = {
                 nombre: this.editedItem.nombre,
                 cliente: this.editedItem.cliente,
@@ -313,16 +319,16 @@ export default {
                 fechaFinalizacion: this.editedItem.fechaFinalizacion,
                 presupuesto: this.editedItem.presupuesto,
                 estado: {
-                    estadoId: this.estadoSelect,                    
-                },   
+                    estadoId: this.estadoSelect,
+                },
                 tipo: {
-                    tipoId: this.tipoSelect,                    
-                },  
+                    tipoId: this.tipoSelect,
+                },
                 equipo: {
-                    equipoId: this.equipoSelect,                    
-                },                
+                    equipoId: this.equipoSelect,
+                },
             }
-            console.log('NewProyect',newProyecto)
+            console.log('NewProyect', newProyecto)
             const res = await this.$dialog.confirm({
                 text: `¿Realmente desea agregar el proyecto?`,
                 title: 'ADVERTENCIA',
@@ -359,7 +365,17 @@ export default {
         },
         proyectos() {
 
-        }
+        },
+        getIdProj(item) {
+            // const relation = this.proyectoId.filter(
+            //     (x) => x.proyectoId === item.proyectoId
+            // )
+            // const URL = `/tablero/${relation[0].proyectoId}`
+            const URL = `/tablero`
+            this.$router.push(URL)
+
+        },
+
     },
 }
 </script>
@@ -413,5 +429,9 @@ export default {
 .button {
     width: 140px;
     /* Ancho personalizado para el botón */
+}
+
+.hand-cursor {
+    cursor: pointer;
 }
 </style>
