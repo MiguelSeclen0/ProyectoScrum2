@@ -28,7 +28,7 @@
             </v-row>
             <v-row style="margin: 2%; padding-left: 2%;">
                 <v-row>
-                    <div @click="getIdProj(item)" v-for="item in  proyectoId" :key="item.proyectoId" class="hand-cursor"
+                    <div v-for="item in  proyectoId" :key="item.proyectoId" class="hand-cursor"
                         style="margin-left: 2%; margin-top: 1%">
                         <v-hover>
                             <template v-slot:default="{ hover }">
@@ -60,7 +60,7 @@
                                     large>mdi-calendar-month-outline</v-icon>{{
                                         item.duracion }}</span>
                             <v-divider style="margin: 5%;"></v-divider>
-                            <span>
+                            <span @click="getIdProj(item)">
                                 <ProgressBar style="margin: 1% 5% 1% 5%;" :value="bar">
                                     {{ bar }}%
                                 </ProgressBar>
