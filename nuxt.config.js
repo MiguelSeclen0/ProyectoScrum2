@@ -48,6 +48,8 @@ export default {
       browserBaseURL: process.env.BROWSER_BASE_URL,
     },
   },
+  loading: '@/components/Loading.vue',
+
   router: {
     middleware: ['auth'],
   },
