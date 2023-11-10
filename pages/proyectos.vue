@@ -197,7 +197,7 @@ export default {
         bar: 30,
         Proyectos: [],
         desserts: [],
-        editedIndex: -1,
+        editedIndex: false,
         editedItem: {
             nombre: '',
             cliente: '',
@@ -230,7 +230,7 @@ export default {
         ...mapState('equipo', ['equipo']),
         ...mapState('estado', ['proyectoEstado']),
         formTitle() {
-            return this.editedIndex === -1 ? 'Nuevo Proyecto' : 'Editar Proyecto'
+            return this.editedIndex === true ? 'Editar Proyecto' : 'Nuevo Proyecto'
         },
     },
 
@@ -274,6 +274,7 @@ export default {
         editItem() {
             // this.editedIndex = this.proyectoId.proyectoId
             // this.editedItem = Object.assign({}, item)
+            this.editedIndex =true
             this.dialog = true
         },
 
@@ -305,11 +306,6 @@ export default {
         },
 
         async save() {
-            // if (this.editedIndex > -1) {
-            //     Object.assign(this.proyectoId[this.editedIndex], this.editedItem)
-            // } else {
-            //     this.proyectoId.push(this.editedItem)
-            // }
             console.log('editItem', this.editedItem)
             console.log('Select', this.select)
 
@@ -361,6 +357,7 @@ export default {
                     })
                 } catch (err) { }
             }
+            this.editedIndex=false
             this.close()
         },
         usersName() {
