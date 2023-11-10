@@ -174,6 +174,7 @@ import { FETCH_PROYECTOS, INSERT_PROYECTOS } from '@/utils/types/proyectos/actio
 import { FETCH_TIPOS } from '@/utils/types/tipos/actions.types'
 import { FETCH_EQUIPOS } from '@/utils/types/equipos/actions.types'
 import { FETCH_ESTADOSPROYECTOS } from '@/utils/types/estados/actions.types'
+import { GlobalValues } from '~/utils/global'
 
 export default {
     name: 'proyectos',
@@ -369,10 +370,11 @@ export default {
 
         },
         getIdProj(item) {
-            // const relation = this.proyectoId.filter(
-            //     (x) => x.proyectoId === item.proyectoId
-            // )
-            // const URL = `/tablero/${relation[0].proyectoId}`
+            const relation = this.proyectoId.filter(
+                (x) => x.proyectoId === item.proyectoId
+            )
+            GlobalValues.idProyect = relation[0].proyectoId
+            console.log('GlobalValues.idProyect', GlobalValues.idProyect)
             const URL = `/tablero`
             this.$router.push(URL)
 

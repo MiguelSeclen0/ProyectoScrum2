@@ -123,13 +123,10 @@
 
 <script>
 import draggable from 'vuedraggable'
-// import { mapState } from 'vuex'
-// import { FETCH_USUARIO } from '@/utils/types/users/actions.types'
-
-// agg1
 import { mapState } from 'vuex'
 import { FETCH_TAREAS } from '@/utils/types/tareas/actions.types'
 import { FETCH_ESTADOS } from '@/utils/types/estados/actions.types'
+import { GlobalValues } from '~/utils/global'
 
 export default {
   name: 'InspirePage',
@@ -201,11 +198,11 @@ export default {
   async fetch() {
     await Promise.all([
       this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
-                id: '653482173d1327199055609e',}),
+                id: GlobalValues.idProyect,}),
       // this.$store.dispatch(`tarea/${FETCH_TAREASESTADO}`, {
       //           id: '653482173d1327199055609e',}),          
       this.$store.dispatch(`estado/${FETCH_ESTADOS}`,{
-                id: '653482173d1327199055609e'
+                id: GlobalValues.idProyect
       })
     ]) 
   },
