@@ -37,7 +37,7 @@
                                     style="position: relative; z-index: 1">
                                     {{ item.cliente }}
                                     <v-icon style="margin-left: 3%;" color="accent" medium
-                                        @click="$emit('click:update')">mdi-pencil</v-icon>
+                                        @click="editItem()">mdi-pencil</v-icon>
                                     <v-icon color="accent" medium @click="$emit('click:delete')"> mdi-trash-can-outline
                                     </v-icon>
                                 </div>
@@ -75,8 +75,6 @@
                 <v-card-title>
                     <span class="text-h5">{{ formTitle }}</span>
                 </v-card-title>
-
-
                 <v-card-text>
                     <v-row>
                         <v-col>
@@ -272,9 +270,9 @@ export default {
         initialize() {
         },
 
-        editItem(item) {
-            this.editedIndex = this.proyectoId.proyectoId
-            this.editedItem = Object.assign({}, item)
+        editItem() {
+            // this.editedIndex = this.proyectoId.proyectoId
+            // this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
 
