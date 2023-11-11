@@ -37,7 +37,7 @@
                                     style="position: relative; z-index: 1">
                                     {{ item.cliente }}
                                     <v-icon style="margin-left: 3%;" color="accent" medium
-                                        @click="editItem()">mdi-pencil</v-icon>
+                                        @click="editItem(item)">mdi-pencil</v-icon>
                                     <v-icon color="accent" medium @click="$emit('click:delete')"> mdi-trash-can-outline
                                     </v-icon>
                                 </div>
@@ -200,6 +200,8 @@ export default {
         desserts: [],
         editedIndex: false,
         editedItem: {
+            proyectoId: '',
+            ColorPicker: '',
             nombre: '',
             cliente: '',
             descripcion: '',
@@ -277,13 +279,24 @@ export default {
         initialize() {
         },
 
-        editItem() {
-            // this.editedIndex = this.proyectoId.proyectoId
-            // this.editedItem = Object.assign({}, item)
+        editItem(item) {
             this.editedIndex = true
-            this.dialog = true
+            this.dialog = true            
+            this.callFields(item)            
         },
-
+        callFields(item){
+            this.editedItem.proyectoId = item.proyectoId;            
+            this.editedItem.nombre = item.nombre;            
+            this.editedItem.cliente = item.cliente;
+            this.editedItem.fechaInicio = item.fechaInicio;
+            this.editedItem.fechaFinalizacion = item.fechaFinalizacion;
+            this.editedItem.ColorPicker = item.color;
+            this.editedItem.presupuesto = item.presupuesto;
+            this.editedItem.descripcion = item.descripcion;
+            this.estadoSelect = item.estado;
+            this.tipoSelect = item.tipo;
+            this.equipoSelect = item.equipo;            
+        },
         deleteItem(item) {
             this.editedIndex = this.proyectoId.indexOf(item)
             this.editedItem = Object.assign({}, item)
@@ -344,8 +357,24 @@ export default {
                 equipo: {
                     equipoId: this.equipoSelect,
                 },
+            }            
+
+            const editProyecto = {
+                proyectoId: this.editedItem.proyectoId,
+                nombre: this.editedItem.nombre,
+                cliente: this.editedItem.cliente,
+                descripcion: this.editedItem.descripcion,
+                color: this.editedItem.ColorPicker,
+                fechaInicio: this.editedItem.fechaInicio,
+                fechaFinalizacion: this.editedItem.fechaFinalizacion,
+                presupuesto: this.editedItem.presupuesto,
+                estado: this.estadoSelect,
+                tipo: this.tipoSelect,
+                equipo:this.equipoSelect,                
             }
+
             console.log('NewProyect', newProyecto)
+            
             const res = await this.$dialog.confirm({
                 text: `¿Realmente desea agregar el proyecto?`,
                 title: 'ADVERTENCIA',
@@ -360,7 +389,7 @@ export default {
                     // Dispatch action for update the survey and fetch all surveys again
                     await this.$store.dispatch(
                         `proyecto/${INSERT_PROYECTOS}`,
-                        newProyecto
+                        this.editedIndex === true ? editProyecto : newProyecto
                     )
                     // Ya se puede ejecutar la modificación
 
