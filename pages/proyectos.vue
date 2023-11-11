@@ -38,7 +38,7 @@
                                     {{ item.cliente }}
                                     <v-icon style="margin-left: 3%;" color="accent" medium
                                         @click="editItem(item)">mdi-pencil</v-icon>
-                                    <v-icon color="accent" medium @click="$emit('click:delete')"> mdi-trash-can-outline
+                                    <v-icon color="accent" medium @click="deleteItem(item)"> mdi-trash-can-outline
                                     </v-icon>
                                 </div>
                             </template>
@@ -170,7 +170,7 @@
 <script>
 
 import { mapState } from 'vuex'
-import { FETCH_PROYECTOS, INSERT_PROYECTOS } from '@/utils/types/proyectos/actions.types'
+import { FETCH_PROYECTOS, INSERT_PROYECTOS, DELETE_PROYECTOS } from '@/utils/types/proyectos/actions.types'
 import { FETCH_TIPOS } from '@/utils/types/tipos/actions.types'
 import { FETCH_EQUIPOS } from '@/utils/types/equipos/actions.types'
 import { FETCH_ESTADOSPROYECTOS } from '@/utils/types/estados/actions.types'
@@ -281,12 +281,12 @@ export default {
 
         editItem(item) {
             this.editedIndex = true
-            this.dialog = true            
-            this.callFields(item)            
+            this.dialog = true
+            this.callFields(item)
         },
-        callFields(item){
-            this.editedItem.proyectoId = item.proyectoId;            
-            this.editedItem.nombre = item.nombre;            
+        callFields(item) {
+            this.editedItem.proyectoId = item.proyectoId;
+            this.editedItem.nombre = item.nombre;
             this.editedItem.cliente = item.cliente;
             this.editedItem.fechaInicio = item.fechaInicio;
             this.editedItem.fechaFinalizacion = item.fechaFinalizacion;
@@ -295,7 +295,7 @@ export default {
             this.editedItem.descripcion = item.descripcion;
             this.estadoSelect = item.estado;
             this.tipoSelect = item.tipo;
-            this.equipoSelect = item.equipo;            
+            this.equipoSelect = item.equipo;
         },
         deleteItem(item) {
             this.editedIndex = this.proyectoId.indexOf(item)
@@ -357,7 +357,7 @@ export default {
                 equipo: {
                     equipoId: this.equipoSelect,
                 },
-            }            
+            }
 
             const editProyecto = {
                 proyectoId: this.editedItem.proyectoId,
@@ -370,13 +370,13 @@ export default {
                 presupuesto: this.editedItem.presupuesto,
                 estado: this.estadoSelect,
                 tipo: this.tipoSelect,
-                equipo:this.equipoSelect,                
+                equipo: this.equipoSelect,
             }
 
             console.log('NewProyect', newProyecto)
-            
+
             const res = await this.$dialog.confirm({
-                text: `¿Realmente desea agregar el proyecto?`,
+                text: this.editedIndex === true ? `¿Realmente desea modificar el proyecto?` : `¿Realmente desea agregar el proyecto?`,
                 title: 'ADVERTENCIA',
                 actions: {
                     false: 'No',
@@ -384,6 +384,8 @@ export default {
                 },
                 persistent: true,
             })
+
+
             if (res) {
                 try {
                     // Dispatch action for update the survey and fetch all surveys again
@@ -394,7 +396,7 @@ export default {
                     // Ya se puede ejecutar la modificación
 
                     this.$dialog.message.success(
-                        'El proyecto se agrego correctamente',
+                        this.editedIndex === true ? `El proyecto se modifico correctamente` : `El proyecto se agrego correctamente`,
                         {
                             position: 'top-right',
                         }
