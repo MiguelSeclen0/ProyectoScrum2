@@ -1,19 +1,6 @@
 <template>
     <v-row>
         <v-col>
-            <!-- <v-row style="margin-top: 2%; padding-left: 2%;" class="justify-end">
-                <UserMenu :name="usersName()">
-                    <v-list subheader>
-                        <v-subheader>Opciones</v-subheader>
-                        <v-list-item @click.stop="onLogout">
-                            <v-list-item-icon>
-                                <v-icon>mdi-logout-variant</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-title>Cerrar Sesion</v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </UserMenu>
-            </v-row> -->
             <v-row justify-center>
                 <v-col md="3">
                     <v-card>
@@ -84,14 +71,26 @@
                 </v-col>
             </v-row>
             <v-row justify-left>
-                <v-card margin-top="4%">
-                    <v-col>
-                        <ChartPrueba></ChartPrueba>
-                    </v-col>
-                </v-card>
+                <v-col>
+                    <v-card margin-top="4%">
+                        <v-col>
+                            <ChartPrueba></ChartPrueba>
+                        </v-col>
+                    </v-card>
+                </v-col>
+                <v-col>
+                    <TableUsers></TableUsers>
+                </v-col>
+            </v-row>
+            <v-row justify-left>
+                <v-col style="max-width: 700px; height: 400px;">
+                    <CalendarTeams></CalendarTeams>
+                </v-col>
+                <v-col style="max-width: 700px; height: 400px;">
+                    <ChartLine></ChartLine>
+                </v-col>
             </v-row>
         </v-col>
-        <CalendarPrueba></CalendarPrueba>
     </v-row>
 </template>
   
@@ -137,4 +136,5 @@ export default {
 /* .container {
     margin-left: 0;
     margin-right: 0;
-} */</style>
+} */
+</style>

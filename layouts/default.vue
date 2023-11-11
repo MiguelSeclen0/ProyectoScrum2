@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app
-      class="custom-drawer accent">
+      class="custom-drawer primary">
       <div class="sidebarCustom">
         <div class="sidebarCustomContainer">
           <img style="width: 55%;" src="LogoScrum.png">
