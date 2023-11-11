@@ -18,7 +18,7 @@
                 </UserMenu>
             </v-row>
             <v-row style="margin: 2%;">
-                <v-text-field color="accent" append-icon="mdi-magnify" label="Buscar Proyecto" outlined
+                <v-text-field v-model="find" color="accent" append-icon="mdi-magnify" label="Buscar Proyecto" outlined
                     rounded></v-text-field>
                 <v-btn style="margin-left: 2%;" color="accent mx-2" fab @click="showDialog">
                     <v-icon dark>
@@ -194,6 +194,7 @@ export default {
         hover: false,
         dialogDelete: false,
         Prueba: true,
+        find: "",
         bar: 30,
         Proyectos: [],
         desserts: [],
@@ -241,6 +242,11 @@ export default {
         dialogDelete(val) {
             val || this.closeDelete()
         },
+        find() {
+            this.proyectoId = this.proyectoId.filter(
+                (x) => x.proyectoId.nombre === find
+            )
+        },
     },
 
     created() {
@@ -274,7 +280,7 @@ export default {
         editItem() {
             // this.editedIndex = this.proyectoId.proyectoId
             // this.editedItem = Object.assign({}, item)
-            this.editedIndex =true
+            this.editedIndex = true
             this.dialog = true
         },
 
@@ -288,8 +294,20 @@ export default {
             this.proyectoId.splice(this.editedIndex, 1)
             this.closeDelete()
         },
-
+        clearFields() {
+            this.editedItem.nombre = '';
+            this.editedItem.cliente = '';
+            this.editedItem.fechaInicio = '';
+            this.editedItem.fechaFinalizacion = '';
+            this.editedItem.ColorPicker = '';
+            this.editedItem.presupuesto = '';
+            this.editedItem.descripcion = '';
+            this.estadoSelect = null;
+            this.tipoSelect = null;
+            this.equipoSelect = null;
+        },
         close() {
+            this.clearFields()
             this.dialog = false
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
@@ -357,7 +375,7 @@ export default {
                     })
                 } catch (err) { }
             }
-            this.editedIndex=false
+            this.editedIndex = false
             this.close()
         },
         usersName() {

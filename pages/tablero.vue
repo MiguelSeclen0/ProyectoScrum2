@@ -1,21 +1,16 @@
 <template>
-  <v-row style="margin-top: 0%; padding-left: 2%;">
-    <v-col>
-      <v-toolbar-title class="text-medium" style="margin-top: 2%; align-items: center;">Tablero de Tareas
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <UserMenu style="margin-right: 2%;" :name="usersName()">
-        <v-list subheader>
-          <v-subheader>Opciones</v-subheader>
-          <v-list-item @click.stop="onLogout">
-            <v-list-item-icon>
-              <v-icon>mdi-logout-variant</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Cerrar Sesion</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </UserMenu>
-    </v-col>
+  <div>
+    <!-- <UserMenu style="margin-right: 2%; justify-content: end !important" :name="usersName()" >
+      <v-list subheader>
+        <v-subheader>Opciones</v-subheader>
+        <v-list-item @click.stop="onLogout">
+          <v-list-item-icon>
+            <v-icon>mdi-logout-variant</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Cerrar Sesion</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </UserMenu> -->
     <div class="cards-wrapper">
       <v-col v-for="(item, index) in  tareaEstado" :key="item.tableroId" class="secondary cards" md="3">
         <div v-if="index !== editedColumnIndex">
@@ -44,7 +39,7 @@
               <v-row align-center="center" justify="space-between">
                 <v-col cols="1">
                   <!-- Muestra item.nombres a la izquierda -->
-                  <v-checkbox color="success" v-model="checked"></v-checkbox>
+                  <v-checkbox color="success"></v-checkbox>
                 </v-col>
                 <v-col cols="6" class="align-center mr-1" style="margin-top: 7.5%; margin-bottom: 10px;">
                   <span class="text-overline" :class="{ 'text-decoration-line-through text-overline': checkbox }">
@@ -115,7 +110,7 @@
         </v-card>
       </v-dialog>
     </div>
-  </v-row>
+  </div>
 </template>
 
 
@@ -131,13 +126,6 @@ export default {
   data() {
     return {
       checkbox: false,
-      tareaEstado: [
-        // ...
-        { tableroId: '...', nombre: 'A', /* ... */ },
-        { tableroId: '...', nombre: 'B', /* ... */ },
-        { tableroId: '...', nombre: 'C', /* ... */ },
-        // ...
-      ],
       Mylist: [
         { nombres: "Cesar" },
         { nombres: "Predro" }
@@ -273,13 +261,22 @@ export default {
     // Activa el modo de edición de una columna
     editColumn(index) {
       this.editedColumnIndex = index;
-      this.editedColumnName = this.Mylist3[index].nombres;
+      this.editedColumnName = this.tareaEstado[index].nombre;
     },
 
     // Guarda el nombre editado de la columna
     saveEditedColumn(index) {
       if (this.editedColumnName.trim() !== '') {
-        this.Mylist3[index].nombres = this.editedColumnName;
+        const nTableroid = this.tareaEstado[index].tableroId
+        const nNombre = this.editedColumnName
+        const nEstado = this.tareaEstado[index].proyecto
+
+        const newEstado = {
+          tableroId: nTableroid,
+          nombre: nNombre,
+          proyecto: nEstado
+        }
+        console.log('newEstado',newEstado)
       }
       this.cancelEdit(index);
     },
