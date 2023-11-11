@@ -1,6 +1,7 @@
 import {
     FETCH_ESTADOS,
-    FETCH_ESTADOSPROYECTOS
+    FETCH_ESTADOSPROYECTOS,
+    INSERT_NOMCOLUM
 } from '@/utils/types/estados/actions.types'
 
 import {
@@ -35,4 +36,7 @@ export const actions = {
         const proyectoEstado = await this.$estado.FindAllEstadoProyecto({})
         commit(SET_ESTADOSPROYECTOS, { proyectoEstado })
     },
+    async [INSERT_NOMCOLUM]({ dispatch }, tablero) {
+        await this.$estado.NomColumn(tablero)
+      },
 }

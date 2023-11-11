@@ -118,7 +118,7 @@
 import draggable from 'vuedraggable'
 import { mapState } from 'vuex'
 import { FETCH_TAREAS } from '@/utils/types/tareas/actions.types'
-import { FETCH_ESTADOS } from '@/utils/types/estados/actions.types'
+import { FETCH_ESTADOS, INSERT_NOMCOLUM } from '@/utils/types/estados/actions.types'
 import { GlobalValues } from '~/utils/global'
 
 export default {
@@ -265,19 +265,54 @@ export default {
     },
 
     // Guarda el nombre editado de la columna
-    saveEditedColumn(index) {
+    async saveEditedColumn(index) {
       if (this.editedColumnName.trim() !== '') {
         const nTableroid = this.tareaEstado[index].tableroId
         const nNombre = this.editedColumnName
         const nEstado = this.tareaEstado[index].proyecto
+        
 
         const newEstado = {
           tableroId: nTableroid,
           nombre: nNombre,
-          proyecto: nEstado
+           proyecto: nEstado
         }
-        console.log('newEstado',newEstado)
+        console.log('newEstado', newEstado)
+        const res = await this.$dialog.confirm({
+          text: `¿Realmente desea editar esta columna?`,
+          title: 'ADVERTENCIA',
+          actions: {
+            false: 'No',
+            true: { color: 'primary', text: 'Sí' },
+          },
+          persistent: true,
+        })
+        if (res) {
+          try {
+            // Dispatch action for update the survey and fetch all surveys again
+            await this.$store.dispatch(
+              `estado/${INSERT_NOMCOLUM}`,
+              newEstado
+            )
+            // Ya se puede ejecutar la modificación
+
+            this.$dialog.message.success(
+              'La Columna se edito correctamente',
+              {
+                position: 'top-right',
+              }
+            )
+            await this.$store.dispatch(`estado/${FETCH_ESTADOS}`, {
+              id: GlobalValues.idProyect,
+            })
+            await this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
+              id: GlobalValues.idProyect,
+            })
+          } catch (err) { }
+        }
       }
+
+      this.editedIndex = false
       this.cancelEdit(index);
     },
 

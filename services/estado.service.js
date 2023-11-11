@@ -11,5 +11,9 @@ export class EstadoService {
     
     FindAllEstadoProyecto() {
         return this.$axios.$get('/estado/all')
-    }    
+    }  
+
+    NomColumn(tablero){
+        return this.$axios.$post('/tablero/save', tablero)
+    }
 }
