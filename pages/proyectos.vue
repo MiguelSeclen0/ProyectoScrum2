@@ -109,7 +109,7 @@
                             <ColorPicker 
                                 label="Color"  
                                 v-model="editedItem.ColorPicker" 
-                                outlined type="String" 
+                                outlined
                                 color="textito"/>
                         </v-col>
                         <v-col>
@@ -141,10 +141,10 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">
+                    <v-btn color="blue darken-1" text @click="close()">
                         Cancelar
                     </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
+                    <v-btn color="blue darken-1" text @click="save()">
                         Guardar
                     </v-btn>
                 </v-card-actions>
