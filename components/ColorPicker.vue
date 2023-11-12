@@ -25,7 +25,6 @@
       hide-inputs
       mode="hexa"
       swatches-max-height="250"
-      @input="menu = false"
     ></v-color-picker>
   </v-menu>
 </template>
