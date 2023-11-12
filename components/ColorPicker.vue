@@ -1,80 +1,62 @@
 <template>
-    <v-menu
-      v-model="menu"
-      :close-on-content-click="false"
-      :nudge-right="40"
-      transition="scale-transition"
-      offset-y
-      min-width="290px"
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-text-field
-          v-model="formatted"
-          v-bind="{ ...attrs, ...$attrs }"
-          v-on="{ ...on, ...$listeners }"
-          backgroundColor="secondary"
-          color="textito"
-        />
-      </template>
-      <v-card>
-      <v-color-picker
-        :type="type"
-        hide-mode-switch
-        mode="hexa"
-        color="textito"
-        @input="menu = true"
-      ></v-color-picker>
-      <v-card-actions>
-        <v-btn @click="cancelSelection">Cancelar</v-btn>
-        <v-btn @click="confirmSelection">Confirmar</v-btn>
-      </v-card-actions>
-    </v-card>
-    </v-menu>
-  </template>
-  <script>
-  export default {
-    inheritAttrs: false,
-    props: {
-      value: {
-        type: String,
-        default: () => '',
-      },
-      format: {
-        type: String,
-        default: () => '#####',
-      },
-      type: {
-        type: String,
-        default: () => 'String',
-      },
+  <v-menu
+    v-model="menu"
+    :close-on-content-click="false"
+    :nudge-right="40"
+    transition="scale-transition"
+    offset-y
+    min-width="290px"
+  >
+    <template v-slot:activator="{ on, attrs }">
+      <v-text-field
+        v-model="color"
+        v-bind="{ ...attrs, ...$attrs }"
+        v-on="{ ...on, ...$listeners }"
+      >
+        <template #prepend-inner>
+          <v-icon :color="color">mdi-circle</v-icon>
+        </template>
+      </v-text-field>
+    </template>
+    <v-color-picker
+      v-model="color"
+      hide-mode-switch
+      dot-size="25"
+      hide-inputs
+      mode="hexa"
+      swatches-max-height="250"
+      @input="menu = true"
+    ></v-color-picker>
+  </v-menu>
+</template>
+<script>
+export default {
+  inheritAttrs: false,
+  props: {
+    value: {
+      type: String,
+      default: () => '#FFFFFF',
     },
-    data: () => ({
-      date: '',
-      formatted: '',
-      menu: false,
-    }),
-    // watch: {
-    //   date() {
-    //     this.$emit('input', this.date)
-    //   },
-    //   value() {
-    //     this.syncValue()
-    //   },
-    // },
-    // mounted() {
-    //   this.syncValue()
-    // },
-    // methods: {
-    //   syncValue() {
-    //     const formatted = this.$moment(this.value)
-    //     if (formatted.isValid()) {
-    //       this.date = formatted.format('YYYY-MM-DD')
-    //       this.formatted = formatted.format(this.format)
-    //     } else {
-    //       this.date = ''
-    //       this.formatted = ''
-    //     }
-    //   },
-    // },
-  }
-  </script>
+  },
+  data: () => ({
+    color: '#FFFFFF',
+    menu: false,
+  }),
+  watch: {
+    value() {
+      this.syncValue()
+    },
+    color() {
+      this.$emit('input', this.color)
+    },
+  },
+  mounted() {
+    this.syncValue()
+  },
+  methods: {
+    syncValue() {
+      this.color = this.value
+    },
+  },
+}
+</script>

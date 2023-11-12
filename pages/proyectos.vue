@@ -98,22 +98,19 @@
 
                     <v-row>
                         <v-col>
-                            <DatePicker label="Fecha Inicio" v-model="editedItem.fechaInicio" outlined type='date' />
+                            <DatePicker label="Fecha Inicio" v-model="editedItem.fechaInicio" outlined type='date' color="textito"/>
                         </v-col>
                         <v-col>
-                            <DatePicker label="Fecha Fin" v-model="editedItem.fechaFinalizacion" outlined type='date' />
+                            <DatePicker label="Fecha Fin" v-model="editedItem.fechaFinalizacion" outlined type='date' color="textito"/>
                         </v-col>
-                        <!-- <v-col>
-                            <v-text-field type="date" v-model="editedItem.name" backgroundColor="secondary" outlined label="Categoría" color="textito"></v-text-field>
-                        </v-col>
-                        <v-col>
-                            <label>Fecha fin</label>
-                            <v-text-field type="date" backgroundColor="grey" rounded></v-text-field>
-                        </v-col> -->
                     </v-row>
                     <v-row>
                         <v-col>
-                            <ColorPicker label="Color" v-model="editedItem.ColorPicker" outlined type="String" />
+                            <ColorPicker 
+                                label="Color"  
+                                v-model="editedItem.ColorPicker" 
+                                outlined type="String" 
+                                color="textito"/>
                         </v-col>
                         <v-col>
                             <v-select label="Tipo" v-model="tipoSelect" item-value="tipoId" :items="tipo" item-text="nombre"
@@ -388,12 +385,10 @@ export default {
 
             if (res) {
                 try {
-                    // Dispatch action for update the survey and fetch all surveys again
                     await this.$store.dispatch(
                         `proyecto/${INSERT_PROYECTOS}`,
                         this.editedIndex === true ? editProyecto : newProyecto
                     )
-                    // Ya se puede ejecutar la modificación
 
                     this.$dialog.message.success(
                         this.editedIndex === true ? `El proyecto se modifico correctamente` : `El proyecto se agrego correctamente`,
