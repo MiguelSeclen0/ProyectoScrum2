@@ -18,8 +18,8 @@
                 </UserMenu>
             </v-row>
             <v-row style="margin: 2%;">
-                <v-text-field v-model="find" color="accent" append-icon="mdi-magnify" label="Buscar Proyecto" outlined
-                    rounded></v-text-field>
+                <!-- <v-text-field v-model="find" color="accent" append-icon="mdi-magnify" label="Buscar Proyecto" outlined
+                    @input="onSearchProyectos" rounded></v-text-field> -->
                 <v-btn style="margin-left: 2%;" color="accent mx-2" fab @click="showDialog">
                     <v-icon dark>
                         mdi-plus
@@ -91,30 +91,28 @@
 
                         <v-col>
                             <v-select label="Estado" v-model="estadoSelect" item-value="estadoId" :items="proyectoEstado"
-                                item-text="nombre" backgroundColor="secondary" color="textito" outlined>
+                                item-text="nombre" backgroundColor="secondary" color="textito" item-color="secondary" outlined>
                             </v-select>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col>
-                            <DatePicker label="Fecha Inicio" v-model="editedItem.fechaInicio" outlined type='date' color="textito"/>
+                            <DatePicker label="Fecha Inicio" v-model="editedItem.fechaInicio" outlined type='date'
+                                color="textito" />
                         </v-col>
                         <v-col>
-                            <DatePicker label="Fecha Fin" v-model="editedItem.fechaFinalizacion" outlined type='date' color="textito"/>
+                            <DatePicker label="Fecha Fin" v-model="editedItem.fechaFinalizacion" outlined type='date'
+                                color="textito" />
                         </v-col>
                     </v-row>
                     <v-row>
                         <v-col>
-                            <ColorPicker 
-                                label="Color"  
-                                v-model="editedItem.ColorPicker" 
-                                outlined
-                                color="textito"/>
+                            <ColorPicker label="Color" v-model="editedItem.ColorPicker" outlined color="textito" />
                         </v-col>
                         <v-col>
                             <v-select label="Tipo" v-model="tipoSelect" item-value="tipoId" :items="tipo" item-text="nombre"
-                                backgroundColor="secondary" color="textito" outlined>
+                                backgroundColor="secondary" color="textito" outlined item-color="secondary" >
                             </v-select>
                         </v-col>
                     </v-row>
@@ -126,7 +124,7 @@
                         </v-col>
                         <v-col>
                             <v-select label="Equipo" v-model="equipoSelect" item-value="equipoId" :items="equipo"
-                                item-text="nombre" backgroundColor="secondary" color="textito" outlined>
+                                item-text="nombre" backgroundColor="secondary" color="textito" outlined item-color="secondary" >
                             </v-select>
                         </v-col>
                     </v-row>
@@ -191,7 +189,7 @@ export default {
         hover: false,
         dialogDelete: false,
         Prueba: true,
-        find: "",
+        find: '',
         bar: 30,
         Proyectos: [],
         desserts: [],
@@ -241,11 +239,6 @@ export default {
         dialogDelete(val) {
             val || this.closeDelete()
         },
-        find() {
-            this.proyectoId = this.proyectoId.filter(
-                (x) => x.proyectoId.nombre === find
-            )
-        },
     },
 
     created() {
@@ -274,6 +267,9 @@ export default {
             }
         },
         initialize() {
+        },
+        onSearchProyectos() {
+            _.debounce(this.fetchSurveys, 1000).apply(this)
         },
 
         editItem(item) {
