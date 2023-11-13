@@ -1,115 +1,106 @@
 <template>
   <div>
-    <!-- <UserMenu style="margin-right: 2%; justify-content: end !important" :name="usersName()" >
-      <v-list subheader>
-        <v-subheader>Opciones</v-subheader>
-        <v-list-item @click.stop="onLogout">
-          <v-list-item-icon>
-            <v-icon>mdi-logout-variant</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Cerrar Sesion</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </UserMenu> -->
-    <div class="cards-wrapper">
-      <v-col v-for="(item, index) in  tareaEstado" :key="item.tableroId" class="secondary cards" md="3">
-        <div v-if="index !== editedColumnIndex">
-          <span @click="editColumn(index)">{{ item.nombre }}</span>
-        </div>
-        <div v-else>
-          <v-text-field v-model="editedColumnName" label="Nuevo nombre" solo-inverted></v-text-field>
-          <v-btn @click="saveEditedColumn(index)">Guardar</v-btn>
-          <v-btn @click="cancelEdit(index)">Cancelar</v-btn>
-        </div>
-        <v-btn @click="deleteColumn(index)">
-          <v-icon>
-            mdi-delete
-          </v-icon>
-        </v-btn>
-        <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
-          <v-card v-for="item in filtrarTareasPorColumna(item.nombre)" :key="item.tareaId" elevation="24"
-            class="mx-auto cardst" :style="{ 'background': item.color }"
-            :class="['column-card', { 'new-column': index >= tareaEstado.length - 1 }]" max-width="250">
-            <v-card-title>
-              <v-icon large left class="text-caption">
-                {{ item.nombre }} <!-- Mostramos el nombre de la tarea -->
-              </v-icon>
-            </v-card-title>
-            <v-card-actions>
-              <v-row align-center="center" justify="space-between">
-                <v-col cols="1">
-                  <!-- Muestra item.nombres a la izquierda -->
-                  <v-checkbox color="success"></v-checkbox>
-                </v-col>
-                <v-col cols="6" class="align-center mr-1" style="margin-top: 7.5%; margin-bottom: 10px;">
-                  <span class="text-overline" :class="{ 'text-decoration-line-through text-overline': checkbox }">
-                    {{ item.descripcion }}
-                  </span>
-                </v-col>
-                <v-col cols="2" class="text-right" style="margin-top: 7.5%; margin-right: 2%;">
-                  <!-- Genera la imagen circular con las iniciales del nombre de usuario a la derecha -->
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-avatar class="avatar-circle" size="24px" v-bind="attrs" v-on="on">
-                        <div class="avatar-inner"> {{ getInitials(item.nombre) }} </div>
-                      </v-avatar>
-                    </template>
-                    <span> {{ item.fechaLimite }} </span>
-                  </v-tooltip>
-                </v-col>
-              </v-row>
-            </v-card-actions>
-          </v-card>
-        </draggable>
-        <v-btn style="margin-top: 1%;" @click="openAddTaskModal">
+    <draggable>
+      <div class="cards-wrapper">
+        <v-col v-for="(item, index) in  tareaEstado" :key="item.tableroId" class="secondary cards" md="3">
+          <div v-if="index !== editedColumnIndex">
+            <span @click="editColumn(index)">{{ item.nombre }}</span>
+          </div>
+          <div v-else>
+            <v-text-field v-model="editedColumnName" label="Nuevo nombre" solo-inverted></v-text-field>
+            <v-btn @click="saveEditedColumn(index)">Guardar</v-btn>
+            <v-btn @click="cancelEdit(index)">Cancelar</v-btn>
+          </div>
+          <v-btn @click="deleteColumn(index)">
+            <v-icon>
+              mdi-delete
+            </v-icon>
+          </v-btn>
+          <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
+            <v-card v-for="item in filtrarTareasPorColumna(item.nombre)" :key="item.tareaId" elevation="24"
+              class="mx-auto cardst" :style="{ 'background': item.color }"
+              :class="['column-card', { 'new-column': index >= tareaEstado.length - 1 }]" max-width="250">
+              <v-card-title>
+                <v-icon large left class="text-caption">
+                  {{ item.nombre }} <!-- Mostramos el nombre de la tarea -->
+                </v-icon>
+              </v-card-title>
+              <v-card-actions>
+                <v-row align-center="center" justify="space-between">
+                  <v-col cols="1">
+                    <!-- Muestra item.nombres a la izquierda -->
+                    <v-checkbox color="success"></v-checkbox>
+                  </v-col>
+                  <v-col cols="6" class="align-center mr-1" style="margin-top: 7.5%; margin-bottom: 10px;">
+                    <span class="text-overline" :class="{ 'text-decoration-line-through text-overline': checkbox }">
+                      {{ item.descripcion }}
+                    </span>
+                  </v-col>
+                  <v-col cols="2" class="text-right" style="margin-top: 7.5%; margin-right: 2%;">
+                    <!-- Genera la imagen circular con las iniciales del nombre de usuario a la derecha -->
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-avatar class="avatar-circle" size="24px" v-bind="attrs" v-on="on">
+                          <div class="avatar-inner"> {{ getInitials(item.nombre) }} </div>
+                        </v-avatar>
+                      </template>
+                      <span> {{ item.fechaLimite }} </span>
+                    </v-tooltip>
+                  </v-col>
+                </v-row>
+              </v-card-actions>
+            </v-card>
+          </draggable>
+          <v-btn style="margin-top: 1%;" @click="openAddTaskModal">
+            <v-icon>
+              mdi-plus
+            </v-icon>
+          </v-btn>
+        </v-col>
+        <v-btn style="margin-top: 1%;" @click="openAddColumnModal">
           <v-icon>
             mdi-plus
           </v-icon>
         </v-btn>
-      </v-col>
-      <v-btn style="margin-top: 1%;" @click="openAddColumnModal">
-        <v-icon>
-          mdi-plus
-        </v-icon>
-      </v-btn>
-      <v-row>
-      </v-row>
-      <v-dialog v-model="addColumnModal" max-width="400">
-        <v-card>
-          <v-card-title>Agregar Nueva Columna</v-card-title>
-          <v-card-text>
-            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre"
-              color="textito"></v-text-field>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="accent" @click="addColumn">Agregar</v-btn>
-            <v-btn @click="closeAddColumnModal">Cancelar</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <v-dialog v-model="addTaskModal" max-width="400">
-        <v-card>
-          <v-card-title>Agregar Nueva Tarea</v-card-title>
-          <v-card-text>
-            <v-col>
+        <v-row>
+        </v-row>
+        <v-dialog v-model="addColumnModal" max-width="400">
+          <v-card>
+            <v-card-title>Agregar Nueva Columna</v-card-title>
+            <v-card-text>
               <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre"
                 color="textito"></v-text-field>
-            </v-col>
-            <v-col>
-              <v-combobox label="Responsable" backgroundColor="secondary" color="textito" outlined>
-              </v-combobox>
-            </v-col>
-            <v-col>
-              <v-textarea backgroundColor="secondary" outlined label="Descripcion"></v-textarea>
-            </v-col>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="accent" @click="addTask">Agregar</v-btn>
-            <v-btn @click="closeAddTaskModal">Cancelar</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="accent" @click="addColumn">Agregar</v-btn>
+              <v-btn @click="closeAddColumnModal">Cancelar</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="addTaskModal" max-width="400">
+          <v-card>
+            <v-card-title>Agregar Nueva Tarea</v-card-title>
+            <v-card-text>
+              <v-col>
+                <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre"
+                  color="textito"></v-text-field>
+              </v-col>
+              <v-col>
+                <v-combobox label="Responsable" backgroundColor="secondary" color="textito" outlined>
+                </v-combobox>
+              </v-col>
+              <v-col>
+                <v-textarea backgroundColor="secondary" outlined label="Descripcion"></v-textarea>
+              </v-col>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="accent" @click="addTask">Agregar</v-btn>
+              <v-btn @click="closeAddTaskModal">Cancelar</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
+    </draggable>
   </div>
 </template>
 
@@ -270,12 +261,12 @@ export default {
         const nTableroid = this.tareaEstado[index].tableroId
         const nNombre = this.editedColumnName
         const nEstado = this.tareaEstado[index].proyecto
-        
+
 
         const newEstado = {
           tableroId: nTableroid,
           nombre: nNombre,
-           proyecto: nEstado
+          proyecto: nEstado
         }
         console.log('newEstado', newEstado)
         const res = await this.$dialog.confirm({
