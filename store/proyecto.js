@@ -1,5 +1,6 @@
 import {
     FETCH_PROYECTOS,
+    FETCH_PROYECTOSALL,
     DELETE_PROYECTOS,
     INSERT_PROYECTOS,
   } from '@/utils/types/proyectos/actions.types'
@@ -10,7 +11,7 @@ import {
   
   
   export const state = () => ({
-    // proyecto: [],
+    // // // proyecto: [],
     proyectoId:[],
   })
   
@@ -24,10 +25,10 @@ import {
   }
   
   export const actions = {
-    //  async [FETCH_PROYECTOS]({ commit }) {
-    //   const proyecto =  await this.$proyecto.FindAll()
-    //   commit(SET_PROYECTOS, { proyecto })
-    // },
+     async [FETCH_PROYECTOSALL]({ commit }) {
+      const proyectoId =  await this.$proyecto.FindAll()
+      commit(SET_PROYECTOS, { proyectoId })
+    },
       async [FETCH_PROYECTOS]({ commit }, params) {
         const proyectoId = await this.$proyecto.findById({params})
         commit(SET_PROYECTOS, { proyectoId })

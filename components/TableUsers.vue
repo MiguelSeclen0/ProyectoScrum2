@@ -50,7 +50,7 @@
   <v-data-table :headers="headers" :items-per-page="5" :items="desserts" sort-by="calories" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Equipo Usuarios</v-toolbar-title>
+        <v-select v-model="selectedTeam" :items="equipo" item-text="nombre" label="Equipo Usuarios"></v-select>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
@@ -68,19 +68,22 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                    <v-text-field v-model="editedItem.name" label="Nombre" :rules="usernameRules" ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                    <v-text-field v-model="editedItem.calories" label="Email"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                    <v-text-field v-model="editedItem.fat" label="Contraseña"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
+                    <v-text-field v-model="editedItem.carbs" label="sueldo"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                  <v-col>
+                    <v-select label="Equipo" v-model="equipoSelect" item-value="equipoId" :items="equipo"
+                                item-text="nombre" backgroundColor="secondary" color="textito" outlined
+                                item-color="secondary">
+                            </v-select>
                   </v-col>
                 </v-row>
               </v-container>
@@ -111,63 +114,82 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">
+      <v-icon color='accent' small class="mr-2" @click="editItem(item)">
         mdi-pencil
       </v-icon>
-      <v-icon small @click="deleteItem(item)">
+      <v-icon color='accent' small @click="deleteItem(item)">
         mdi-delete
       </v-icon>
-    </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">
-        Reset
-      </v-btn>
     </template>
   </v-data-table>
 </template>
 <script>
+
+import { mapState } from 'vuex'
+import { FETCH_USUARIO, INSERT_USUARIO, DELETE_USUARIO } from '@/utils/types/users/actions.types'
+import { FETCH_EQUIPOS } from '@/utils/types/equipos/actions.types'
+import { FETCH_MIEMBROS } from '@/utils/types/miembros/actions.types'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+
+
 export default {
-  data() {
-    return {
-      dialog: false,
-      dialogDelete: false,
-      headers: [
-        {
-          text: 'Dessert (100g serving)',
-          align: 'start',
-          sortable: false,
-          value: 'name',
-        },
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
-        { text: 'Actions', value: 'actions', sortable: false },
-      ],
-      desserts: [],
-      editedIndex: -1,
-      editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-      defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-    };
+  components: { ValidationProvider, ValidationObserver },
+  name: 'usuarios',
+  layout: 'empty',
+  async fetch() {
+    await Promise.all([
+      this.$store.dispatch(`usuario/${FETCH_USUARIO}`),
+      this.$store.dispatch(`equipo/${FETCH_EQUIPOS}`),
+      this.$store.dispatch(`miembro/${FETCH_MIEMBROS}`)
+    ])
   },
+  data: () => ({
+    selectedTeam: null,
+    selectOption: '',
+    dialog: false,
+    dialogDelete: false,
+    Usuarios: [],
+    desserts: [],
+    editedIndex: -1,
+    editedItem: {
+      usuarioId: '',
+      nombre: 0,
+
+    },
+    headers: [
+      {
+        text: 'Nombre',
+        align: 'center',
+        sortable: false,
+        value: 'usuario.nombre',
+      },
+      { text: 'Email', align: 'center', value: 'usuario.email' },
+      { text: 'Sueldo', align: 'center', value: 'usuario.sueldo' },
+      { text: 'Rol', align: 'center', value: 'rol.nombre' },
+      {text: 'Opciones', align: 'center', value: 'actions'},
+    ],
+    equipoSelect: {},
+    defaultItem: {
+      name: '',
+    },
+  }),
   computed: {
+    ...mapState('usuario', ['usuario']),
+    ...mapState('equipo', ['equipo']),
+    ...mapState('miembro', ['miembro']),
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
+    usernameRules() {
+      return [(value) => !!value || 'Ingrese Nombre de Usuario' || '']
+    },
   },
-
+  created() {
+    // Asignar la primera opción por defecto al modelo
+    if (this.equipo.length > 0) {
+      this.equipoSelect = this.equipo[0].equipoId;
+    }
+  },
   watch: {
     dialog(val) {
       val || this.close()
@@ -175,87 +197,16 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete()
     },
-  },
-
-  created() {
-    this.initialize()
+    selectedTeam() {
+      // this.selectedTeam === 'Usuarios' ? this.desserts = this.usuario : this.desserts = this.miembro
+      this.desserts = this.miembro.filter(
+        (x) => x.equipo.nombre === this.selectedTeam
+      )
+      console.log('patta', this.desserts)
+    }
   },
 
   methods: {
-    initialize() {
-      this.desserts = [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-        },
-      ]
-    },
 
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item)
@@ -290,7 +241,7 @@ export default {
       })
     },
 
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem)
       } else {

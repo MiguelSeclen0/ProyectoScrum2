@@ -91,7 +91,8 @@
 
                         <v-col>
                             <v-select label="Estado" v-model="estadoSelect" item-value="estadoId" :items="proyectoEstado"
-                                item-text="nombre" backgroundColor="secondary" color="textito" item-color="secondary" outlined>
+                                item-text="nombre" backgroundColor="secondary" color="textito" item-color="secondary"
+                                outlined>
                             </v-select>
                         </v-col>
                     </v-row>
@@ -112,7 +113,7 @@
                         </v-col>
                         <v-col>
                             <v-select label="Tipo" v-model="tipoSelect" item-value="tipoId" :items="tipo" item-text="nombre"
-                                backgroundColor="secondary" color="textito" outlined item-color="secondary" >
+                                backgroundColor="secondary" color="textito" outlined item-color="secondary">
                             </v-select>
                         </v-col>
                     </v-row>
@@ -124,7 +125,8 @@
                         </v-col>
                         <v-col>
                             <v-select label="Equipo" v-model="equipoSelect" item-value="equipoId" :items="equipo"
-                                item-text="nombre" backgroundColor="secondary" color="textito" outlined item-color="secondary" >
+                                item-text="nombre" backgroundColor="secondary" color="textito" outlined
+                                item-color="secondary">
                             </v-select>
                         </v-col>
                     </v-row>
@@ -165,7 +167,7 @@
 <script>
 
 import { mapState } from 'vuex'
-import { FETCH_PROYECTOS, INSERT_PROYECTOS, DELETE_PROYECTOS } from '@/utils/types/proyectos/actions.types'
+import { FETCH_PROYECTOS, FETCH_PROYECTOSALL, INSERT_PROYECTOS, DELETE_PROYECTOS } from '@/utils/types/proyectos/actions.types'
 import { FETCH_TIPOS } from '@/utils/types/tipos/actions.types'
 import { FETCH_EQUIPOS } from '@/utils/types/equipos/actions.types'
 import { FETCH_ESTADOSPROYECTOS } from '@/utils/types/estados/actions.types'
@@ -176,9 +178,10 @@ export default {
     layout: 'empty',
     async fetch() {
         await Promise.all([
-            this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
-                id: this.$auth.user.email,
-            }),
+            this.$auth.user.authorities[0].authority === "ADMINISTRADOR" ? this.$store.dispatch(`proyecto/${FETCH_PROYECTOSALL}`)
+                : this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
+                    id: this.$auth.user.email,
+                }),
             this.$store.dispatch(`tipo/${FETCH_TIPOS}`),
             this.$store.dispatch(`equipo/${FETCH_EQUIPOS}`),
             this.$store.dispatch(`estado/${FETCH_ESTADOSPROYECTOS}`)
@@ -211,7 +214,7 @@ export default {
             equipo: {
                 equipoId: '',
             },
-        },        
+        },
         estadoSelect: {},
         tipoSelect: {},
         equipoSelect: {},
@@ -224,7 +227,7 @@ export default {
     }),
 
     computed: {
-        ...mapState('proyecto', ['proyectoId']),
+        ...mapState('proyecto', ['proyectoId'],),
         ...mapState('tipo', ['tipo']),
         ...mapState('equipo', ['equipo']),
         ...mapState('estado', ['proyectoEstado']),
@@ -297,16 +300,16 @@ export default {
         },
 
         async deleteItemConfirm() {
-            this.proyectoId.splice(this.editedIndex, 1)            
-            
+            this.proyectoId.splice(this.editedIndex, 1)
+
             const idProyecto = this.proyectoDelete
-            console.log('idProyecto',idProyecto)
+            console.log('idProyecto', idProyecto)
 
             try {
                 await this.$store.dispatch(
-                    `proyecto/${DELETE_PROYECTOS}` , {
-                    id: idProyecto,    
-                })            
+                    `proyecto/${DELETE_PROYECTOS}`, {
+                    id: idProyecto,
+                })
 
                 this.$dialog.message.success(
                     'El proyecto se elimino correctamente',
@@ -314,16 +317,16 @@ export default {
                         position: 'top-right',
                     }
                 )
-                await this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {                    
+                await this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
                     id: this.$auth.user.email,
                 })
-                
+
             } catch (err) { }
-            
+
             this.editedIndex = false
             this.closeDelete()
         },
-        
+
         clearFields() {
             this.editedItem.nombre = '';
             this.editedItem.cliente = '';
@@ -346,7 +349,7 @@ export default {
         },
 
         closeDelete() {
-            this.dialogDelete = false          
+            this.dialogDelete = false
         },
 
         async save() {
