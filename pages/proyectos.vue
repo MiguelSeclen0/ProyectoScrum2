@@ -91,7 +91,8 @@
 
                         <v-col>
                             <v-select label="Estado" v-model="estadoSelect" item-value="estadoId" :items="proyectoEstado"
-                                item-text="nombre" backgroundColor="secondary" color="textito" item-color="secondary" outlined>
+                                item-text="nombre" backgroundColor="secondary" color="textito" item-color="secondary"
+                                outlined>
                             </v-select>
                         </v-col>
                     </v-row>
@@ -112,7 +113,7 @@
                         </v-col>
                         <v-col>
                             <v-select label="Tipo" v-model="tipoSelect" item-value="tipoId" :items="tipo" item-text="nombre"
-                                backgroundColor="secondary" color="textito" outlined item-color="secondary" >
+                                backgroundColor="secondary" color="textito" outlined item-color="secondary">
                             </v-select>
                         </v-col>
                     </v-row>
@@ -124,7 +125,8 @@
                         </v-col>
                         <v-col>
                             <v-select label="Equipo" v-model="equipoSelect" item-value="equipoId" :items="equipo"
-                                item-text="nombre" backgroundColor="secondary" color="textito" outlined item-color="secondary" >
+                                item-text="nombre" backgroundColor="secondary" color="textito" outlined
+                                item-color="secondary">
                             </v-select>
                         </v-col>
                     </v-row>
@@ -186,7 +188,7 @@ export default {
     },
     data: () => ({
         dialog: false,
-        hover: false,
+        hover: true,
         dialogDelete: false,
         Prueba: true,
         find: '',
@@ -211,7 +213,7 @@ export default {
             equipo: {
                 equipoId: '',
             },
-        },        
+        },
         estadoSelect: {},
         tipoSelect: {},
         equipoSelect: {},
@@ -297,33 +299,31 @@ export default {
         },
 
         async deleteItemConfirm() {
-            this.proyectoId.splice(this.editedIndex, 1)            
-            
+            // this.proyectoId.splice(this.editedIndex, 1)            
+
             const idProyecto = this.proyectoDelete
-            console.log('idProyecto',idProyecto)
+            console.log('idProyecto', idProyecto)
 
             try {
                 await this.$store.dispatch(
-                    `proyecto/${DELETE_PROYECTOS}` , {
-                    id: idProyecto,    
-                })            
-
-                this.$dialog.message.success(
-                    'El proyecto se elimino correctamente',
-                    {
-                        position: 'top-right',
-                    }
-                )
-                await this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {                    
-                    id: this.$auth.user.email,
+                    `proyecto/${DELETE_PROYECTOS}`, {
+                    id: idProyecto,
                 })
-                
+
             } catch (err) { }
-            
-            this.editedIndex = false
+            this.$dialog.message.success(
+                'El proyecto se elimino correctamente',
+                {
+                    position: 'top-right',
+                }
+            )
+
+            await this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
+                id: this.$auth.user.email,
+            })
             this.closeDelete()
         },
-        
+
         clearFields() {
             this.editedItem.nombre = '';
             this.editedItem.cliente = '';
@@ -346,7 +346,7 @@ export default {
         },
 
         closeDelete() {
-            this.dialogDelete = false          
+            this.dialogDelete = false
         },
 
         async save() {
