@@ -167,7 +167,7 @@
 <script>
 
 import { mapState } from 'vuex'
-import { FETCH_PROYECTOS, INSERT_PROYECTOS, DELETE_PROYECTOS } from '@/utils/types/proyectos/actions.types'
+import { FETCH_PROYECTOS, FETCH_PROYECTOSALL, INSERT_PROYECTOS, DELETE_PROYECTOS } from '@/utils/types/proyectos/actions.types'
 import { FETCH_TIPOS } from '@/utils/types/tipos/actions.types'
 import { FETCH_EQUIPOS } from '@/utils/types/equipos/actions.types'
 import { FETCH_ESTADOSPROYECTOS } from '@/utils/types/estados/actions.types'
@@ -178,9 +178,10 @@ export default {
     layout: 'empty',
     async fetch() {
         await Promise.all([
-            this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
-                id: this.$auth.user.email,
-            }),
+            this.$auth.user.authorities[0].authority === "ADMINISTRADOR" ? this.$store.dispatch(`proyecto/${FETCH_PROYECTOSALL}`)
+                : this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
+                    id: this.$auth.user.email,
+                }),
             this.$store.dispatch(`tipo/${FETCH_TIPOS}`),
             this.$store.dispatch(`equipo/${FETCH_EQUIPOS}`),
             this.$store.dispatch(`estado/${FETCH_ESTADOSPROYECTOS}`)
@@ -226,7 +227,7 @@ export default {
     }),
 
     computed: {
-        ...mapState('proyecto', ['proyectoId']),
+        ...mapState('proyecto', ['proyectoId'],),
         ...mapState('tipo', ['tipo']),
         ...mapState('equipo', ['equipo']),
         ...mapState('estado', ['proyectoEstado']),

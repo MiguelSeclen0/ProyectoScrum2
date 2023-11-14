@@ -1,5 +1,7 @@
 import {
     FETCH_USUARIO,
+    DELETE_USUARIO,
+    INSERT_USUARIO,
   } from '@/utils/types/users/actions.types'
   
   import {
@@ -24,5 +26,11 @@ import {
      async [FETCH_USUARIO]({ commit }) {
       const usuario =  await this.$usuario.FindAll()
       commit(SET_USUARIO, { usuario })
+    },
+    async [DELETE_USUARIO]({ dispatch }, params) {
+      await this.$usuario.deletedById({params})     
+    },
+    async [INSERT_USUARIO]({ dispatch }, usuario) {
+      await this.$usuario.usuarioInsert(usuario)
     },
   }
