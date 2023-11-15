@@ -47,15 +47,15 @@
   </DataTable>
 </template> -->
 <template>
-  <v-data-table :headers="headers" :items-per-page="5" :items="desserts" sort-by="calories" class="elevation-1">
+  <v-data-table :headers="tableHeaders" :items-per-page="10" :items="desserts" sort-by="Nombre" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat>
-        <v-select v-model="selectedTeam" :items="equipo" item-text="nombre" label="Equipo Usuarios"></v-select>
+        <v-select v-model="selectedTeam" :items="equipoWithAll" item-text="nombre" label="Equipo Usuarios"></v-select>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="accent" dark class="mb-2" v-bind="attrs" v-on="on">
+            <v-btn color="accent" dark class="mb-2" v-bind="attrs" v-on="on" @click="toggleForm">
               Nuevo Usuario
             </v-btn>
           </template>
@@ -68,22 +68,35 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Nombre" :rules="usernameRules" ></v-text-field>
+                    <v-text-field
+                      :value="selectedTeam === 'Usuarios' ? editedItem.nombre : (editedItem.usuario ? editedItem.usuario.nombre : '')"
+                      @input="updateNombre" label="Nombre" :rules="usernameRules"></v-text-field>
+
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.calories" label="Email"></v-text-field>
+                    <v-text-field
+                      :value="selectedTeam === 'Usuarios' ? editedItem.email : (editedItem.usuario ? editedItem.usuario.email : '')"
+                      @input="updateEmail" label="Email"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.fat" label="Contraseña"></v-text-field>
+                    <v-text-field
+                      :value="selectedTeam === 'Usuarios' ? editedItem.contra : (editedItem.usuario ? editedItem.usuario.contra : '')"
+                      @input="updateContra" label="Contraseña"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.carbs" label="sueldo"></v-text-field>
+                    <v-text-field
+                      :value="selectedTeam === 'Usuarios' ? editedItem.sueldo : (editedItem.usuario ? editedItem.usuario.sueldo : '')"
+                      @input="updateSueldo" label="Sueldo" type="number" :rules="sueldoRules"></v-text-field>
                   </v-col>
-                  <v-col>
-                    <v-select label="Equipo" v-model="equipoSelect" item-value="equipoId" :items="equipo"
-                                item-text="nombre" backgroundColor="secondary" color="textito" outlined
-                                item-color="secondary">
-                            </v-select>
+                  <v-col v-if="showForm" cols="12" sm="6" md="4">
+                    <v-select v-model="equipoSelect" item-value="equipoId" :items="equipo" item-text="nombre"
+                      backgroundColor="secondary" color="textito" outlined item-color="secondary">
+                    </v-select>
+                  </v-col>
+                  <v-col v-if="showForm" cols="12" sm="6" md="4">
+                    <v-select v-model="rolSelect" item-value="rolId" :items="rol" item-text="nombre"
+                      backgroundColor="secondary" color="textito" outlined item-color="secondary">
+                    </v-select>
                   </v-col>
                 </v-row>
               </v-container>
@@ -128,7 +141,8 @@
 import { mapState } from 'vuex'
 import { FETCH_USUARIO, INSERT_USUARIO, DELETE_USUARIO } from '@/utils/types/users/actions.types'
 import { FETCH_EQUIPOS } from '@/utils/types/equipos/actions.types'
-import { FETCH_MIEMBROS } from '@/utils/types/miembros/actions.types'
+import { FETCH_ROLS } from '@/utils/types/rols/actions.types'
+import { FETCH_MIEMBROS, INSERT_MIEMBROS, DELETE_MIEMBROS } from '@/utils/types/miembros/actions.types'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 
 
@@ -140,7 +154,8 @@ export default {
     await Promise.all([
       this.$store.dispatch(`usuario/${FETCH_USUARIO}`),
       this.$store.dispatch(`equipo/${FETCH_EQUIPOS}`),
-      this.$store.dispatch(`miembro/${FETCH_MIEMBROS}`)
+      this.$store.dispatch(`miembro/${FETCH_MIEMBROS}`),
+      this.$store.dispatch(`rol/${FETCH_ROLS}`)
     ])
   },
   data: () => ({
@@ -151,44 +166,94 @@ export default {
     Usuarios: [],
     desserts: [],
     editedIndex: -1,
+    usuarioDelete: '',
     editedItem: {
+      nombre: '',
+      email: '',
+      contra: '',
+      sueldo: '',
+      miembroId: '',
       usuarioId: '',
-      nombre: 0,
-
-    },
-    headers: [
-      {
-        text: 'Nombre',
-        align: 'center',
-        sortable: false,
-        value: 'usuario.nombre',
+      usuario: {},
+      equipo: {
+        equipoId: '',
+        nombre: ''
       },
-      { text: 'Email', align: 'center', value: 'usuario.email' },
-      { text: 'Sueldo', align: 'center', value: 'usuario.sueldo' },
-      { text: 'Rol', align: 'center', value: 'rol.nombre' },
-      {text: 'Opciones', align: 'center', value: 'actions'},
-    ],
+      rol: {
+        rolId: '',
+        nombre: ''
+      }
+    },
+    headers: [],
     equipoSelect: {},
+    rolSelect: {},
     defaultItem: {
       name: '',
     },
+    showForm: true,
+    formValid: false,
+    isEditing: false,
   }),
   computed: {
     ...mapState('usuario', ['usuario']),
     ...mapState('equipo', ['equipo']),
     ...mapState('miembro', ['miembro']),
+    ...mapState('rol', ['rol']),
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
+    equipoWithAll() {
+      // Crea una copia del array 'equipo' y agrega una opción para mostrar todos los usuarios
+      const equipoCopy = [...this.equipo];
+      equipoCopy.unshift({ equipoId: 'all', nombre: 'Usuarios' });
+      return equipoCopy;
+    },
+
+    tableHeaders() {
+      if (this.selectedTeam === 'Usuarios') {
+        // Si se selecciona 'Todos los Usuarios', muestra estas columnas
+        return [
+          { text: 'Nombre', align: 'center', sortable: false, value: 'nombre' },
+          { text: 'Email', align: 'center', value: 'email' },
+          { text: 'Sueldo', align: 'center', value: 'sueldo' },
+          { text: 'Opciones', align: 'center', value: 'actions' },
+        ];
+      } else {
+        // Si se selecciona un equipo específico, muestra las columnas originales
+        return [
+          { text: 'Nombre', align: 'center', sortable: false, value: 'usuario.nombre' },
+          { text: 'Email', align: 'center', value: 'usuario.email' },
+          { text: 'Sueldo', align: 'center', value: 'usuario.sueldo' },
+          { text: 'Rol', align: 'center', value: 'rol.nombre' },
+          { text: 'Opciones', align: 'center', value: 'actions' },
+        ];
+      }
+    },
+
     usernameRules() {
       return [(value) => !!value || 'Ingrese Nombre de Usuario' || '']
+    },
+    sueldoRules: function () {
+      return [
+        (value) => !!value || 'El sueldo es requerido',
+        (value) => /^\d+(\.\d+)?$/.test(value) || 'Ingrese un valor numérico válido',
+      ];
+
+    },
+    areTextFieldsFilled() {
+      const filled = (this.editedItem.nombre &&
+        this.editedItem.email &&
+        this.editedItem.contra &&
+        this.editedItem.sueldo) ||
+        this.isEditing;
+      this.formValid = filled; // Actualiza this.formValid
+      return filled;
     },
   },
   created() {
     // Asignar la primera opción por defecto al modelo
-    if (this.equipo.length > 0) {
-      this.equipoSelect = this.equipo[0].equipoId;
-    }
+    const defaultTeam = 'Usuarios'; // o el valor que desees establecer por defecto
+    this.selectedTeam = defaultTeam;
   },
   watch: {
     dialog(val) {
@@ -197,33 +262,91 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete()
     },
+    // selectedTeam() {
+    //   // this.selectedTeam === 'Usuarios' ? this.desserts = this.usuario : this.desserts = this.miembro
+    //   this.desserts = this.miembro.filter(
+    //     (x) => x.equipo.nombre === this.selectedTeam
+    //   )
+    // },
     selectedTeam() {
-      // this.selectedTeam === 'Usuarios' ? this.desserts = this.usuario : this.desserts = this.miembro
-      this.desserts = this.miembro.filter(
-        (x) => x.equipo.nombre === this.selectedTeam
-      )
-      console.log('patta', this.desserts)
-    }
+      if (this.selectedTeam === 'Usuarios') {
+        // Si se selecciona 'Todos los Usuarios', muestra todos los usuarios
+        this.desserts = this.usuario.map((usuario) => ({
+          usuarioId: usuario.usuarioId,
+          nombre: usuario.nombre,
+          email: usuario.email,
+          sueldo: usuario.sueldo,
+        }));
+      } else {
+        // Si se selecciona un equipo específico, filtra los usuarios por ese equipo
+        this.desserts = this.miembro.filter((x) => x.equipo.nombre === this.selectedTeam);
+      }
+    },
+    'editedItem.nombre': 'updateFormValid',
+    'editedItem.email': 'updateFormValid',
+    'editedItem.contra': 'updateFormValid',
+    'editedItem.sueldo': 'updateFormValid',
+    isEditing: 'updateFormValid',
   },
 
   methods: {
+    updateFormValid() {
+      this.formValid = this.areTextFieldsFilled;
+    },
+    toggleForm() {
+      this.showForm = false;
+    },
 
     editItem(item) {
+      if (this.selectedTeam === 'Usuarios') {
+        if (this.equipo.length > 0) {
+          this.equipoSelect = null;
+        }
+        if (this.rol.length > 0) {
+          this.rolSelect = null;
+        }
+      } else {
+        this.rolSelect = item.rol;
+        this.equipoSelect = item.equipo;
+      }
+      this.showForm = true;
+      // if(!this.selectedTeam === 'Usuarios){
+      //   this.editedItem.nombre
+      // }
+      this.editedIndex = true
       this.editedIndex = this.desserts.indexOf(item)
       this.editedItem = Object.assign({}, item)
+      console.log("patatat", item)
       this.dialog = true
     },
 
-    deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialogDelete = true
+    callFields(item) {
+      this.editedItem.miembroId = item.miembroId;
+      this.editedItem.usuario.usuarioId = item.usuarioId;
+      this.editedItem.usuario.nombre = item.usuario.nombre;
+      this.editedItem.usuario.email = item.usuario.email;
+      this.editedItem.usuario.contra = item.usuario.contrasena;
+      this.editedItem.usuario.sueldo = item.usuario.sueldo;
+      this.equipoSelect = item.equipo;
+      this.rolSelect = item.rol;
     },
 
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1)
-      this.closeDelete()
+    clearFields() {
+      if (this.selectedTeam === 'Usuarios') {
+        this.editedItem.nombre = '';
+        this.editedItem.email = '';
+        this.editedItem.contra = '';
+        this.editedItem.sueldo = '';
+      } else {
+        this.editedItem.usuario.nombre = '';
+        this.editedItem.usuario.email = '';
+        this.editedItem.usuario.contra = '';
+        this.editedItem.usuario.sueldo = '';
+      }
+
     },
+
+
 
     close() {
       this.dialog = false
@@ -242,13 +365,266 @@ export default {
     },
 
     async save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+      if (this.showForm === false) {
+        const newUsuario = {
+          nombre: this.editedItem.nombre,
+          email: this.editedItem.email,
+          contrasena: this.editedItem.contra, 
+          sueldo: this.editedItem.sueldo,
+        }
+        const res = await this.$dialog.confirm({
+          text: `¿Realmente desea agregar el usuario?`,
+          title: 'ADVERTENCIA',
+          actions: {
+            false: 'No',
+            true: { color: 'primary', text: 'Sí' },
+          },
+          persistent: true,
+        })
+        if (res) {
+          try {
+            await this.$store.dispatch(
+              `usuario/${INSERT_USUARIO}`, newUsuario
+            )
+
+            this.$dialog.message.success(`El usuario se agrego correctamente`,
+              {
+                position: 'top-right',
+              }
+            )
+            await this.$store.dispatch(`usuario/${FETCH_USUARIO}`)
+          } catch (err) { }
+        }
+        this.editedIndex = false
+        this.close()
+
       } else {
-        this.desserts.push(this.editedItem)
+
+        if (this.selectedTeam === 'Usuarios') {
+
+          const editUsuario = {
+            usuarioId: this.editedItem.usuarioId,
+            nombre: this.editedItem.nombre,
+            email: this.editedItem.email, // Ajusta según tus necesidades
+            contrasena: this.editedItem.contra, // Ajusta según tus necesidades
+            sueldo: this.editedItem.sueldo,
+
+          }
+
+          const res = await this.$dialog.confirm({
+            text: `¿Realmente desea modificar el usuario?`,
+            title: 'ADVERTENCIA',
+            actions: {
+              false: 'No',
+              true: { color: 'primary', text: 'Sí' },
+            },
+            persistent: true,
+          })
+
+          if (res) {
+            if (this.equipoSelect === null || this.rolSelect === null) {
+              try {
+                await this.$store.dispatch(
+                  `usuario/${INSERT_USUARIO}`, editUsuario
+                )
+
+                this.$dialog.message.success(`El usuario se modifico correctamente`,
+                  {
+                    position: 'top-right',
+                  }
+                )
+                await this.$store.dispatch(`usuario/${FETCH_USUARIO}`)
+              } catch (err) { }
+
+            } else {
+              const newMiembro = {
+                usuario: {
+                  usuarioId: this.editedItem.usuarioId,
+                  nombre: "",
+                },
+                rol: {
+                  rolId: this.rolSelect,
+                },
+                equipo: {
+                  equipoId: this.equipoSelect,
+                },
+              };
+
+              console.log("sdfahfksfj", newMiembro)
+
+              try {
+                await this.$store.dispatch(
+                  `usuario/${INSERT_USUARIO}`, editUsuario
+                )
+                await this.$store.dispatch(
+                  `miembro/${INSERT_MIEMBROS}`, newMiembro)
+                this.$dialog.message.success(`El usuario se modifico correctamente`,
+                  {
+                    position: 'top-right',
+                  }
+                )
+                await this.$store.dispatch(`usuario/${FETCH_USUARIO}`)
+                await this.$store.dispatch(`miembro/${FETCH_MIEMBROS}`)
+              } catch (err) { }
+            }
+
+          }
+
+
+
+        } else {
+          console.log("EDITAR MIEMBRO")
+
+          const editMiembro = {
+            miembroId: this.editedItem.miembroId,
+            usuario: {
+              usuarioId: this.editedItem.usuario.usuarioId,
+              nombre:'',
+            },
+            rol: {
+              rolId: this.rolSelect,
+            },
+            equipo: {
+              equipoId: this.equipoSelect,
+            },
+          };
+          const res = await this.$dialog.confirm({
+            text: `¿Realmente desea modificar el usuario?`,
+            title: 'ADVERTENCIA',
+            actions: {
+              false: 'No',
+              true: { color: 'primary', text: 'Sí' },
+            },
+            persistent: true,
+          })
+
+          if (res) {
+            try {
+              await this.$store.dispatch(
+                `miembro/${INSERT_MIEMBROS}`, editMiembro
+              )
+
+              this.$dialog.message.success(`El Miembro se modifico correctamente`,
+                {
+                  position: 'top-right',
+                }
+              )
+              await this.$store.dispatch(`miembro/${FETCH_MIEMBROS}`)
+            } catch (err) { }
+
+          }
+        }
+
       }
+      this.editedIndex = false
       this.close()
+
     },
+
+    deleteItem(item) {
+      this.editedIndex = this.desserts.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialogDelete = true
+    },
+
+    deleteItemConfirm() {
+      this.desserts.splice(this.editedIndex, 1)
+      this.closeDelete()
+    },
+
+    deleteItem(item) {
+      if (this.selectedTeam === 'Usuarios') this.usuarioDelete = item.usuarioId
+      else this.usuarioDelete = item.miembroId
+      this.dialogDelete = true
+    },
+
+    async deleteItemConfirm() {
+
+      const id = this.usuarioDelete
+
+      console.log("sada", id)
+      if (this.selectedTeam === 'Usuarios') {
+        try {
+          await this.$store.dispatch(
+            `usuario/${DELETE_USUARIO}`, {
+            id: id,
+          })
+
+          this.$dialog.message.success(
+            'El Usuario se elimino correctamente',
+            {
+              position: 'top-right',
+            }
+          )
+          await this.$store.dispatch(`usuario/${FETCH_USUARIO}`)
+
+        } catch (err) { }
+
+      } else {
+        try {
+          await this.$store.dispatch(
+            `miembro/${DELETE_MIEMBROS}`, {
+            id: id,
+          })
+
+          this.$dialog.message.success(
+            'El miembro se elimino correctamente',
+            {
+              position: 'top-right',
+            }
+          )
+          await this.$store.dispatch(`miembro/${FETCH_MIEMBROS}`)
+
+        } catch (err) { }
+
+      }
+      this.editedIndex = false
+      this.closeDelete()
+    },
+
+
+    updateNombre(value) {
+      if (this.selectedTeam === 'Usuarios') {
+        this.editedItem.nombre = value;
+      } else {
+        if (!this.editedItem.usuario) {
+          this.editedItem.usuario = {};
+        }
+        this.editedItem.usuario.nombre = value;
+      }
+    },
+    updateEmail(value) {
+      if (this.selectedTeam === 'Usuarios') {
+        this.editedItem.email = value;
+      } else {
+        if (!this.editedItem.usuario) {
+          this.editedItem.usuario = {};
+        }
+        this.editedItem.usuario.email = value;
+      }
+    },
+    updateContra(value) {
+      if (this.selectedTeam === 'Usuarios') {
+        this.editedItem.contra = value;
+      } else {
+        if (!this.editedItem.usuario) {
+          this.editedItem.usuario = {};
+        }
+        this.editedItem.usuario.contra = value;
+      }
+    },
+    updateSueldo(value) {
+      if (this.selectedTeam === 'Usuarios') {
+        this.editedItem.sueldo = value;
+      } else {
+        if (!this.editedItem.usuario) {
+          this.editedItem.usuario = {};
+        }
+        this.editedItem.usuario.sueldo = value;
+      }
+    },
+
+
   },
 }
 </script>
