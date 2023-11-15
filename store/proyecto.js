@@ -34,9 +34,7 @@ import {
         commit(SET_PROYECTOS, { proyectoId })
       },
       async [DELETE_PROYECTOS]({ dispatch }, params) {
-        console.log('params.js',params)
         await this.$proyecto.deletedById({params})
-        console.log('proyecto id.js',deleteproyectoId)        
       },
       async [INSERT_PROYECTOS]({ dispatch }, proyecto) {
         await this.$proyecto.proyectoInsert(proyecto)

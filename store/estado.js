@@ -1,7 +1,8 @@
 import {
     FETCH_ESTADOS,
     FETCH_ESTADOSPROYECTOS,
-    INSERT_NOMCOLUM
+    INSERT_NOMCOLUM,
+    DELETE_COLUM,
 } from '@/utils/types/estados/actions.types'
 
 import {
@@ -38,5 +39,9 @@ export const actions = {
     },
     async [INSERT_NOMCOLUM]({ dispatch }, tablero) {
         await this.$estado.NomColumn(tablero)
-      },
+    },
+    async [DELETE_COLUM]({ dispatch }, params) {
+        console.log('params.estado.js', params)
+        await this.$estado.DelColumn({params})
+    },
 }

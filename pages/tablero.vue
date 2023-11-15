@@ -77,6 +77,17 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-card>
+            <v-card-title class="text-h5">¿Estás seguro de eliminar esta columna?</v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="closeDeleteColumn()">Cancelar</v-btn>
+              <v-btn color="blue darken-1" text @click="ConfDeleteColumn()">Eliminar</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-dialog v-model="addTaskModal" max-width="400">
           <v-card>
             <v-card-title>Agregar Nueva Tarea</v-card-title>
@@ -109,7 +120,7 @@
 import draggable from 'vuedraggable'
 import { mapState } from 'vuex'
 import { FETCH_TAREAS } from '@/utils/types/tareas/actions.types'
-import { FETCH_ESTADOS, INSERT_NOMCOLUM } from '@/utils/types/estados/actions.types'
+import { FETCH_ESTADOS, INSERT_NOMCOLUM, DELETE_COLUM } from '@/utils/types/estados/actions.types'
 import { GlobalValues } from '~/utils/global'
 
 export default {
@@ -125,7 +136,8 @@ export default {
       addTaskModal: false,
       newTaskName: '',
       editedIndex: false,
-
+      columnaDelete: '',
+      dialogDelete: false,
     }
   },
   watch: {
@@ -212,8 +224,40 @@ export default {
       }
     },
     deleteColumn(index) {
-      this.Mylist3.splice(index, 1);
+      this.columnaDelete = this.tareaEstado[index].tableroId;
+      this.dialogDelete = true;
     },
+
+    async ConfDeleteColumn() {
+      const tableroId = this.columnaDelete
+
+      try {
+        console.log('tableroId',tableroId)
+        await this.$store.dispatch(
+          `estado/${DELETE_COLUM}`, {
+          id: tableroId,
+        })
+      } catch (err) { }
+      this.$dialog.message.success(
+        'La columna se elimino correctamente',
+        {
+          position: 'top-right',
+        }
+      )
+
+      await this.$store.dispatch(`estado/${FETCH_ESTADOS}`, {
+        id: GlobalValues.idProyect,
+      })
+      await this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
+        id: GlobalValues.idProyect,
+      })
+      this.closeDeleteColumn()
+    },
+
+    closeDeleteColumn(){
+      this.dialogDelete = false
+    },
+
     // Activa el modo de edición de una columna
     editColumn(index) {
       this.editedIndex = true;
