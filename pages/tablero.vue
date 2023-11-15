@@ -72,8 +72,8 @@
                 color="textito"></v-text-field>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="accent" @click="addColumn">Agregar</v-btn>
-              <v-btn @click="closeAddColumnModal">Cancelar</v-btn>
+              <v-btn color="accent" @click="addColumn()">Agregar</v-btn>
+              <v-btn @click="closeAddColumnModal()">Cancelar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -82,7 +82,7 @@
             <v-card-title>Agregar Nueva Tarea</v-card-title>
             <v-card-text>
               <v-col>
-                <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre"
+                <v-text-field v-model="newTareaName" backgroundColor="secondary" outlined label="Nombre"
                   color="textito"></v-text-field>
               </v-col>
               <v-col>
@@ -117,46 +117,14 @@ export default {
   data() {
     return {
       checkbox: false,
-      Mylist: [
-        { nombres: "Cesar" },
-        { nombres: "Predro" }
-
-      ],
-      Mylist2: [
-        {
-          id: "001",
-          nombreTarea: "tarea1",
-          nombreUsuario: "Usuario Palomo",
-          nombres: "U1"
-        },
-        {
-          id: "002",
-          nombreTarea: "tarea2",
-          nombreUsuario: "Usuario Seclen",
-          nombres: "U2"
-        },
-        {
-          id: "003",
-          nombreTarea: "tarea3m",
-          nombreUsuario: "Usuario Snache",
-          nombres: "USSSSSSSSS"
-        },
-        // Agrega más objetos de datos aquí según sea necesario
-      ],
-      Mylist3: [
-        { nombres: "TO DO", editing: false }, // Agrega 'editing: false' a cada elemento
-        { nombres: "TO DO", editing: false },
-        { nombres: "TO DO", editing: false }
-      ],
-      Mylist4: [
-        { nombres: "Axel" }
-      ],
       addColumnModal: false, // Controla la visibilidad del modal
       newColumnName: '',    // Almacena el nombre de la nueva columna
+      newTareaName: '',    // Almacena el nombre de la nueva tarea
       editedColumnIndex: -1,     // Índice de la columna en edición
       editedColumnName: '',      // Nuevo nombre de la columna en edición
       addTaskModal: false,
       newTaskName: '',
+      editedIndex: false,
 
     }
   },
@@ -228,20 +196,17 @@ export default {
     },
 
     // Agrega una nueva columna a la lista
-    addColumn() {
-      if (this.newColumnName.trim() !== '') {
-        this.Mylist3.push({ nombres: this.newColumnName });
-        this.Mylist2 = [...this.Mylist2]; // Restablece Mylist2 a su estado original
-        this.closeAddColumnModal(); // Cierra el modal después de agregar la columna
-      }
+    async addColumn() {
+      this.saveEditedColumn()
+      this.closeAddColumnModal(); // Cierra el modal después de agregar la columna
     },
     addTask() {
-      if (this.newColumnName.trim() !== '') {
+      if (this.newTareaName.trim() !== '') {
         this.Mylist2.push({
           id: 5,
-          nombreTarea: this.newColumnName,
-          nombreUsuario: this.newColumnName,
-          nombres: this.newColumnName
+          nombreTarea: this.newTareaName,
+          nombreUsuario: this.newTareaName,
+          nombres: this.newTareaName
         });
         this.closeAddTaskModal(); // Cierra el modal después de agregar la columna
       }
@@ -251,26 +216,71 @@ export default {
     },
     // Activa el modo de edición de una columna
     editColumn(index) {
+      this.editedIndex = true;
       this.editedColumnIndex = index;
       this.editedColumnName = this.tareaEstado[index].nombre;
     },
 
     // Guarda el nombre editado de la columna
     async saveEditedColumn(index) {
-      if (this.editedColumnName.trim() !== '') {
-        const nTableroid = this.tareaEstado[index].tableroId
-        const nNombre = this.editedColumnName
-        const nEstado = this.tareaEstado[index].proyecto
+      if (this.editedIndex === true) {
+        if (this.editedColumnName.trim() !== '' || this.newColumnName.trim() !== '') {
+          const nTableroid = this.tareaEstado[index].tableroId
+          const nNombre = this.editedColumnName
+          const nEstado = this.tareaEstado[index].proyecto
 
+          const newEstado = {
+            tableroId: nTableroid,
+            nombre: nNombre,
+            proyecto: nEstado
+          }
 
-        const newEstado = {
-          tableroId: nTableroid,
-          nombre: nNombre,
-          proyecto: nEstado
+          const res = await this.$dialog.confirm({
+            text: this.editedIndex === true ? `¿Realmente desea editar esta columna?` : `¿Realmente desea agregar esta columna?`,
+            title: 'ADVERTENCIA',
+            actions: {
+              false: 'No',
+              true: { color: 'primary', text: 'Sí' },
+            },
+            persistent: true,
+          })
+
+          if (res) {
+            try {
+              // Dispatch action for update the survey and fetch all surveys again
+              await this.$store.dispatch(
+                `estado/${INSERT_NOMCOLUM}`,
+                this.editedIndex === true ? newEstado : newEstado2
+              )
+              // Ya se puede ejecutar la modificación
+
+              this.$dialog.message.success(
+                this.editedIndex === true ? `La columna se modifico correctamente` : `La columna se agrego correctamente`,
+                {
+                  position: 'top-right',
+                }
+              )
+              await this.$store.dispatch(`estado/${FETCH_ESTADOS}`, {
+                id: GlobalValues.idProyect,
+              })
+              await this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
+                id: GlobalValues.idProyect,
+              })
+            } catch (err) { }
+          }
         }
-        console.log('newEstado', newEstado)
+      }
+
+      const newEstado2 = {
+        nombre: this.newColumnName,
+        proyecto: {
+          proyectoId: GlobalValues.idProyect,
+        },
+      }
+
+      if (this.editedIndex === false) {
         const res = await this.$dialog.confirm({
-          text: `¿Realmente desea editar esta columna?`,
+          text: this.editedIndex === true ? `¿Realmente desea editar esta columna?` : `¿Realmente desea agregar esta columna?`,
           title: 'ADVERTENCIA',
           actions: {
             false: 'No',
@@ -278,17 +288,18 @@ export default {
           },
           persistent: true,
         })
+
         if (res) {
           try {
             // Dispatch action for update the survey and fetch all surveys again
             await this.$store.dispatch(
               `estado/${INSERT_NOMCOLUM}`,
-              newEstado
+              this.editedIndex === true ? newEstado : newEstado2
             )
             // Ya se puede ejecutar la modificación
 
             this.$dialog.message.success(
-              'La Columna se edito correctamente',
+              this.editedIndex === true ? `La columna se modifico correctamente` : `La columna se agrego correctamente`,
               {
                 position: 'top-right',
               }
@@ -303,7 +314,9 @@ export default {
         }
       }
 
+
       this.editedIndex = false
+      this.closeAddColumnModal(); // Cierra el modal después de agregar la columna
       this.cancelEdit(index);
     },
 
@@ -311,6 +324,7 @@ export default {
     cancelEdit(index) {
       this.editedColumnIndex = -1;
       this.editedColumnName = '';
+      this.newColumnName = '';
     },
   },
 }
