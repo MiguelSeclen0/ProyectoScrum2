@@ -14,7 +14,6 @@ export class ProyectoService {
   }
 
   deletedById({ params }) {
-    console.log('params.serv.js', params)
     return this.$axios.$get('/proyecto/delete', {
       params,
     })

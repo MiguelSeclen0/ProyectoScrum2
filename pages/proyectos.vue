@@ -189,7 +189,7 @@ export default {
     },
     data: () => ({
         dialog: false,
-        hover: false,
+        hover: true,
         dialogDelete: false,
         Prueba: true,
         find: '',
@@ -300,7 +300,7 @@ export default {
         },
 
         async deleteItemConfirm() {
-            this.proyectoId.splice(this.editedIndex, 1)
+            // this.proyectoId.splice(this.editedIndex, 1)            
 
             const idProyecto = this.proyectoDelete
             console.log('idProyecto', idProyecto)
@@ -311,19 +311,17 @@ export default {
                     id: idProyecto,
                 })
 
-                this.$dialog.message.success(
-                    'El proyecto se elimino correctamente',
-                    {
-                        position: 'top-right',
-                    }
-                )
-                await this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
-                    id: this.$auth.user.email,
-                })
-
             } catch (err) { }
+            this.$dialog.message.success(
+                'El proyecto se elimino correctamente',
+                {
+                    position: 'top-right',
+                }
+            )
 
-            this.editedIndex = false
+            await this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
+                id: this.$auth.user.email,
+            })
             this.closeDelete()
         },
 
