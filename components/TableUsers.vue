@@ -138,12 +138,12 @@
 </template>
 <script>
 
+import { ValidationProvider, ValidationObserver} from 'vee-validate'
 import { mapState } from 'vuex'
 import { FETCH_USUARIO, INSERT_USUARIO, DELETE_USUARIO } from '@/utils/types/users/actions.types'
 import { FETCH_EQUIPOS } from '@/utils/types/equipos/actions.types'
 import { FETCH_ROLS } from '@/utils/types/rols/actions.types'
 import { FETCH_MIEMBROS, INSERT_MIEMBROS, DELETE_MIEMBROS } from '@/utils/types/miembros/actions.types'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
 
 
 export default {

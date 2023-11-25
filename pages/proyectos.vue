@@ -83,19 +83,20 @@
                     <v-row>
                         <v-col>
                             <v-text-field v-model="editedItem.nombre" backgroundColor="secondary" outlined label="Nombre"
-                                color="textito"></v-text-field>
+                                ref="campo1Ref" color="textito" :rules="nameRules" required></v-text-field>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col>
                             <v-text-field v-model="editedItem.cliente" backgroundColor="secondary" outlined label="Cliente"
-                                color="textito"></v-text-field>
+                                ref="campo2Ref" :rules="clientRules" color="textito"></v-text-field>
                         </v-col>
 
                         <v-col>
                             <v-select label="Estado" v-model="estadoSelect" item-value="estadoId" :items="proyectoEstado"
                                 item-text="nombre" backgroundColor="secondary" color="textito" item-color="secondary"
+                                :rules="estadoRules"
                                 outlined>
                             </v-select>
                         </v-col>
@@ -103,29 +104,31 @@
 
                     <v-row>
                         <v-col>
-                            <DatePicker label="Fecha Inicio" v-model="editedItem.fechaInicio" outlined type='date'
-                                color="textito" />
+                            <DatePicker ref="campo4Ref" label="Fecha Inicio" v-model="editedItem.fechaInicio" outlined
+                                type='date' :rules="fechaInicioRules" color="textito" />
                         </v-col>
                         <v-col>
-                            <DatePicker label="Fecha Fin" v-model="editedItem.fechaFinalizacion" outlined type='date'
-                                color="textito" />
+                            <DatePicker ref="campo5Ref" label="Fecha Fin" v-model="editedItem.fechaFinalizacion" outlined
+                                :rules="fechaFinalRules" type='date' color="textito" />
                         </v-col>
                     </v-row>
                     <v-row>
                         <v-col>
-                            <ColorPicker label="Color" v-model="editedItem.ColorPicker" outlined color="textito" />
+                            <ColorPicker ref="campo6Ref" label="Color" v-model="editedItem.ColorPicker" outlined
+                                :rules="colorRules" color="textito" />
                         </v-col>
                         <v-col>
                             <v-select label="Tipo" v-model="tipoSelect" item-value="tipoId" :items="tipo" item-text="nombre"
-                                backgroundColor="secondary" color="textito" outlined item-color="secondary">
+                                :rules="estadoRules" backgroundColor="secondary" color="textito" outlined
+                                item-color="secondary">
                             </v-select>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col>
-                            <v-text-field v-model="editedItem.presupuesto" backgroundColor="secondary" outlined
-                                label="Presupuesto" color="textito"></v-text-field>
+                            <v-text-field ref="campo8Ref" v-model="editedItem.presupuesto" backgroundColor="secondary"
+                                :rules="presupuestoRules" outlined label="Presupuesto" color="textito"></v-text-field>
                         </v-col>
                         <v-col>
                             <v-select label="Equipo" v-model="equipoSelect" item-value="equipoId" :items="equipo"
@@ -138,11 +141,11 @@
                     <v-row>
                         <v-col>
                             <v-textarea v-model="editedItem.descripcion" backgroundColor="secondary" outlined
-                                label="Detalle"></v-textarea>
+                                label="Detalle" color="textito"></v-textarea>
                         </v-col>
                     </v-row>
                 </v-card-text>
-
+                <span class="classerror" v-if="incompletefield === true">Por favor, completa todos los campos.</span>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="close()">
@@ -169,7 +172,7 @@
 </template>
   
 <script>
-
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { mapState } from 'vuex'
 import { FETCH_PROYECTOS, FETCH_PROYECTOSALL, INSERT_PROYECTOS, DELETE_PROYECTOS } from '@/utils/types/proyectos/actions.types'
 import { FETCH_TIPOS } from '@/utils/types/tipos/actions.types'
@@ -178,6 +181,7 @@ import { FETCH_ESTADOSPROYECTOS } from '@/utils/types/estados/actions.types'
 import { GlobalValues } from '~/utils/global'
 
 export default {
+    components: { ValidationProvider, ValidationObserver },
     name: 'proyectos',
     layout: 'empty',
     async fetch() {
@@ -193,6 +197,7 @@ export default {
     },
     data: () => ({
         dialog: false,
+        incompletefield: false,
         hover: true,
         dialogDelete: false,
         Prueba: true,
@@ -228,6 +233,13 @@ export default {
             tipo1: '',
             oportunidad1: '',
         },
+        nameRules: [v => !!v || 'Nombre es requerido'],
+        clientRules: [v => !!v || 'Cliente es requerido'],
+        estadoRules: [v => !!v || 'Estado es requerido'],
+        fechaInicioRules: [v => !!v || 'Fecha de inicio es requerido'],
+        fechaFinalRules: [v => !!v || 'Fecha final es requerido'],
+        colorRules: [v => !!v || 'Seleccionar un color es requerido'],
+        presupuestoRules: [v => !!v || 'Presupuesto es requerido'],
     }),
 
     computed: {
@@ -344,10 +356,6 @@ export default {
         close() {
             this.clearFields()
             this.dialog = false
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
-                this.editedIndex = -1
-            })
         },
 
         closeDelete() {
@@ -355,75 +363,98 @@ export default {
         },
 
         async save() {
-            console.log('editItem', this.editedItem)
-            console.log('Select', this.select)
+            const valorCampo1 = this.$refs.campo1Ref ? this.$refs.campo1Ref.value.trim() : ''
+            const valorCampo2 = this.$refs.campo2Ref ? this.$refs.campo2Ref.value.trim() : ''
+            const valorCampo3 = this.$refs.estadoSelect ? this.$refs.estadoSelect.value.trim() : ''
+            const valorCampo4 = this.$refs.campo4Ref ? this.$refs.campo4Ref.value.trim() : ''
+            const valorCampo5 = this.$refs.campo5Ref ? this.$refs.campo5Ref.value.trim() : ''
+            const valorCampo6 = this.$refs.campo6Ref ? this.$refs.campo6Ref.value.trim() : ''
+            // const valorCampo8 = this.$refs.campo8Ref ? this.$refs.campo8Ref.value.trim() : ''
 
-            const newProyecto = {
-                nombre: this.editedItem.nombre,
-                cliente: this.editedItem.cliente,
-                descripcion: this.editedItem.descripcion,
-                color: this.editedItem.ColorPicker,
-                fechaInicio: this.editedItem.fechaInicio,
-                fechaFinalizacion: this.editedItem.fechaFinalizacion,
-                presupuesto: this.editedItem.presupuesto,
-                estado: {
-                    estadoId: this.estadoSelect,
-                },
-                tipo: {
-                    tipoId: this.tipoSelect,
-                },
-                equipo: {
-                    equipoId: this.equipoSelect,
-                },
+            if (!valorCampo1 || valorCampo1 === undefined
+                || !valorCampo2 || valorCampo2 === undefined
+                || !valorCampo3 || valorCampo3 === undefined
+                || !valorCampo4 || valorCampo4 === undefined
+                || !valorCampo5 || valorCampo5 === undefined
+                || !valorCampo6 || valorCampo6 === undefined
+                // ||!valorCampo7 || valorCampo7===undefined
+                // || !valorCampo8 || valorCampo8 === undefined
+                // ||!valorCampo9 || valorCampo9===undefined
+            ) {
+                this.incompletefield = true
+            } else {
+                this.incompletefield = false
+                console.log('editItem', this.editedItem)
+                console.log('Select', this.select)
+
+                const newProyecto = {
+                    nombre: this.editedItem.nombre,
+                    cliente: this.editedItem.cliente,
+                    descripcion: this.editedItem.descripcion,
+                    color: this.editedItem.ColorPicker,
+                    fechaInicio: this.editedItem.fechaInicio,
+                    fechaFinalizacion: this.editedItem.fechaFinalizacion,
+                    presupuesto: this.editedItem.presupuesto,
+                    estado: {
+                        estadoId: this.estadoSelect,
+                    },
+                    tipo: {
+                        tipoId: this.tipoSelect,
+                    },
+                    equipo: {
+                        equipoId: this.equipoSelect,
+                    },
+                }
+
+                const editProyecto = {
+                    proyectoId: this.editedItem.proyectoId,
+                    nombre: this.editedItem.nombre,
+                    cliente: this.editedItem.cliente,
+                    descripcion: this.editedItem.descripcion,
+                    color: this.editedItem.ColorPicker,
+                    fechaInicio: this.editedItem.fechaInicio,
+                    fechaFinalizacion: this.editedItem.fechaFinalizacion,
+                    presupuesto: this.editedItem.presupuesto,
+                    estado: this.estadoSelect,
+                    tipo: this.tipoSelect,
+                    equipo: this.equipoSelect,
+                }
+
+                console.log('NewProyect', newProyecto)
+
+                const res = await this.$dialog.confirm({
+                    text: this.editedIndex === true ? `¿Realmente desea modificar el proyecto?` : `¿Realmente desea agregar el proyecto?`,
+                    title: 'ADVERTENCIA',
+                    actions: {
+                        false: 'No',
+                        true: { color: 'primary', text: 'Sí' },
+                    },
+                    persistent: true,
+                })
+
+
+                if (res) {
+                    try {
+                        await this.$store.dispatch(
+                            `proyecto/${INSERT_PROYECTOS}`,
+                            this.editedIndex === true ? editProyecto : newProyecto
+                        )
+
+                        this.$dialog.message.success(
+                            this.editedIndex === true ? `El proyecto se modifico correctamente` : `El proyecto se agrego correctamente`,
+                            {
+                                position: 'top-right',
+                            }
+                        )
+                        await this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
+                            id: this.$auth.user.email,
+                        })
+                    } catch (err) { }
+                }
+                this.editedIndex = false
+                this.incompletefield = false
+                this.close()
             }
-
-            const editProyecto = {
-                proyectoId: this.editedItem.proyectoId,
-                nombre: this.editedItem.nombre,
-                cliente: this.editedItem.cliente,
-                descripcion: this.editedItem.descripcion,
-                color: this.editedItem.ColorPicker,
-                fechaInicio: this.editedItem.fechaInicio,
-                fechaFinalizacion: this.editedItem.fechaFinalizacion,
-                presupuesto: this.editedItem.presupuesto,
-                estado: this.estadoSelect,
-                tipo: this.tipoSelect,
-                equipo: this.equipoSelect,
-            }
-
-            console.log('NewProyect', newProyecto)
-
-            const res = await this.$dialog.confirm({
-                text: this.editedIndex === true ? `¿Realmente desea modificar el proyecto?` : `¿Realmente desea agregar el proyecto?`,
-                title: 'ADVERTENCIA',
-                actions: {
-                    false: 'No',
-                    true: { color: 'primary', text: 'Sí' },
-                },
-                persistent: true,
-            })
-
-
-            if (res) {
-                try {
-                    await this.$store.dispatch(
-                        `proyecto/${INSERT_PROYECTOS}`,
-                        this.editedIndex === true ? editProyecto : newProyecto
-                    )
-
-                    this.$dialog.message.success(
-                        this.editedIndex === true ? `El proyecto se modifico correctamente` : `El proyecto se agrego correctamente`,
-                        {
-                            position: 'top-right',
-                        }
-                    )
-                    await this.$store.dispatch(`proyecto/${FETCH_PROYECTOS}`, {
-                        id: this.$auth.user.email,
-                    })
-                } catch (err) { }
-            }
-            this.editedIndex = false
-            this.close()
         },
         usersName() {
             return this.$auth.user.nombre
@@ -441,6 +472,7 @@ export default {
             this.$router.push(URL)
 
         },
+
 
     },
 }
@@ -504,5 +536,10 @@ export default {
 .p-progressbar-determinate .p-progressbar-value-animate {
     background: green !important;
     border-radius: 0 20px 20px 0px;
+}
+
+.classerror {
+    color: #ffc7d0;
+    margin-left: 30px;
 }
 </style>
