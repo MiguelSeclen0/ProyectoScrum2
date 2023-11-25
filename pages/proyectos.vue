@@ -96,8 +96,7 @@
                         <v-col>
                             <v-select label="Estado" v-model="estadoSelect" item-value="estadoId" :items="proyectoEstado"
                                 item-text="nombre" backgroundColor="secondary" color="textito" item-color="secondary"
-                                :rules="estadoRules"
-                                outlined>
+                                :rules="selectRules" outlined>
                             </v-select>
                         </v-col>
                     </v-row>
@@ -119,7 +118,7 @@
                         </v-col>
                         <v-col>
                             <v-select label="Tipo" v-model="tipoSelect" item-value="tipoId" :items="tipo" item-text="nombre"
-                                :rules="estadoRules" backgroundColor="secondary" color="textito" outlined
+                                :rules="selectRules" backgroundColor="secondary" color="textito" outlined
                                 item-color="secondary">
                             </v-select>
                         </v-col>
@@ -132,7 +131,7 @@
                         </v-col>
                         <v-col>
                             <v-select label="Equipo" v-model="equipoSelect" item-value="equipoId" :items="equipo"
-                                item-text="nombre" backgroundColor="secondary" color="textito" outlined
+                                item-text="nombre" backgroundColor="secondary" color="textito" outlined :rules="selectRules"
                                 item-color="secondary">
                             </v-select>
                         </v-col>
@@ -235,7 +234,7 @@ export default {
         },
         nameRules: [v => !!v || 'Nombre es requerido'],
         clientRules: [v => !!v || 'Cliente es requerido'],
-        estadoRules: [v => !!v || 'Estado es requerido'],
+        selectRules: [v => !!v || 'El valor es requerido'],
         fechaInicioRules: [v => !!v || 'Fecha de inicio es requerido'],
         fechaFinalRules: [v => !!v || 'Fecha final es requerido'],
         colorRules: [v => !!v || 'Seleccionar un color es requerido'],
@@ -366,21 +365,23 @@ export default {
             const valorCampo1 = this.$refs.campo1Ref ? this.$refs.campo1Ref.value.trim() : ''
             const valorCampo2 = this.$refs.campo2Ref ? this.$refs.campo2Ref.value.trim() : ''
             const valorCampo3 = this.$refs.estadoSelect ? this.$refs.estadoSelect.value.trim() : ''
-            const valorCampo4 = this.$refs.campo4Ref ? this.$refs.campo4Ref.value.trim() : ''
-            const valorCampo5 = this.$refs.campo5Ref ? this.$refs.campo5Ref.value.trim() : ''
-            const valorCampo6 = this.$refs.campo6Ref ? this.$refs.campo6Ref.value.trim() : ''
+            console.log('valorCampo3',valorCampo3)
+            // const valorCampo4 = this.$refs.campo4Ref ? this.$refs.campo4Ref.value.trim() : ''
+            // const valorCampo5 = this.$refs.campo5Ref ? this.$refs.campo5Ref.value.trim() : ''
+            // const valorCampo6 = this.$refs.campo6Ref ? this.$refs.campo6Ref.value.trim() : ''
             // const valorCampo8 = this.$refs.campo8Ref ? this.$refs.campo8Ref.value.trim() : ''
 
             if (!valorCampo1 || valorCampo1 === undefined
-                || !valorCampo2 || valorCampo2 === undefined
-                || !valorCampo3 || valorCampo3 === undefined
-                || !valorCampo4 || valorCampo4 === undefined
-                || !valorCampo5 || valorCampo5 === undefined
-                || !valorCampo6 || valorCampo6 === undefined
+             || !valorCampo2 || valorCampo2 === undefined
+             || !valorCampo3 || valorCampo3 === undefined
+                // || !valorCampo4 || valorCampo4 === undefined
+                // || !valorCampo5 || valorCampo5 === undefined
+                // || !valorCampo6 || valorCampo6 === undefined
                 // ||!valorCampo7 || valorCampo7===undefined
                 // || !valorCampo8 || valorCampo8 === undefined
                 // ||!valorCampo9 || valorCampo9===undefined
             ) {
+            console.log('valorCampo3',valorCampo3)
                 this.incompletefield = true
             } else {
                 this.incompletefield = false
