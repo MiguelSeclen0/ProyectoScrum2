@@ -14,7 +14,11 @@ export class TareaService {
   tareaInsert(tarea) {
     return this.$axios.$post('/tarea/save', tarea)
   }
-
+  DelTarea({ params }) {
+    return this.$axios.$get('/tarea/delete', {
+      params,
+    })
+  }
   // listEstado({params}) {
   //     return this.$axios.$get('/tarea/listEstado', {
   //       params,

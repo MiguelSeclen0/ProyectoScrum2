@@ -26,7 +26,7 @@
               <v-row align-center="center" justify="space-between">
                 <v-col cols="1">
                   <!-- Muestra item.nombres a la izquierda -->
-                  <v-checkbox color="success"></v-checkbox>
+                  <!--<v-checkbox color="success"></v-checkbox>-->
                 </v-col>
                 <v-col cols="6" class="align-center mr-1" style="margin-top: 7.5%; margin-bottom: 10px;">
                   <span class="text-overline" :class="{ 'text-decoration-line-through text-overline': checkbox }">
@@ -53,12 +53,17 @@
             mdi-plus
           </v-icon>
         </v-btn>
+        <v-btn style="margin-top: 1%;" @click="openDeleteTaskModal()">
+          <v-icon>
+            mdi-trash-can-outline
+          </v-icon>
+        </v-btn>
       </v-col>
       <v-btn style="margin-top: 1%;" @click="openAddColumnModal">
         <v-icon>
           mdi-plus
         </v-icon>
-      </v-btn>
+      </v-btn>  
       <v-row>
       </v-row>
       <v-dialog v-model="addColumnModal" max-width="400">
@@ -111,6 +116,22 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="deleteTaskModal" max-width="400">
+        <v-card>
+          <v-card-title>Eliminar Tarea</v-card-title>
+          <v-card-text>
+            <v-col>
+              <v-select label="Tarea" v-model="tareaSelect" item-value="tareaId" :items="tarea" item-text="nombre"
+                backgroundColor="secondary" color="textito" outlined item-color="secondary">
+              </v-select>
+            </v-col>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="accent" @click="deleteTask()">Eliminar</v-btn>
+            <v-btn @click="closeDeleteTaskModal()">Cancelar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -119,7 +140,7 @@
 <script>
 import draggable from 'vuedraggable'
 import { mapState } from 'vuex'
-import { FETCH_TAREAS, INSERT_TAREAS } from '@/utils/types/tareas/actions.types'
+import { FETCH_TAREAS, INSERT_TAREAS, DELETE_TAREAS } from '@/utils/types/tareas/actions.types'
 import { FETCH_ESTADOS, INSERT_NOMCOLUM, DELETE_COLUM } from '@/utils/types/estados/actions.types'
 import { FETCH_USUARIO } from '@/utils/types/users/actions.types'
 import { GlobalValues } from '~/utils/global'
@@ -134,10 +155,12 @@ export default {
       editedColumnIndex: -1,     // Índice de la columna en edición
       editedColumnName: '',      // Nuevo nombre de la columna en edición
       addTaskModal: false,
+      deleteTaskModal: false,
       newTaskName: '',
       editedIndex: false,
       columnaDelete: '',
       tabId: '',
+      tarId: '',
       estId: '',
       dialogDelete: false,
       newTarea: {
@@ -154,6 +177,7 @@ export default {
       },
       responsableSelect: {},
       columnaSelect: {},
+      tareaSelect: {},
     }
   },
   watch: {
@@ -227,6 +251,9 @@ export default {
       this.addTaskModal = false;
       this.newTaskName = ''; // Restablece el nombre de la nueva columna
     },
+    closeDeleteTaskModal() {
+      this.deleteTaskModal = false;
+    },
 
     // Agrega una nueva columna a la lista
     async addColumn() {
@@ -267,9 +294,8 @@ export default {
           proyectoId: GlobalValues.idProyect,
         },
         tablero: {
-          tableroId: this.tabId,
-        },
-        usuario: {
+        tableroId: this.tabId,
+        },       usuario: {
           usuarioId: this.responsableSelect,
         },
         estado: {
@@ -310,6 +336,32 @@ export default {
       }
       this.editedIndex = false
       this.closeAddTaskModal();
+    },
+    openDeleteTaskModal() {
+      this.deleteTaskModal = true
+    },
+    async deleteTask() {
+      const tareaId = this.tareaSelect
+
+      try {
+        await this.$store.dispatch(
+          `tarea/${DELETE_TAREAS}`, {
+          id: tareaId,
+        })
+      } catch (err) { }
+      this.$dialog.message.success(
+        'La tarea se elimino correctamente',
+        {
+          position: 'top-right',
+        }
+      )
+      await this.$store.dispatch(`estado/${FETCH_ESTADOS}`, {
+        id: GlobalValues.idProyect,
+      })
+      await this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
+        id: GlobalValues.idProyect,
+      })
+      this.closeDeleteTaskModal()
     },
     deleteColumn(index) {
       this.columnaDelete = this.tareaEstado[index].tableroId;

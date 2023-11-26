@@ -1,6 +1,7 @@
 import {
     FETCH_TAREAS,
     INSERT_TAREAS,
+    DELETE_TAREAS,
 } from '@/utils/types/tareas/actions.types'
 
 import {
@@ -37,6 +38,9 @@ export const actions = {
     },
     async [INSERT_TAREAS]({ dispatch }, tarea) {
         await this.$tarea.tareaInsert(tarea)
+    },
+    async [DELETE_TAREAS]({ dispatch }, params) {
+        await this.$tarea.DelTarea({params})
     },
 
     // async [FETCH_TAREASESTADO]({ commit }, params) {
