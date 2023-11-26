@@ -1,117 +1,117 @@
 <template>
   <div>
-    <draggable>
-      <div class="cards-wrapper">
-        <v-col v-for="(item, index) in  tareaEstado" :key="item.tableroId" class="secondary cards" md="3">
-          <div v-if="index !== editedColumnIndex">
-            <span @click="editColumn(index)">{{ item.nombre }}</span>
-          </div>
-          <div v-else>
-            <v-text-field v-model="editedColumnName" label="Nuevo nombre" solo-inverted></v-text-field>
-            <v-btn @click="saveEditedColumn(index)">Guardar</v-btn>
-            <v-btn @click="cancelEdit(index)">Cancelar</v-btn>
-          </div>
-          <v-btn @click="deleteColumn(index)">
-            <v-icon>
-              mdi-delete
-            </v-icon>
-          </v-btn>
-          <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
-            <v-card v-for="item in filtrarTareasPorColumna(item.nombre)" :key="item.tareaId" elevation="24"
-              class="mx-auto cardst" :style="{ 'background': item.color }"
-              :class="['column-card', { 'new-column': index >= tareaEstado.length - 1 }]" max-width="250">
-              <v-card-title>
-                <v-icon large left class="text-caption">
-                  {{ item.nombre }} <!-- Mostramos el nombre de la tarea -->
-                </v-icon>
-              </v-card-title>
-              <v-card-actions>
-                <v-row align-center="center" justify="space-between">
-                  <v-col cols="1">
-                    <!-- Muestra item.nombres a la izquierda -->
-                    <v-checkbox color="success"></v-checkbox>
-                  </v-col>
-                  <v-col cols="6" class="align-center mr-1" style="margin-top: 7.5%; margin-bottom: 10px;">
-                    <span class="text-overline" :class="{ 'text-decoration-line-through text-overline': checkbox }">
-                      {{ item.descripcion }}
-                    </span>
-                  </v-col>
-                  <v-col cols="2" class="text-right" style="margin-top: 7.5%; margin-right: 2%;">
-                    <!-- Genera la imagen circular con las iniciales del nombre de usuario a la derecha -->
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-avatar class="avatar-circle" size="24px" v-bind="attrs" v-on="on">
-                          <div class="avatar-inner"> {{ getInitials(item.nombre) }} </div>
-                        </v-avatar>
-                      </template>
-                      <span> {{ item.fechaLimite }} </span>
-                    </v-tooltip>
-                  </v-col>
-                </v-row>
-              </v-card-actions>
-            </v-card>
-          </draggable>
-          <v-btn style="margin-top: 1%;" @click="openAddTaskModal">
-            <v-icon>
-              mdi-plus
-            </v-icon>
-          </v-btn>
-        </v-col>
-        <v-btn style="margin-top: 1%;" @click="openAddColumnModal">
+    <div class="cards-wrapper">
+      <v-col v-for="(item, index) in  tareaEstado" :key="item.tableroId" class="secondary cards" md="3">
+        <div v-if="index !== editedColumnIndex">
+          <span @click="editColumn(index)">{{ item.nombre }}</span>
+        </div>
+        <div v-else>
+          <v-text-field v-model="editedColumnName" label="Nuevo nombre" solo-inverted></v-text-field>
+          <v-btn @click="saveEditedColumn(index)">Guardar</v-btn>
+          <v-btn @click="cancelEdit(index)">Cancelar</v-btn>
+        </div>
+        <v-btn @click="deleteColumn(index)">
+          <v-icon>
+            mdi-delete
+          </v-icon>
+        </v-btn>
+        <draggable style="margin-bottom: 10px;" group="people2" @start="drag = true">
+          <v-card v-for="item in filtrarTareasPorColumna(item.nombre)" :key="item.tareaId" elevation="24"
+            class="mx-auto cardst" :style="{ 'background': item.color }"
+            :class="['column-card', { 'new-column': index >= tareaEstado.length - 1 }]" max-width="250">
+            <v-card-title class="text-small">
+              <span>{{ item.nombre }}</span>
+            </v-card-title>
+            <v-card-actions>
+              <v-row align-center="center" justify="space-between">
+                <v-col cols="1">
+                  <!-- Muestra item.nombres a la izquierda -->
+                  <v-checkbox color="success"></v-checkbox>
+                </v-col>
+                <v-col cols="6" class="align-center mr-1" style="margin-top: 7.5%; margin-bottom: 10px;">
+                  <span class="text-overline" :class="{ 'text-decoration-line-through text-overline': checkbox }">
+                    {{ item.descripcion }}
+                  </span>
+                </v-col>
+                <v-col cols="2" class="text-right" style="margin-top: 7.5%; margin-right: 2%;">
+                  <!-- Genera la imagen circular con las iniciales del nombre de usuario a la derecha -->
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-avatar class="avatar-circle" size="24px" v-bind="attrs" v-on="on">
+                        <div class="avatar-inner"> {{ getInitials(item.nombre) }} </div>
+                      </v-avatar>
+                    </template>
+                    <span> {{ item.fechaLimite }} </span>
+                  </v-tooltip>
+                </v-col>
+              </v-row>
+            </v-card-actions>
+          </v-card>
+        </draggable>
+        <v-btn style="margin-top: 1%;" @click="openAddTaskModal(item.tableroId)">
           <v-icon>
             mdi-plus
           </v-icon>
         </v-btn>
-        <v-row>
-        </v-row>
-        <v-dialog v-model="addColumnModal" max-width="400">
-          <v-card>
-            <v-card-title>Agregar Nueva Columna</v-card-title>
-            <v-card-text>
-              <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre"
+      </v-col>
+      <v-btn style="margin-top: 1%;" @click="openAddColumnModal">
+        <v-icon>
+          mdi-plus
+        </v-icon>
+      </v-btn>
+      <v-row>
+      </v-row>
+      <v-dialog v-model="addColumnModal" max-width="400">
+        <v-card>
+          <v-card-title>Agregar Nueva Columna</v-card-title>
+          <v-card-text>
+            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre"
+              color="textito"></v-text-field>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="accent" @click="addColumn()">Agregar</v-btn>
+            <v-btn @click="closeAddColumnModal()">Cancelar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="dialogDelete" max-width="500px">
+        <v-card>
+          <v-card-title class="text-h5">¿Estás seguro de eliminar esta columna?</v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="closeDeleteColumn()">Cancelar</v-btn>
+            <v-btn color="blue darken-1" text @click="ConfDeleteColumn()">Eliminar</v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="addTaskModal" max-width="400">
+        <v-card>
+          <v-card-title>Agregar Nueva Tarea</v-card-title>
+          <v-card-text>
+            <v-col>
+              <v-text-field v-model="newTarea.nombre" backgroundColor="secondary" outlined label="Nombre"
                 color="textito"></v-text-field>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="accent" @click="addColumn()">Agregar</v-btn>
-              <v-btn @click="closeAddColumnModal()">Cancelar</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5">¿Estás seguro de eliminar esta columna?</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDeleteColumn()">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="ConfDeleteColumn()">Eliminar</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="addTaskModal" max-width="400">
-          <v-card>
-            <v-card-title>Agregar Nueva Tarea</v-card-title>
-            <v-card-text>
-              <v-col>
-                <v-text-field v-model="newTareaName" backgroundColor="secondary" outlined label="Nombre"
-                  color="textito"></v-text-field>
-              </v-col>
-              <v-col>
-                <v-combobox label="Responsable" backgroundColor="secondary" color="textito" outlined>
-                </v-combobox>
-              </v-col>
-              <v-col>
-                <v-textarea backgroundColor="secondary" outlined label="Descripcion"></v-textarea>
-              </v-col>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="accent" @click="addTask">Agregar</v-btn>
-              <v-btn @click="closeAddTaskModal">Cancelar</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </div>
-    </draggable>
+              <ColorPicker label="Color" v-model="newTarea.ColorPicker" outlined color="textito" />
+            </v-col>
+            <v-col>
+              <v-select label="Responsable" v-model="responsableSelect" item-value="usuarioId" :items="usuario"
+                item-text="nombre" backgroundColor="secondary" color="textito" outlined item-color="secondary">
+              </v-select>
+              <DatePicker label="Fecha Limite" v-model="newTarea.fechaLimite" outlined type='date' color="textito" />
+            </v-col>
+            <v-col>
+              <v-textarea v-model="newTarea.descripcion" backgroundColor="secondary" outlined
+                label="Descripcion"></v-textarea>
+            </v-col>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="accent" @click="addTask()">Agregar</v-btn>
+            <v-btn @click="closeAddTaskModal()">Cancelar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
@@ -119,8 +119,9 @@
 <script>
 import draggable from 'vuedraggable'
 import { mapState } from 'vuex'
-import { FETCH_TAREAS } from '@/utils/types/tareas/actions.types'
+import { FETCH_TAREAS, INSERT_TAREAS } from '@/utils/types/tareas/actions.types'
 import { FETCH_ESTADOS, INSERT_NOMCOLUM, DELETE_COLUM } from '@/utils/types/estados/actions.types'
+import { FETCH_USUARIO } from '@/utils/types/users/actions.types'
 import { GlobalValues } from '~/utils/global'
 
 export default {
@@ -130,14 +131,29 @@ export default {
       checkbox: false,
       addColumnModal: false, // Controla la visibilidad del modal
       newColumnName: '',    // Almacena el nombre de la nueva columna
-      newTareaName: '',    // Almacena el nombre de la nueva tarea
       editedColumnIndex: -1,     // Índice de la columna en edición
       editedColumnName: '',      // Nuevo nombre de la columna en edición
       addTaskModal: false,
       newTaskName: '',
       editedIndex: false,
       columnaDelete: '',
+      tabId: '',
+      estId: '',
       dialogDelete: false,
+      newTarea: {
+        nombre: '',    // Almacena el nombre de la nueva tarea        
+        ColorPicker: '',
+        usuario: {
+          usuarioId: '',
+        },
+        fechaLimite: '',
+        descripcion: '',
+        tablero: {
+          tableroId: '',
+        },
+      },
+      responsableSelect: {},
+      columnaSelect: {},
     }
   },
   watch: {
@@ -151,6 +167,9 @@ export default {
       this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
         id: GlobalValues.idProyect,
       }),
+      this.$store.dispatch(`usuario/${FETCH_USUARIO}`, {
+        id: GlobalValues.idProyect,
+      }),
       this.$store.dispatch(`estado/${FETCH_ESTADOS}`, {
         id: GlobalValues.idProyect
       })
@@ -158,6 +177,7 @@ export default {
   },
   computed: {
     ...mapState('tarea', ['tarea']),
+    ...mapState('usuario', ['usuario']),
     ...mapState('estado', ['tareaEstado'])
   },
 
@@ -194,7 +214,8 @@ export default {
     openAddColumnModal() {
       this.addColumnModal = true;
     },
-    openAddTaskModal() {
+    openAddTaskModal(item) {
+      this.tabId = item
       this.addTaskModal = true;
     },
     // Cierra el modal
@@ -212,16 +233,83 @@ export default {
       this.saveEditedColumn()
       this.closeAddColumnModal(); // Cierra el modal después de agregar la columna
     },
-    addTask() {
-      if (this.newTareaName.trim() !== '') {
-        this.Mylist2.push({
-          id: 5,
-          nombreTarea: this.newTareaName,
-          nombreUsuario: this.newTareaName,
-          nombres: this.newTareaName
-        });
-        this.closeAddTaskModal(); // Cierra el modal después de agregar la columna
+    async addTask() {
+
+      const nuevaTarea = {
+        nombre: this.newTarea.nombre,
+        descripcion: this.newTarea.descripcion,
+        fechaLimite: this.newTarea.fechaLimite,
+        color: this.newTarea.ColorPicker,
+        etiqueta: {
+          etiquetaId: '65370f8bb21e1239553afba4',
+        },
+        proyecto: {
+          proyectoId: GlobalValues.idProyect,
+        },
+        tablero: {
+          tableroId: this.tabId,
+        },
+        usuario: {
+          usuarioId: this.responsableSelect,
+          nombre: '',
+        },
       }
+
+      const modifTarea = {
+        nombre: this.newTarea.nombre,
+        descripcion: this.newTarea.descripcion,
+        fechaLimite: this.newTarea.fechaLimite,
+        color: this.newTarea.ColorPicker,
+        etiqueta: {
+          etiquetaId: '65370f8bb21e1239553afba4',
+        },
+        proyecto: {
+          proyectoId: GlobalValues.idProyect,
+        },
+        tablero: {
+          tableroId: this.tabId,
+        },
+        usuario: {
+          usuarioId: this.responsableSelect,
+        },
+        estado: {
+          estadoId: this.responsableSelect,
+        },
+      }
+
+      const res = await this.$dialog.confirm({
+        text: this.editedIndex === true ? `¿Realmente desea modificar la tarea?` : `¿Realmente desea agregar la tarea?`,
+        title: 'ADVERTENCIA',
+        actions: {
+          false: 'No',
+          true: { color: 'primary', text: 'Sí' },
+        },
+        persistent: true,
+      })
+
+      if (res) {
+        try {
+          await this.$store.dispatch(
+            `tarea/${INSERT_TAREAS}`,
+            this.editedIndex === true ? modifTarea : nuevaTarea
+          )
+
+          this.$dialog.message.success(
+            this.editedIndex === true ? `La tarea se modifico correctamente` : `La tarea se agrego correctamente`,
+            {
+              position: 'top-right',
+            }
+          )
+          await this.$store.dispatch(`estado/${FETCH_ESTADOS}`, {
+            id: GlobalValues.idProyect,
+          })
+          await this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
+            id: GlobalValues.idProyect,
+          })
+        } catch (err) { }
+      }
+      this.editedIndex = false
+      this.closeAddTaskModal();
     },
     deleteColumn(index) {
       this.columnaDelete = this.tareaEstado[index].tableroId;
@@ -232,7 +320,7 @@ export default {
       const tableroId = this.columnaDelete
 
       try {
-        console.log('tableroId',tableroId)
+        console.log('tableroId', tableroId)
         await this.$store.dispatch(
           `estado/${DELETE_COLUM}`, {
           id: tableroId,
@@ -254,7 +342,7 @@ export default {
       this.closeDeleteColumn()
     },
 
-    closeDeleteColumn(){
+    closeDeleteColumn() {
       this.dialogDelete = false
     },
 
@@ -268,6 +356,7 @@ export default {
     // Guarda el nombre editado de la columna
     async saveEditedColumn(index) {
       if (this.editedIndex === true) {
+        console.log('1')
         if (this.editedColumnName.trim() !== '' || this.newColumnName.trim() !== '') {
           const nTableroid = this.tareaEstado[index].tableroId
           const nNombre = this.editedColumnName

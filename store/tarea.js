@@ -1,5 +1,6 @@
 import {
     FETCH_TAREAS,
+    INSERT_TAREAS,
 } from '@/utils/types/tareas/actions.types'
 
 import {
@@ -29,10 +30,14 @@ export const actions = {
     //    const tarea = await this.$tarea.FindAll()
     //    commit(SET_TAREAS, { tarea })
     // },
+
     async [FETCH_TAREAS]({ commit }, params) {
-        const tarea = await this.$tarea.findById({params})
+        const tarea = await this.$tarea.findById({ params })
         commit(SET_TAREAS, { tarea })
-      },
+    },
+    async [INSERT_TAREAS]({ dispatch }, tarea) {
+        await this.$tarea.tareaInsert(tarea)
+    },
 
     // async [FETCH_TAREASESTADO]({ commit }, params) {
     //     const tareaEstado = await this.$tarea.listEstado({params})
