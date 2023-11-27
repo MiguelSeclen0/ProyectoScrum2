@@ -43,6 +43,7 @@
                     </template>
                     <span> {{ item.fechaLimite }} </span>
                   </v-tooltip>
+                  <v-icon style="margin-left: 3%;" color="accent" medium @click="editTarea(item)">mdi-pencil</v-icon>
                 </v-col>
               </v-row>
             </v-card-actions>
@@ -63,7 +64,7 @@
         <v-icon>
           mdi-plus
         </v-icon>
-      </v-btn>  
+      </v-btn>
       <v-row>
       </v-row>
       <v-dialog v-model="addColumnModal" max-width="400">
@@ -92,7 +93,9 @@
       </v-dialog>
       <v-dialog v-model="addTaskModal" max-width="400">
         <v-card>
-          <v-card-title>Agregar Nueva Tarea</v-card-title>
+          <v-card-title>
+            <span class="text-h5">{{ formTitlee }}</span>
+          </v-card-title>
           <v-card-text>
             <v-col>
               <v-text-field v-model="newTarea.nombre" backgroundColor="secondary" outlined label="Nombre"
@@ -111,7 +114,7 @@
             </v-col>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="accent" @click="addTask()">Agregar</v-btn>
+            <v-btn color="accent" @click="addTask()">Aceptar</v-btn>
             <v-btn @click="closeAddTaskModal()">Cancelar</v-btn>
           </v-card-actions>
         </v-card>
@@ -162,17 +165,30 @@ export default {
       tabId: '',
       tarId: '',
       estId: '',
+      usuId: '',
       dialogDelete: false,
       newTarea: {
+        tareaId: '',
         nombre: '',    // Almacena el nombre de la nueva tarea        
         ColorPicker: '',
         usuario: {
           usuarioId: '',
+          nombre: '',
         },
         fechaLimite: '',
+        fechaFin: '',
         descripcion: '',
         tablero: {
           tableroId: '',
+        },
+        etiqueta: {
+          etiquetaId: '',
+        },
+        proyecto: {
+          proyectoId: '',
+        },
+        estado: {
+          estadoId: '',
         },
       },
       responsableSelect: {},
@@ -202,7 +218,10 @@ export default {
   computed: {
     ...mapState('tarea', ['tarea']),
     ...mapState('usuario', ['usuario']),
-    ...mapState('estado', ['tareaEstado'])
+    ...mapState('estado', ['tareaEstado']),
+    formTitlee() {
+      return this.editedIndex === true ? 'Editar Tarea' : 'Nueva Tarea'
+    },
   },
 
   methods: {
@@ -239,6 +258,7 @@ export default {
       this.addColumnModal = true;
     },
     openAddTaskModal(item) {
+      this.editedIndex = false
       this.tabId = item
       this.addTaskModal = true;
     },
@@ -259,6 +279,22 @@ export default {
     async addColumn() {
       this.saveEditedColumn()
       this.closeAddColumnModal(); // Cierra el modal después de agregar la columna
+    },
+    editTarea(item) {
+      this.editedIndex = true
+      this.addTaskModal = true
+      this.estId = item.estado.estadoId
+      this.tabId = item.tablero.tableroId
+      this.usuId = item.usuario.usuarioId
+      this.callTareas(item)
+    },
+    callTareas(item) {
+      this.newTarea.tareaId = item.tareaId;
+      this.newTarea.nombre = item.nombre;
+      this.newTarea.descripcion = item.descripcion;
+      this.newTarea.fechaLimite = item.fechaLimite;
+      this.newTarea.ColorPicker = item.color;
+      this.responsableSelect = item.usuario;
     },
     async addTask() {
 
@@ -283,9 +319,11 @@ export default {
       }
 
       const modifTarea = {
+        tareaId: this.newTarea.tareaId,
         nombre: this.newTarea.nombre,
         descripcion: this.newTarea.descripcion,
         fechaLimite: this.newTarea.fechaLimite,
+        fechaFin: null,
         color: this.newTarea.ColorPicker,
         etiqueta: {
           etiquetaId: '65370f8bb21e1239553afba4',
@@ -294,12 +332,14 @@ export default {
           proyectoId: GlobalValues.idProyect,
         },
         tablero: {
-        tableroId: this.tabId,
-        },       usuario: {
-          usuarioId: this.responsableSelect,
+          tableroId: this.tabId,
+        },
+        usuario: {
+          usuarioId: this.usuId,
+          nombre: '',
         },
         estado: {
-          estadoId: this.responsableSelect,
+          estadoId: this.estId,
         },
       }
 
