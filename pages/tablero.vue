@@ -248,8 +248,8 @@ export default {
       this.newColumnName = ''; // Restablece el nombre de la nueva columna
     },
     closeAddTaskModal() {
+      this.clearTareas()
       this.addTaskModal = false;
-      this.newTaskName = ''; // Restablece el nombre de la nueva columna
     },
     closeDeleteTaskModal() {
       this.deleteTaskModal = false;
@@ -336,6 +336,13 @@ export default {
       }
       this.editedIndex = false
       this.closeAddTaskModal();
+    },
+    clearTareas() {
+      this.newTarea.nombre = '';
+      this.newTarea.descripcion = '';
+      this.newTarea.fechaLimite = '';
+      this.newTarea.ColorPicker = '';
+      this.responsableSelect = null;
     },
     openDeleteTaskModal() {
       this.deleteTaskModal = true
