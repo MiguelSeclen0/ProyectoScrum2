@@ -147,7 +147,7 @@
                 <span class="classerror" v-if="incompletefield === true">Por favor, completa todos los campos.</span>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close()">
+                    <v-btn color="blue darken-1" text @click="closeCancel()">
                         Cancelar
                     </v-btn>
                     <v-btn color="blue darken-1" text @click="save()">
@@ -223,7 +223,8 @@ export default {
                 equipoId: '',
             },
         },
-        estadoSelect: {},
+        estadoSelect: {estadoId: "6530997b91bbab402bbfdb5c",
+        nombre: "En progreso"},
         tipoSelect: {},
         equipoSelect: {},
         defaultItem: {
@@ -356,7 +357,9 @@ export default {
             this.clearFields()
             this.dialog = false
         },
-
+        closeCancel() {
+            this.dialog = false
+        },
         closeDelete() {
             this.dialogDelete = false
         },
@@ -364,24 +367,23 @@ export default {
         async save() {
             const valorCampo1 = this.$refs.campo1Ref ? this.$refs.campo1Ref.value.trim() : ''
             const valorCampo2 = this.$refs.campo2Ref ? this.$refs.campo2Ref.value.trim() : ''
-            const valorCampo3 = this.$refs.estadoSelect ? this.$refs.estadoSelect.value.trim() : ''
-            console.log('valorCampo3',valorCampo3)
-            // const valorCampo4 = this.$refs.campo4Ref ? this.$refs.campo4Ref.value.trim() : ''
-            // const valorCampo5 = this.$refs.campo5Ref ? this.$refs.campo5Ref.value.trim() : ''
-            // const valorCampo6 = this.$refs.campo6Ref ? this.$refs.campo6Ref.value.trim() : ''
-            // const valorCampo8 = this.$refs.campo8Ref ? this.$refs.campo8Ref.value.trim() : ''
+            //const valorCampo3 = this.$refs.estadoSelect ? this.$refs.estadoSelect.value.trim() : ''
+            //console.log('valorCampo3',valorCampo3)
+            const valorCampo4 = this.$refs.campo4Ref ? this.$refs.campo4Ref.value.trim() : ''
+            const valorCampo5 = this.$refs.campo5Ref ? this.$refs.campo5Ref.value.trim() : ''
+            const valorCampo6 = this.$refs.campo6Ref ? this.$refs.campo6Ref.value.trim() : ''
+            //const valorCampo7 = this.$refs.campo7Ref ? this.$refs.campo7Ref.value.trim() : ''
+            const valorCampo8 = this.$refs.campo8Ref ? this.$refs.campo8Ref.value.trim() : ''
 
             if (!valorCampo1 || valorCampo1 === undefined
              || !valorCampo2 || valorCampo2 === undefined
-             || !valorCampo3 || valorCampo3 === undefined
-                // || !valorCampo4 || valorCampo4 === undefined
-                // || !valorCampo5 || valorCampo5 === undefined
-                // || !valorCampo6 || valorCampo6 === undefined
-                // ||!valorCampo7 || valorCampo7===undefined
-                // || !valorCampo8 || valorCampo8 === undefined
-                // ||!valorCampo9 || valorCampo9===undefined
+             //|| !valorCampo3 || valorCampo3 === undefined
+                 || !valorCampo4 || valorCampo4 === undefined
+                 || !valorCampo5 || valorCampo5 === undefined
+                 || !valorCampo6 || valorCampo6 === undefined
+                // || !valorCampo7 || valorCampo7===undefined
+                 || !valorCampo8 || valorCampo8 === undefined                  
             ) {
-            console.log('valorCampo3',valorCampo3)
                 this.incompletefield = true
             } else {
                 this.incompletefield = false
@@ -426,9 +428,10 @@ export default {
                 const res = await this.$dialog.confirm({
                     text: this.editedIndex === true ? `¿Realmente desea modificar el proyecto?` : `¿Realmente desea agregar el proyecto?`,
                     title: 'ADVERTENCIA',
+                    titleColor: 'red',
                     actions: {
                         false: 'No',
-                        true: { color: 'primary', text: 'Sí' },
+                        true: { color: 'primary', text: 'Sí' },                        
                     },
                     persistent: true,
                 })

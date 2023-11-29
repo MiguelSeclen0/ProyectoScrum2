@@ -71,7 +71,7 @@
         <v-card>
           <v-card-title>Agregar Nueva Columna</v-card-title>
           <v-card-text>
-            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre"
+            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre" :rules="nameRules"
               color="textito"></v-text-field>
           </v-card-text>
           <v-card-actions>
@@ -99,14 +99,16 @@
           <v-card-text>
             <v-col>
               <v-text-field v-model="newTarea.nombre" backgroundColor="secondary" outlined label="Nombre"
-                color="textito"></v-text-field>
+                :rules="nameRules" color="textito"></v-text-field>
               <ColorPicker label="Color" v-model="newTarea.ColorPicker" outlined color="textito" />
             </v-col>
             <v-col>
               <v-select label="Responsable" v-model="responsableSelect" item-value="usuarioId" :items="usuario"
-                item-text="nombre" backgroundColor="secondary" color="textito" outlined item-color="secondary">
+                item-text="nombre" backgroundColor="secondary" :rules="selectRules" color="textito" outlined
+                item-color="secondary">
               </v-select>
-              <DatePicker label="Fecha Limite" v-model="newTarea.fechaLimite" outlined type='date' color="textito" />
+              <DatePicker label="Fecha Limite" v-model="newTarea.fechaLimite" outlined type='date'
+                :rules="fechaFinalRules" color="textito" />
             </v-col>
             <v-col>
               <v-textarea v-model="newTarea.descripcion" backgroundColor="secondary" outlined
@@ -194,6 +196,10 @@ export default {
       responsableSelect: {},
       columnaSelect: {},
       tareaSelect: {},
+      nameRules: [v => !!v || 'Nombre es requerido'],
+      colorRules: [v => !!v || 'Seleccionar un color es requerido'],
+      selectRules: [v => !!v || 'El valor es requerido'],
+      fechaFinalRules: [v => !!v || 'Fecha limite es requerido'],
     }
   },
   watch: {
@@ -235,6 +241,7 @@ export default {
       const res = await this.$dialog.confirm({
         text: '¿Realmente desea cerrar sesión?',
         title: 'Advertencia',
+        titleColor: 'red',
         actions: {
           false: 'No',
           true: { color: 'accent', text: 'Si' },
@@ -348,7 +355,7 @@ export default {
         title: 'ADVERTENCIA',
         actions: {
           false: 'No',
-          true: { color: 'primary', text: 'Sí' },
+          true: { color: 'accent', text: 'Sí' },
         },
         persistent: true,
       })
@@ -472,7 +479,7 @@ export default {
             title: 'ADVERTENCIA',
             actions: {
               false: 'No',
-              true: { color: 'primary', text: 'Sí' },
+              true: { color: 'accent', text: 'Sí' },
             },
             persistent: true,
           })
@@ -516,7 +523,7 @@ export default {
           title: 'ADVERTENCIA',
           actions: {
             false: 'No',
-            true: { color: 'primary', text: 'Sí' },
+            true: { color: 'accent', text: 'Sí' },
           },
           persistent: true,
         })
