@@ -70,23 +70,23 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       :value="selectedTeam === 'Usuarios' ? editedItem.nombre : (editedItem.usuario ? editedItem.usuario.nombre : '')"
-                      @input="updateNombre" label="Nombre" :rules="usernameRules"></v-text-field>
+                      @input="updateNombre" label="Nombre" :rules="rules.nameRules"></v-text-field>
 
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       :value="selectedTeam === 'Usuarios' ? editedItem.email : (editedItem.usuario ? editedItem.usuario.email : '')"
-                      @input="updateEmail" label="Email"></v-text-field>
+                      @input="rules.emailRules" label="Email"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       :value="selectedTeam === 'Usuarios' ? editedItem.contra : (editedItem.usuario ? editedItem.usuario.contra : '')"
-                      @input="updateContra" label="Contraseña"></v-text-field>
+                      @input="rules.usuariosRules" label="Contraseña"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       :value="selectedTeam === 'Usuarios' ? editedItem.sueldo : (editedItem.usuario ? editedItem.usuario.sueldo : '')"
-                      @input="updateSueldo" label="Sueldo" type="number" :rules="sueldoRules"></v-text-field>
+                      @input="rules.sueldoRules" label="Sueldo" type="number" :rules="sueldoRules"></v-text-field>
                   </v-col>
                   <v-col v-if="showForm" cols="12" sm="6" md="4">
                     <v-select v-model="equipoSelect" item-value="equipoId" :items="equipo" item-text="nombre"
@@ -202,6 +202,15 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
+    rules() {
+            return {
+                nameRules: [v => !!v || 'Nombre es requerido'],
+                emailRules: [v => !!v || 'Email es requerido'],
+                usuariosRules: [v => !!v || 'Contraseña es requerido'],
+                sueldoRules: [v => !!v || 'Sueldo es requerido'],
+                sueldoRules: [v => !!v || 'Sueldo es requerido'],
+            }
+        },
     equipoWithAll() {
       // Crea una copia del array 'equipo' y agrega una opción para mostrar todos los usuarios
       const equipoCopy = [...this.equipo];
@@ -228,17 +237,6 @@ export default {
           { text: 'Opciones', align: 'center', value: 'actions' },
         ];
       }
-    },
-
-    usernameRules() {
-      return [(value) => !!value || 'Ingrese Nombre de Usuario' || '']
-    },
-    sueldoRules: function () {
-      return [
-        (value) => !!value || 'El sueldo es requerido',
-        (value) => /^\d+(\.\d+)?$/.test(value) || 'Ingrese un valor numérico válido',
-      ];
-
     },
     areTextFieldsFilled() {
       const filled = (this.editedItem.nombre &&
@@ -377,7 +375,7 @@ export default {
           title: 'ADVERTENCIA',
           actions: {
             false: 'No',
-            true: { color: 'primary', text: 'Sí' },
+            true: { color: 'accent', text: 'Sí' },
           },
           persistent: true,
         })
@@ -416,7 +414,7 @@ export default {
             title: 'ADVERTENCIA',
             actions: {
               false: 'No',
-              true: { color: 'primary', text: 'Sí' },
+              true: { color: 'accent', text: 'Sí' },
             },
             persistent: true,
           })
@@ -493,7 +491,7 @@ export default {
             title: 'ADVERTENCIA',
             actions: {
               false: 'No',
-              true: { color: 'primary', text: 'Sí' },
+              true: { color: 'accent', text: 'Sí' },
             },
             persistent: true,
           })
