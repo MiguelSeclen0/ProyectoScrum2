@@ -71,7 +71,7 @@
         <v-card>
           <v-card-title>Agregar Nueva Columna</v-card-title>
           <v-card-text>
-            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre"
+            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre" :rules="nameRules"
               color="textito"></v-text-field>
           </v-card-text>
           <v-card-actions>
@@ -98,21 +98,24 @@
           </v-card-title>
           <v-card-text>
             <v-col>
-              <v-text-field v-model="newTarea.nombre" backgroundColor="secondary" outlined label="Nombre"
-                color="textito"></v-text-field>
+              <v-text-field v-model="newTarea.nombre" backgroundColor="secondary" outlined label="Nombre" ref="campo1refTab"
+                :rules="nameRules" color="textito"></v-text-field>
               <ColorPicker label="Color" v-model="newTarea.ColorPicker" outlined color="textito" />
             </v-col>
             <v-col>
               <v-select label="Responsable" v-model="responsableSelect" item-value="usuarioId" :items="usuario"
-                item-text="nombre" backgroundColor="secondary" color="textito" outlined item-color="secondary">
+                item-text="nombre" backgroundColor="secondary" :rules="selectRules" color="textito" outlined
+                item-color="secondary">
               </v-select>
-              <DatePicker label="Fecha Limite" v-model="newTarea.fechaLimite" outlined type='date' color="textito" />
+              <DatePicker ref="campo2RefTab" label="Fecha Limite" v-model="newTarea.fechaLimite" outlined type='date'
+                :rules="fechaFinalRules" color="textito" />
             </v-col>
             <v-col>
               <v-textarea v-model="newTarea.descripcion" backgroundColor="secondary" outlined
                 label="Descripcion"></v-textarea>
             </v-col>
           </v-card-text>
+          <span class="classerror" v-if="incompletefield === true">Por favor, completa todos los campos.</span>
           <v-card-actions>
             <v-btn color="accent" @click="addTask()">Aceptar</v-btn>
             <v-btn @click="closeAddTaskModal()">Cancelar</v-btn>
@@ -153,6 +156,7 @@ export default {
   data() {
     return {
       checkbox: false,
+      incompletefield: false,
       addColumnModal: false, // Controla la visibilidad del modal
       newColumnName: '',    // Almacena el nombre de la nueva columna
       editedColumnIndex: -1,     // Índice de la columna en edición
@@ -191,9 +195,19 @@ export default {
           estadoId: '',
         },
       },
-      responsableSelect: {},
+      responsableSelect: {
+
+      },
       columnaSelect: {},
       tareaSelect: {},
+      nameRules: [v => !!v || 'Nombre es requerido'],
+      colorRules: [v => !!v || 'Seleccionar un color es requerido'],
+      selectRules: [v => !!v || 'El valor es requerido'],
+      fechaFinalRules: [v => !!v || 'Fecha limite es requerido'],
+      responsableSelect: {
+        usuarioId: '6521fd2fa1598a4ca722cabe',
+        nombre: '',
+      },
     }
   },
   watch: {
@@ -235,6 +249,7 @@ export default {
       const res = await this.$dialog.confirm({
         text: '¿Realmente desea cerrar sesión?',
         title: 'Advertencia',
+        titleColor: 'red',
         actions: {
           false: 'No',
           true: { color: 'accent', text: 'Si' },
@@ -297,85 +312,96 @@ export default {
       this.responsableSelect = item.usuario;
     },
     async addTask() {
+      const valorCampo1 = this.$refs.campo1refTab ? this.$refs.campo1refTab.value.trim() : ''
+      const valorCampo2 = this.$refs.campo2RefTab ? this.$refs.campo2RefTab.value.trim() : ''
 
-      const nuevaTarea = {
-        nombre: this.newTarea.nombre,
-        descripcion: this.newTarea.descripcion,
-        fechaLimite: this.newTarea.fechaLimite,
-        color: this.newTarea.ColorPicker,
-        etiqueta: {
-          etiquetaId: '65370f8bb21e1239553afba4',
-        },
-        proyecto: {
-          proyectoId: GlobalValues.idProyect,
-        },
-        tablero: {
-          tableroId: this.tabId,
-        },
-        usuario: {
-          usuarioId: this.responsableSelect,
-          nombre: '',
-        },
+      if (!valorCampo1 || valorCampo1 === undefined
+        || !valorCampo2 || valorCampo2 === undefined
+      ) {
+        this.incompletefield = true
+      } else {
+        this.incompletefield = false
+
+        const nuevaTarea = {
+          nombre: this.newTarea.nombre,
+          descripcion: this.newTarea.descripcion,
+          fechaLimite: this.newTarea.fechaLimite,
+          color: this.newTarea.ColorPicker,
+          etiqueta: {
+            etiquetaId: '65370f8bb21e1239553afba4',
+          },
+          proyecto: {
+            proyectoId: GlobalValues.idProyect,
+          },
+          tablero: {
+            tableroId: this.tabId,
+          },
+          usuario: {
+            usuarioId: this.responsableSelect,
+            nombre: '',
+          },
+        }
+
+        const modifTarea = {
+          tareaId: this.newTarea.tareaId,
+          nombre: this.newTarea.nombre,
+          descripcion: this.newTarea.descripcion,
+          fechaLimite: this.newTarea.fechaLimite,
+          fechaFin: null,
+          color: this.newTarea.ColorPicker,
+          etiqueta: {
+            etiquetaId: '65370f8bb21e1239553afba4',
+          },
+          proyecto: {
+            proyectoId: GlobalValues.idProyect,
+          },
+          tablero: {
+            tableroId: this.tabId,
+          },
+          usuario: {
+            usuarioId: this.usuId,
+            nombre: '',
+          },
+          estado: {
+            estadoId: this.estId,
+          },
+        }
+
+        const res = await this.$dialog.confirm({
+          text: this.editedIndex === true ? `¿Realmente desea modificar la tarea?` : `¿Realmente desea agregar la tarea?`,
+          title: 'ADVERTENCIA',
+          actions: {
+            false: 'No',
+            true: { color: 'accent', text: 'Sí' },
+          },
+          persistent: true,
+        })
+
+        if (res) {
+          try {
+            await this.$store.dispatch(
+              `tarea/${INSERT_TAREAS}`,
+              this.editedIndex === true ? modifTarea : nuevaTarea
+            )
+
+            this.$dialog.message.success(
+              this.editedIndex === true ? `La tarea se modifico correctamente` : `La tarea se agrego correctamente`,
+              {
+                position: 'top-right',
+              }
+            )
+            await this.$store.dispatch(`estado/${FETCH_ESTADOS}`, {
+              id: GlobalValues.idProyect,
+            })
+            await this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
+              id: GlobalValues.idProyect,
+            })
+          } catch (err) { }
+        }
+        this.editedIndex = false
+        this.incompletefield = false
+        this.closeAddTaskModal();
       }
-
-      const modifTarea = {
-        tareaId: this.newTarea.tareaId,
-        nombre: this.newTarea.nombre,
-        descripcion: this.newTarea.descripcion,
-        fechaLimite: this.newTarea.fechaLimite,
-        fechaFin: null,
-        color: this.newTarea.ColorPicker,
-        etiqueta: {
-          etiquetaId: '65370f8bb21e1239553afba4',
-        },
-        proyecto: {
-          proyectoId: GlobalValues.idProyect,
-        },
-        tablero: {
-          tableroId: this.tabId,
-        },
-        usuario: {
-          usuarioId: this.usuId,
-          nombre: '',
-        },
-        estado: {
-          estadoId: this.estId,
-        },
-      }
-
-      const res = await this.$dialog.confirm({
-        text: this.editedIndex === true ? `¿Realmente desea modificar la tarea?` : `¿Realmente desea agregar la tarea?`,
-        title: 'ADVERTENCIA',
-        actions: {
-          false: 'No',
-          true: { color: 'primary', text: 'Sí' },
-        },
-        persistent: true,
-      })
-
-      if (res) {
-        try {
-          await this.$store.dispatch(
-            `tarea/${INSERT_TAREAS}`,
-            this.editedIndex === true ? modifTarea : nuevaTarea
-          )
-
-          this.$dialog.message.success(
-            this.editedIndex === true ? `La tarea se modifico correctamente` : `La tarea se agrego correctamente`,
-            {
-              position: 'top-right',
-            }
-          )
-          await this.$store.dispatch(`estado/${FETCH_ESTADOS}`, {
-            id: GlobalValues.idProyect,
-          })
-          await this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
-            id: GlobalValues.idProyect,
-          })
-        } catch (err) { }
-      }
-      this.editedIndex = false
-      this.closeAddTaskModal();
     },
     clearTareas() {
       this.newTarea.nombre = '';
@@ -472,7 +498,7 @@ export default {
             title: 'ADVERTENCIA',
             actions: {
               false: 'No',
-              true: { color: 'primary', text: 'Sí' },
+              true: { color: 'accent', text: 'Sí' },
             },
             persistent: true,
           })
@@ -516,7 +542,7 @@ export default {
           title: 'ADVERTENCIA',
           actions: {
             false: 'No',
-            true: { color: 'primary', text: 'Sí' },
+            true: { color: 'accent', text: 'Sí' },
           },
           persistent: true,
         })
@@ -638,5 +664,10 @@ export default {
 .mx-auto.cardst {
   /* Ajusta el margen entre las tarjetas dentro de las columnas */
   margin: 5%;
+}
+
+.classerror {
+  color: #ffc7d0;
+  margin-left: 30px;
 }
 </style>
