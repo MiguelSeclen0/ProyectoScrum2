@@ -388,24 +388,18 @@ export default {
         async save() {
             const valorCampo1 = this.$refs.campo1Ref ? this.$refs.campo1Ref.value.trim() : ''
             const valorCampo2 = this.$refs.campo2Ref ? this.$refs.campo2Ref.value.trim() : ''
-            //const valorCampo3 = this.$refs.estadoSelect ? this.$refs.estadoSelect.value.trim() : ''
-            //console.log('valorCampo3',valorCampo3)
             const valorCampo4 = this.$refs.campo4Ref ? this.$refs.campo4Ref.value.trim() : ''
             const valorCampo5 = this.$refs.campo5Ref ? this.$refs.campo5Ref.value.trim() : ''
             const valorCampo6 = this.$refs.campo6Ref ? this.$refs.campo6Ref.value.trim() : ''
-            //const valorCampo7 = this.$refs.campo7Ref ? this.$refs.campo7Ref.value.trim() : ''
             const valorCampo8 = this.$refs.campo8Ref ? this.$refs.campo8Ref.value.trim() : ''
 
             if (!valorCampo1 || valorCampo1 === undefined
-             || !valorCampo2 || valorCampo2 === undefined
-             //|| !valorCampo3 || valorCampo3 === undefined
+                 || !valorCampo2 || valorCampo2 === undefined
                  || !valorCampo4 || valorCampo4 === undefined
                  || !valorCampo5 || valorCampo5 === undefined
                  || !valorCampo6 || valorCampo6 === undefined
-                // || !valorCampo7 || valorCampo7===undefined
                  || !valorCampo8 || valorCampo8 === undefined                  
             ) {
-            console.log('valorCampo3',valorCampo3)
                 this.incompletefield = true
             } else {
                 this.incompletefield = false
