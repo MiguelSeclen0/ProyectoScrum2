@@ -44,6 +44,7 @@
                     <span> {{ item.fechaLimite }} </span>
                   </v-tooltip>
                   <v-icon style="margin-left: 3%;" color="accent" medium @click="editTarea(item)">mdi-pencil</v-icon>
+                  <v-icon style="margin-left: 3%;" color="accent" medium @click="openDeleteTaskModal(item)">mdi-trash-can-outline</v-icon>
                 </v-col>
               </v-row>
             </v-card-actions>
@@ -52,11 +53,6 @@
         <v-btn style="margin-top: 1%;" @click="openAddTaskModal(item.tableroId)">
           <v-icon>
             mdi-plus
-          </v-icon>
-        </v-btn>
-        <v-btn style="margin-top: 1%;" @click="openDeleteTaskModal()">
-          <v-icon>
-            mdi-trash-can-outline
           </v-icon>
         </v-btn>
       </v-col>
@@ -87,6 +83,17 @@
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" text @click="closeDeleteColumn()">Cancelar</v-btn>
             <v-btn color="blue darken-1" text @click="ConfDeleteColumn()">Eliminar</v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="dialogDeleteTask" max-width="500px">
+        <v-card>
+          <v-card-title class="text-h5">¿Estás seguro de eliminar esta tarea?</v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="closeDeleteTask()">Cancelar</v-btn>
+            <v-btn color="blue darken-1" text @click="deleteTask()">Eliminar</v-btn>
             <v-spacer></v-spacer>
           </v-card-actions>
         </v-card>
@@ -162,12 +169,14 @@ export default {
       editedColumnIndex: -1,     // Índice de la columna en edición
       editedColumnName: '',      // Nuevo nombre de la columna en edición
       addTaskModal: false,
+      dialogDeleteTask: false,
       deleteTaskModal: false,
       newTaskName: '',
       editedIndex: false,
       columnaDelete: '',
       tabId: '',
       tarId: '',
+      tarIdD: '',
       estId: '',
       usuId: '',
       dialogDelete: false,
@@ -410,11 +419,15 @@ export default {
       this.newTarea.ColorPicker = '';
       this.responsableSelect = null;
     },
-    openDeleteTaskModal() {
-      this.deleteTaskModal = true
+    openDeleteTaskModal(item) {
+      this.tarIdD = item.tareaId;
+      this.dialogDeleteTask = true
+    },
+    closeDeleteTask() {
+      this.dialogDeleteTask = false
     },
     async deleteTask() {
-      const tareaId = this.tareaSelect
+      const tareaId = this.tarIdD
 
       try {
         await this.$store.dispatch(
@@ -434,7 +447,7 @@ export default {
       await this.$store.dispatch(`tarea/${FETCH_TAREAS}`, {
         id: GlobalValues.idProyect,
       })
-      this.closeDeleteTaskModal()
+      this.closeDeleteTask()
     },
     deleteColumn(index) {
       this.columnaDelete = this.tareaEstado[index].tableroId;
