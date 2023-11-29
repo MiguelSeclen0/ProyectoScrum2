@@ -83,20 +83,20 @@
                     <v-row>
                         <v-col>
                             <v-text-field v-model="editedItem.nombre" backgroundColor="secondary" outlined label="Nombre"
-                                ref="campo1Ref" color="textito" :rules="nameRules" required></v-text-field>
+                                ref="campo1Ref" color="textito" :rules="rules.nameRules" required></v-text-field>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col>
                             <v-text-field v-model="editedItem.cliente" backgroundColor="secondary" outlined label="Cliente"
-                                ref="campo2Ref" :rules="clientRules" color="textito"></v-text-field>
+                                ref="campo2Ref" :rules="rules.clientRules" color="textito"></v-text-field>
                         </v-col>
 
                         <v-col>
                             <v-select label="Estado" v-model="estadoSelect" item-value="estadoId" :items="proyectoEstado"
                                 item-text="nombre" backgroundColor="secondary" color="textito" item-color="secondary"
-                                :rules="selectRules" outlined>
+                                :rules="rules.selectRules" outlined>
                             </v-select>
                         </v-col>
                     </v-row>
@@ -104,21 +104,21 @@
                     <v-row>
                         <v-col>
                             <DatePicker ref="campo4Ref" label="Fecha Inicio" v-model="editedItem.fechaInicio" outlined
-                                type='date' :rules="fechaInicioRules" color="textito" />
+                                type='date' :rules="rules.fechaInicioRules" color="textito" />
                         </v-col>
                         <v-col>
                             <DatePicker ref="campo5Ref" label="Fecha Fin" v-model="editedItem.fechaFinalizacion" outlined
-                                :rules="fechaFinalRules" type='date' color="textito" />
+                                :rules="rules.fechaFinalRules" type='date' color="textito" />
                         </v-col>
                     </v-row>
                     <v-row>
                         <v-col>
                             <ColorPicker ref="campo6Ref" label="Color" v-model="editedItem.ColorPicker" outlined
-                                :rules="colorRules" color="textito" />
+                                :rules="rules.colorRules" color="textito" />
                         </v-col>
                         <v-col>
                             <v-select label="Tipo" v-model="tipoSelect" item-value="tipoId" :items="tipo" item-text="nombre"
-                                :rules="selectRules" backgroundColor="secondary" color="textito" outlined
+                                :rules="rules.selectRules" backgroundColor="secondary" color="textito" outlined
                                 item-color="secondary">
                             </v-select>
                         </v-col>
@@ -127,12 +127,12 @@
                     <v-row>
                         <v-col>
                             <v-text-field ref="campo8Ref" v-model="editedItem.presupuesto" backgroundColor="secondary"
-                                :rules="presupuestoRules" outlined label="Presupuesto" color="textito"></v-text-field>
+                                :rules="rules.presupuestoRules" outlined label="Presupuesto" color="textito"></v-text-field>
                         </v-col>
                         <v-col>
                             <v-select label="Equipo" v-model="equipoSelect" item-value="equipoId" :items="equipo"
-                                item-text="nombre" backgroundColor="secondary" color="textito" outlined :rules="selectRules"
-                                item-color="secondary">
+                                item-text="nombre" backgroundColor="secondary" color="textito" outlined
+                                :rules="rules.selectRules" item-color="secondary">
                             </v-select>
                         </v-col>
                     </v-row>
@@ -232,13 +232,13 @@ export default {
             tipo1: '',
             oportunidad1: '',
         },
-        nameRules: [v => !!v || 'Nombre es requerido'],
-        clientRules: [v => !!v || 'Cliente es requerido'],
-        selectRules: [v => !!v || 'El valor es requerido'],
-        fechaInicioRules: [v => !!v || 'Fecha de inicio es requerido'],
-        fechaFinalRules: [v => !!v || 'Fecha final es requerido'],
-        colorRules: [v => !!v || 'Seleccionar un color es requerido'],
-        presupuestoRules: [v => !!v || 'Presupuesto es requerido'],
+        // nameRules: [v => !!v || 'Nombre es requerido'],
+        // clientRules: [v => !!v || 'Cliente es requerido'],
+        // selectRules: [v => !!v || 'El valor es requerido'],
+        // fechaInicioRules: [v => !!v || 'Fecha de inicio es requerido'],
+        // fechaFinalRules: [v => !!v || 'Fecha final es requerido'],
+        // colorRules: [v => !!v || 'Seleccionar un color es requerido'],
+        // presupuestoRules: [v => !!v || 'Presupuesto es requerido'],
     }),
 
     computed: {
@@ -249,6 +249,27 @@ export default {
         formTitle() {
             return this.editedIndex === true ? 'Editar Proyecto' : 'Nuevo Proyecto'
         },
+        rules() {
+            return {
+                nameRules: [v => !!v || 'Nombre es requerido'],
+                clientRules: [v => !!v || 'Cliente es requerido'],
+                selectRules: [v => !!v || 'El valor es requerido'],
+                fechaInicioRules: [v => !!v || 'Fecha de inicio es requerido'],
+                fechaFinalRules: [(d) => !!d || 'Fecha de Final es requerido',
+                (v) => {
+                    const end = this.$moment(this.editedItem.fechaFinalizacion).format(
+                        'yyyy-MM-DD'
+                    )
+                    const start = this.$moment(
+                        this.editedItem.fechaInicio
+                    ).format('yyyy-MM-DD')
+
+                    return end >= start || 'La fecha final no puede ser menor a la inicial'
+                },],
+                colorRules: [v => !!v || 'Seleccionar un color es requerido'],
+                presupuestoRules: [v => !!v || 'Presupuesto es requerido'],
+            }
+        }
     },
 
     watch: {
@@ -365,15 +386,15 @@ export default {
             const valorCampo1 = this.$refs.campo1Ref ? this.$refs.campo1Ref.value.trim() : ''
             const valorCampo2 = this.$refs.campo2Ref ? this.$refs.campo2Ref.value.trim() : ''
             const valorCampo3 = this.$refs.estadoSelect ? this.$refs.estadoSelect.value.trim() : ''
-            console.log('valorCampo3',valorCampo3)
+            console.log('valorCampo3', valorCampo3)
             // const valorCampo4 = this.$refs.campo4Ref ? this.$refs.campo4Ref.value.trim() : ''
             // const valorCampo5 = this.$refs.campo5Ref ? this.$refs.campo5Ref.value.trim() : ''
             // const valorCampo6 = this.$refs.campo6Ref ? this.$refs.campo6Ref.value.trim() : ''
             // const valorCampo8 = this.$refs.campo8Ref ? this.$refs.campo8Ref.value.trim() : ''
 
             if (!valorCampo1 || valorCampo1 === undefined
-             || !valorCampo2 || valorCampo2 === undefined
-             || !valorCampo3 || valorCampo3 === undefined
+                || !valorCampo2 || valorCampo2 === undefined
+                || !valorCampo3 || valorCampo3 === undefined
                 // || !valorCampo4 || valorCampo4 === undefined
                 // || !valorCampo5 || valorCampo5 === undefined
                 // || !valorCampo6 || valorCampo6 === undefined
@@ -381,7 +402,7 @@ export default {
                 // || !valorCampo8 || valorCampo8 === undefined
                 // ||!valorCampo9 || valorCampo9===undefined
             ) {
-            console.log('valorCampo3',valorCampo3)
+                console.log('valorCampo3', valorCampo3)
                 this.incompletefield = true
             } else {
                 this.incompletefield = false
