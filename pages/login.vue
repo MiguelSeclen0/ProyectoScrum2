@@ -21,9 +21,6 @@
           <PasswordField v-model="user.password" label='Contraseña' min="6" solo rounded style="background-color;:#e3e3e3"
             :rules="passwordRules" />
           <div class="text-right">
-            <v-btn small color="primary" text rounded to="/forgot-your-password">
-              Olvidaste Contraseña
-            </v-btn>
           </div>
 
           <v-btn class="mt-5 black--text" type="submit" color="primary" :loading="busy" large rounded>

@@ -11,9 +11,9 @@
                             </v-list-item-avatar>
                             <v-list-item-content>
                                 <div class="text-overline mb-4">
-                                    TOTAL ASIGNACIONES
+                                    TOTAL ASIGNACIONES {{ consoleDatos() }}
                                     <v-list-item-title>
-                                        {{tareaDatos.tareasTotales}}
+                                        {{ tarea ? tarea.tareasTotales : 'N/A' }}
                                     </v-list-item-title>
                                 </div>
                             </v-list-item-content>
@@ -31,7 +31,7 @@
                                 <div class="text-overline mb-4">
                                     ASIGNACIONES COMPLETADAS
                                     <v-list-item-title>
-                                        <!-- {{ tareasDatos.tareasCompletadas }} -->
+                                        {{ tarea ? tarea.tareasCompletadas : 'N/A' }}
                                     </v-list-item-title>
                                 </div>
                             </v-list-item-content>
@@ -49,14 +49,13 @@
                                 <div class="text-overline mb-4">
                                     ASIGNACIONES EN PROCESO
                                     <v-list-item-title>
-                                        {{ tareasDatos.tareasFaltantes }}
+                                        {{ tarea ? tarea.tareasFaltantes : 'N/A' }}
                                     </v-list-item-title>
                                 </div>
                             </v-list-item-content>
                         </v-list-item>
                     </v-card>
                 </v-col>
-                <span>{{ tareasDatos }}</span>
                 <v-col md="1">
                     <UserMenu :name="usersName()">
                         <v-list subheader>
@@ -102,13 +101,9 @@ import { FETCH_DATOS } from '@/utils/types/tareas/actions.types'
 export default {
     name: 'dashboard',
     layout: 'default',
-    data: () => ({
-
-    }),
-    computed: {
-        ...mapState('tarea', ['tareaDatos']),
-    },
-    watch: {
+    data() {
+        return {
+        }
     },
     async fetch() {
         await Promise.all([
@@ -118,9 +113,15 @@ export default {
         ])
     },
 
+    computed: {
+        ...mapState('tarea', ['tarea'])
+    },
     methods: {
         usersName() {
             return this.$auth.user.nombre
+        },
+        consoleDatos(){
+            console.log('consolatareasd',this.tareas )
         },
         async onLogout() {
             const res = await this.$dialog.confirm({
