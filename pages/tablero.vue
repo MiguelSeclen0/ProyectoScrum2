@@ -67,7 +67,7 @@
         <v-card>
           <v-card-title>Agregar Nueva Columna</v-card-title>
           <v-card-text>
-            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre" :rules="nameRules"
+            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre" :rules="rules.nameRules"
               color="textito"></v-text-field>
           </v-card-text>
           <v-card-actions>
@@ -335,11 +335,13 @@ export default {
       this.responsableSelect = item.usuario;
     },
     async addTask() {
-      const valorCampo1 = this.$refs.campo1refTab ? this.$refs.campo1refTab.value.trim() : ''
-      const valorCampo2 = this.$refs.campo2RefTab ? this.$refs.campo2RefTab.value.trim() : ''
+      const valorCampo1 = this.newTarea.nombre
+      const valorCampo2 = this.newTarea.fechaLimite
+      const valorCampo3 = this.newTarea.ColorPicker
 
-      if (!valorCampo1 || valorCampo1 === undefined
-        || !valorCampo2 || valorCampo2 === undefined
+      if (valorCampo1 === ""
+          || valorCampo2   === ""
+          || valorCampo3   === ""
       ) {
         this.incompletefield = true
       } else {

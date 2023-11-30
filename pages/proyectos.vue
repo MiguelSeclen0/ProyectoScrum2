@@ -60,7 +60,7 @@
                                     large>mdi-calendar-month-outline</v-icon>{{
                                         item.duracion }}</span>
                             <span style="margin-left: 8%;"><v-icon color="accent" large>mdi-cash-multiple</v-icon>{{
-                                item.duracion }}</span>
+                                item.gasto }}</span>
                             <span style="margin-left: 45.5%;"><v-icon color="accent" large>mdi-cash</v-icon>{{
                                 item.duracion }}</span>
                             <v-divider style="margin: 5%;"></v-divider>
