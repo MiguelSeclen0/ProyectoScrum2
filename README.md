@@ -1,8 +1,8 @@
 # ProyectoScrum
 
 ## Build Setup
-
 ```bash
+# Utilizar la siguiente version de node js v14.18.2
 # install dependencies
 $ npm install
 
