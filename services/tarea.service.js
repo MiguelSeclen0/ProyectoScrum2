@@ -11,6 +11,12 @@ export class TareaService {
       params,
     })
   }
+  findAllDatos({ params }) {
+    console.log('SERVICEDATOS')
+    return this.$axios.$get('/tarea/datosTareas', {
+      params,
+    })
+  }
   tareaInsert(tarea) {
     return this.$axios.$post('/tarea/save', tarea)
   }

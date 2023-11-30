@@ -76,17 +76,17 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       :value="selectedTeam === 'Usuarios' ? editedItem.email : (editedItem.usuario ? editedItem.usuario.email : '')"
-                      @input="rules.emailRules" label="Email"></v-text-field>
+                      @input="emailRules" label="Email"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       :value="selectedTeam === 'Usuarios' ? editedItem.contra : (editedItem.usuario ? editedItem.usuario.contra : '')"
-                      @input="rules.usuariosRules" label="Contraseña"></v-text-field>
+                      @input="usuariosRules" label="Contraseña"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       :value="selectedTeam === 'Usuarios' ? editedItem.sueldo : (editedItem.usuario ? editedItem.usuario.sueldo : '')"
-                      @input="rules.sueldoRules" label="Sueldo" type="number" :rules="sueldoRules"></v-text-field>
+                      @input="sueldoRules" label="Sueldo" type="number" :rules="rules.sueldoRules"></v-text-field>
                   </v-col>
                   <v-col v-if="showForm" cols="12" sm="6" md="4">
                     <v-select v-model="equipoSelect" item-value="equipoId" :items="equipo" item-text="nombre"
@@ -266,20 +266,20 @@ export default {
     //     (x) => x.equipo.nombre === this.selectedTeam
     //   )
     // },
-    selectedTeam() {
-      if (this.selectedTeam === 'Usuarios') {
-        // Si se selecciona 'Todos los Usuarios', muestra todos los usuarios
-        this.desserts = this.usuario.map((usuario) => ({
-          usuarioId: usuario.usuarioId,
-          nombre: usuario.nombre,
-          email: usuario.email,
-          sueldo: usuario.sueldo,
-        }));
-      } else {
-        // Si se selecciona un equipo específico, filtra los usuarios por ese equipo
-        this.desserts = this.miembro.filter((x) => x.equipo.nombre === this.selectedTeam);
-      }
-    },
+    // selectedTeam() {
+    //   if (this.selectedTeam === 'Usuarios') {
+    //     // Si se selecciona 'Todos los Usuarios', muestra todos los usuarios
+    //     this.desserts = this.usuario.map((usuario) => ({
+    //       usuarioId: usuario.usuarioId,
+    //       nombre: usuario.nombre,
+    //       email: usuario.email,
+    //       sueldo: usuario.sueldo,
+    //     }));
+    //   } else {
+    //     // Si se selecciona un equipo específico, filtra los usuarios por ese equipo
+    //     this.desserts = this.miembro.filter((x) => x.equipo.nombre === this.selectedTeam);
+    //   }
+    // },
     'editedItem.nombre': 'updateFormValid',
     'editedItem.email': 'updateFormValid',
     'editedItem.contra': 'updateFormValid',

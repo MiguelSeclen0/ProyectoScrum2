@@ -13,7 +13,7 @@
                                 <div class="text-overline mb-4">
                                     TOTAL ASIGNACIONES
                                     <v-list-item-title>
-                                        600
+                                        {{tareaDatos.tareasTotales}}
                                     </v-list-item-title>
                                 </div>
                             </v-list-item-content>
@@ -31,7 +31,7 @@
                                 <div class="text-overline mb-4">
                                     ASIGNACIONES COMPLETADAS
                                     <v-list-item-title>
-                                        600
+                                        <!-- {{ tareasDatos.tareasCompletadas }} -->
                                     </v-list-item-title>
                                 </div>
                             </v-list-item-content>
@@ -49,13 +49,14 @@
                                 <div class="text-overline mb-4">
                                     ASIGNACIONES EN PROCESO
                                     <v-list-item-title>
-                                        600
+                                        {{ tareasDatos.tareasFaltantes }}
                                     </v-list-item-title>
                                 </div>
                             </v-list-item-content>
                         </v-list-item>
                     </v-card>
                 </v-col>
+                <span>{{ tareasDatos }}</span>
                 <v-col md="1">
                     <UserMenu :name="usersName()">
                         <v-list subheader>
@@ -86,15 +87,18 @@
                 <v-col style="max-width: 700px; height: 400px;">
                     <CalendarTeams></CalendarTeams>
                 </v-col>
-                <v-col style="max-width: 700px; height: 400px;">
+                <!-- <v-col style="max-width: 700px; height: 400px;">
                     <ChartLine></ChartLine>
-                </v-col>
+                </v-col> -->
             </v-row>
         </v-col>
     </v-row>
 </template>
   
 <script>
+import { mapState } from 'vuex'
+import { GlobalValues } from '~/utils/global'
+import { FETCH_DATOS } from '@/utils/types/tareas/actions.types'
 export default {
     name: 'dashboard',
     layout: 'default',
@@ -102,9 +106,16 @@ export default {
 
     }),
     computed: {
-
+        ...mapState('tarea', ['tareaDatos']),
     },
     watch: {
+    },
+    async fetch() {
+        await Promise.all([
+            this.$store.dispatch(`tarea/${FETCH_DATOS}`, {
+                id: GlobalValues.idProyect,
+            }),
+        ])
     },
 
     methods: {
