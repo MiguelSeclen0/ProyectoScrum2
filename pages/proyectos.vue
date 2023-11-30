@@ -62,7 +62,7 @@
                             <span style="margin-left: 8%;"><v-icon color="accent" large>mdi-cash-multiple</v-icon>{{
                                 item.gasto }}</span>
                             <span style="margin-left: 45.5%;"><v-icon color="accent" large>mdi-cash</v-icon>{{
-                                item.duracion }}</span>
+                                item.spi }}</span>
                             <v-divider style="margin: 5%;"></v-divider>
                             <span @click="getIdProj(item)">
                                 <ProgressBar style="margin: 1% 5% 1% 5%;" :value="item.porcentaje">
