@@ -60,9 +60,9 @@
                                     large>mdi-calendar-month-outline</v-icon>{{
                                         item.duracion }}</span>
                             <span style="margin-left: 8%;"><v-icon color="accent" large>mdi-cash-multiple</v-icon>{{
-                                item.duracion }}</span>
+                                item.gasto }}</span>
                             <span style="margin-left: 45.5%;"><v-icon color="accent" large>mdi-cash</v-icon>{{
-                                item.duracion }}</span>
+                                item.spi }}</span>
                             <v-divider style="margin: 5%;"></v-divider>
                             <span @click="getIdProj(item)">
                                 <ProgressBar style="margin: 1% 5% 1% 5%;" :value="item.porcentaje">
@@ -95,7 +95,7 @@
 
                         <v-col>
                             <v-select label="Estado" v-model="estadoSelect" item-value="estadoId" :items="proyectoEstado"
-                                item-text="nombre" backgroundColor="secondary" color="textito" item-color="secondary"
+                                item-text="nombre" backgroundColor="secondary" color="textito" item-color="accent"
                                 :rules="rules.selectRules" outlined>
                             </v-select>
                         </v-col>
@@ -266,7 +266,7 @@ export default {
                     const start = this.$moment(
                         this.editedItem.fechaInicio
                     ).format('yyyy-MM-DD')
-
+                    
                     return end >= start || 'La fecha final no puede ser menor a la inicial'
                 },],
                 colorRules: [v => !!v || 'Seleccionar un color es requerido'],
@@ -388,19 +388,19 @@ export default {
         },
 
         async save() {
-            const valorCampo1 = this.$refs.campo1Ref ? this.$refs.campo1Ref.value.trim() : ''
-            const valorCampo2 = this.$refs.campo2Ref ? this.$refs.campo2Ref.value.trim() : ''
-            const valorCampo4 = this.$refs.campo4Ref ? this.$refs.campo4Ref.value.trim() : ''
-            const valorCampo5 = this.$refs.campo5Ref ? this.$refs.campo5Ref.value.trim() : ''
-            const valorCampo6 = this.$refs.campo6Ref ? this.$refs.campo6Ref.value.trim() : ''
-            const valorCampo8 = this.$refs.campo8Ref ? this.$refs.campo8Ref.value.trim() : ''
+            const valorCampo1 = this.editedItem.nombre
+            const valorCampo2 = this.editedItem.cliente
+            const valorCampo4 = this.editedItem.fechaInicio
+            const valorCampo5 = this.editedItem.fechaFinalizacion
+            const valorCampo6 = this.editedItem.ColorPicker
+            const valorCampo8 = this.editedItem.presupuesto
 
-            if (!valorCampo1 || valorCampo1 === undefined
-                 || !valorCampo2 || valorCampo2 === undefined
-                 || !valorCampo4 || valorCampo4 === undefined
-                 || !valorCampo5 || valorCampo5 === undefined
-                 || !valorCampo6 || valorCampo6 === undefined
-                 || !valorCampo8 || valorCampo8 === undefined                  
+            if (valorCampo1 === ""
+                 || valorCampo2  === ""
+                 || valorCampo4  === ""
+                 || valorCampo5  === ""
+                 || valorCampo6  === ""
+                 || valorCampo8  === ""                 
             ) {
                 this.incompletefield = true
             } else {
@@ -449,7 +449,7 @@ export default {
                     titleColor: 'red',
                     actions: {
                         false: 'No',
-                        true: { color: 'primary', text: 'Sí' },                        
+                        true: { color: 'accent', text: 'Sí' },                        
                     },
                     persistent: true,
                 })

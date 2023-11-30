@@ -67,7 +67,7 @@
         <v-card>
           <v-card-title>Agregar Nueva Columna</v-card-title>
           <v-card-text>
-            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre" :rules="nameRules"
+            <v-text-field v-model="newColumnName" backgroundColor="secondary" outlined label="Nombre" :rules="rules.nameRules"
               color="textito"></v-text-field>
           </v-card-text>
           <v-card-actions>
@@ -105,17 +105,18 @@
           </v-card-title>
           <v-card-text>
             <v-col>
-              <v-text-field v-model="newTarea.nombre" backgroundColor="secondary" outlined label="Nombre" ref="campo1refTab"
-                :rules="nameRules" color="textito"></v-text-field>
-              <ColorPicker label="Color" v-model="newTarea.ColorPicker" outlined color="textito" />
+              <v-text-field v-model="newTarea.nombre" backgroundColor="secondary" outlined label="Nombre"
+                ref="campo1refTab" :rules="rules.nameRules" color="textito"></v-text-field>
+              <ColorPicker label="Color" v-model="newTarea.ColorPicker" outlined color="textito"
+                :rules="rules.colorRules" />
             </v-col>
             <v-col>
               <v-select label="Responsable" v-model="responsableSelect" item-value="usuarioId" :items="usuario"
-                item-text="nombre" backgroundColor="secondary" :rules="selectRules" color="textito" outlined
+                item-text="nombre" backgroundColor="secondary" :rules="rules.selectRules" color="textito" outlined
                 item-color="secondary">
               </v-select>
               <DatePicker ref="campo2RefTab" label="Fecha Limite" v-model="newTarea.fechaLimite" outlined type='date'
-                :rules="fechaFinalRules" color="textito" />
+                :rules="rules.fechaFinalRules" color="textito" />
             </v-col>
             <v-col>
               <v-textarea v-model="newTarea.descripcion" backgroundColor="secondary" outlined
@@ -209,10 +210,6 @@ export default {
       },
       columnaSelect: {},
       tareaSelect: {},
-      nameRules: [v => !!v || 'Nombre es requerido'],
-      colorRules: [v => !!v || 'Seleccionar un color es requerido'],
-      selectRules: [v => !!v || 'El valor es requerido'],
-      fechaFinalRules: [v => !!v || 'Fecha limite es requerido'],
       responsableSelect: {
         usuarioId: '6521fd2fa1598a4ca722cabe',
         nombre: '',
@@ -244,6 +241,23 @@ export default {
     ...mapState('estado', ['tareaEstado']),
     formTitlee() {
       return this.editedIndex === true ? 'Editar Tarea' : 'Nueva Tarea'
+    },
+    rules() {
+      return {
+        nameRules: [v => !!v || 'Nombre es requerido'],
+        colorRules: [v => !!v || 'Seleccionar un color es requerido'],
+        selectRules: [v => !!v || 'El valor es requerido'],
+        fechaFinalRules: [(d) => !!d || 'Fecha de Final es requerido',
+        (v) => {
+          const end = this.$moment(this.newTarea.fechaLimite).format(
+            'yyyy-MM-DD'
+          )
+          const start = '2023-11-29'
+          
+          return end >= start || 'La fecha final no puede ser menor a la inicial'
+        },],
+        colorRules: [v => !!v || 'Color es requerido'],
+      }
     },
   },
 
@@ -321,11 +335,13 @@ export default {
       this.responsableSelect = item.usuario;
     },
     async addTask() {
-      const valorCampo1 = this.$refs.campo1refTab ? this.$refs.campo1refTab.value.trim() : ''
-      const valorCampo2 = this.$refs.campo2RefTab ? this.$refs.campo2RefTab.value.trim() : ''
+      const valorCampo1 = this.newTarea.nombre
+      const valorCampo2 = this.newTarea.fechaLimite
+      const valorCampo3 = this.newTarea.ColorPicker
 
-      if (!valorCampo1 || valorCampo1 === undefined
-        || !valorCampo2 || valorCampo2 === undefined
+      if (valorCampo1 === ""
+          || valorCampo2   === ""
+          || valorCampo3   === ""
       ) {
         this.incompletefield = true
       } else {
