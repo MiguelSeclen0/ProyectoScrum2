@@ -86,7 +86,7 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       :value="selectedTeam === 'Usuarios' ? editedItem.sueldo : (editedItem.usuario ? editedItem.usuario.sueldo : '')"
-                      @input="updateSueldo" label="Sueldo" type="number" :rules="sueldoRules"></v-text-field>
+                      @input="updateSueldo" label="Sueldo" type="number" :rules="rules.sueldoRules"></v-text-field>
                   </v-col>
                   <v-col v-if="showForm" cols="12" sm="6" md="4">
                     <v-select v-model="equipoSelect" item-value="equipoId" :items="equipo" item-text="nombre"

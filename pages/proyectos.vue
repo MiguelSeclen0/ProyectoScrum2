@@ -225,8 +225,10 @@ export default {
         },
         estadoSelect: {estadoId: "6530997b91bbab402bbfdb5c",
         nombre: "En progreso"},
-        tipoSelect: {},
-        equipoSelect: {},
+        tipoSelect: {"tipoId": "653099b891bbab402bbfdb5f",
+        "nombre": "Página Web"},
+        equipoSelect: {"equipoId": "6525ea0674a3e40d011d2834",
+        "nombre": "Equipo 01"},
         defaultItem: {
             name: '',
             clave1: '',
