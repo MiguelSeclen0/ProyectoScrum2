@@ -76,12 +76,12 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       :value="selectedTeam === 'Usuarios' ? editedItem.email : (editedItem.usuario ? editedItem.usuario.email : '')"
-                      @input="emailRules" label="Email"></v-text-field>
+                      @input="updateEmail" label="Email"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       :value="selectedTeam === 'Usuarios' ? editedItem.contra : (editedItem.usuario ? editedItem.usuario.contra : '')"
-                      @input="usuariosRules" label="Contraseña"></v-text-field>
+                      @input="updateContra" label="Contraseña"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
