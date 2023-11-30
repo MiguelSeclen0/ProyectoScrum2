@@ -138,7 +138,7 @@
 </template>
 <script>
 
-import { ValidationProvider, ValidationObserver} from 'vee-validate'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { mapState } from 'vuex'
 import { FETCH_USUARIO, INSERT_USUARIO, DELETE_USUARIO } from '@/utils/types/users/actions.types'
 import { FETCH_EQUIPOS } from '@/utils/types/equipos/actions.types'
@@ -203,14 +203,14 @@ export default {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
     rules() {
-            return {
-                nameRules: [v => !!v || 'Nombre es requerido'],
-                emailRules: [v => !!v || 'Email es requerido'],
-                usuariosRules: [v => !!v || 'Contraseña es requerido'],
-                sueldoRules: [v => !!v || 'Sueldo es requerido'],
-                sueldoRules: [v => !!v || 'Sueldo es requerido'],
-            }
-        },
+      return {
+        nameRules: [v => !!v || 'Nombre es requerido'],
+        emailRules: [v => !!v || 'Email es requerido'],
+        usuariosRules: [v => !!v || 'Contraseña es requerido'],
+        sueldoRules: [v => !!v || 'Sueldo es requerido'],
+        sueldoRules: [v => !!v || 'Sueldo es requerido'],
+      }
+    },
     equipoWithAll() {
       // Crea una copia del array 'equipo' y agrega una opción para mostrar todos los usuarios
       const equipoCopy = [...this.equipo];
@@ -266,20 +266,20 @@ export default {
     //     (x) => x.equipo.nombre === this.selectedTeam
     //   )
     // },
-    // selectedTeam() {
-    //   if (this.selectedTeam === 'Usuarios') {
-    //     // Si se selecciona 'Todos los Usuarios', muestra todos los usuarios
-    //     this.desserts = this.usuario.map((usuario) => ({
-    //       usuarioId: usuario.usuarioId,
-    //       nombre: usuario.nombre,
-    //       email: usuario.email,
-    //       sueldo: usuario.sueldo,
-    //     }));
-    //   } else {
-    //     // Si se selecciona un equipo específico, filtra los usuarios por ese equipo
-    //     this.desserts = this.miembro.filter((x) => x.equipo.nombre === this.selectedTeam);
-    //   }
-    // },
+    selectedTeam() {
+      if (this.selectedTeam === 'Usuarios') {
+        // Si se selecciona 'Todos los Usuarios', muestra todos los usuarios
+        this.desserts = this.usuario.map((usuario) => ({
+          usuarioId: usuario.usuarioId,
+          nombre: usuario.nombre,
+          email: usuario.email,
+          sueldo: usuario.sueldo,
+        }));
+      } else {
+        // Si se selecciona un equipo específico, filtra los usuarios por ese equipo
+        this.desserts = this.miembro.filter((x) => x.equipo.nombre === this.selectedTeam);
+      }
+    },
     'editedItem.nombre': 'updateFormValid',
     'editedItem.email': 'updateFormValid',
     'editedItem.contra': 'updateFormValid',
@@ -367,7 +367,7 @@ export default {
         const newUsuario = {
           nombre: this.editedItem.nombre,
           email: this.editedItem.email,
-          contrasena: this.editedItem.contra, 
+          contrasena: this.editedItem.contra,
           sueldo: this.editedItem.sueldo,
         }
         const res = await this.$dialog.confirm({
@@ -477,7 +477,7 @@ export default {
             miembroId: this.editedItem.miembroId,
             usuario: {
               usuarioId: this.editedItem.usuario.usuarioId,
-              nombre:'',
+              nombre: '',
             },
             rol: {
               rolId: this.rolSelect,
